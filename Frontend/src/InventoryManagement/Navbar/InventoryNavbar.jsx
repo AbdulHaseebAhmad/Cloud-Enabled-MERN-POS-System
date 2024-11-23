@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import logo from "../../assets/logo.jpg";
 const InventoryNavbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
@@ -12,7 +12,7 @@ const InventoryNavbar = () => {
       <div className="flex items-center justify-between">
         {/* Left Section: Logo */}
         <div className="flex items-center">
-          <img src="your-logo-url" alt="Company Logo" className="h-8 w-auto" />
+          <img src={logo} alt="Company Logo" className="h-8 w-auto" />
         </div>
 
         {/* Center Section: Store/Outlet & Employee Info */}
