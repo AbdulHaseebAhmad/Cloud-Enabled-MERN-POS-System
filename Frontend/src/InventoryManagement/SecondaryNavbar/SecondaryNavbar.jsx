@@ -1,42 +1,55 @@
+import { NavLink } from "react-router-dom";
 
 const SecondaryNavbar = () => {
+  const ActiveStyle =
+    "text-lt-primary-action-color dark:text-d-primary-action-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color";
+  const InActiveStyle =
+    "text-lt-primary-text-color dark:text-d-primary-text-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color";
+
   return (
     <div className=" p-4 bg-lt-secondary-bg-color dark:bg-d-secondary-bg-color shadow-md justify-self-center mt-2">
       <div className="container mx-auto flex justify-center items-center">
         <nav className="flex space-x-6">
-          <a 
-            to="/inventory-management" 
-            className="text-lg text-lt-primary-text-color dark:text-d-primary-text-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color"
+          <NavLink
+            to="/dashboard/supplier-management"
+            className={({ isActive }) =>
+              isActive ? ActiveStyle : InActiveStyle
+            }
           >
-            Inventory Reports
-          </a>
-          <a 
-            to="/order-management" 
-            className="text-lg text-lt-primary-text-color dark:text-d-primary-text-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color"
-          >
-           Supplier Management
-          </a>
-          <a 
-            to="/point-of-sales" 
-            className="text-lg text-lt-primary-text-color dark:text-d-primary-text-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color"
+            Supplier Management
+          </NavLink>
+          <NavLink
+            to="/dashboard/product-management"
+            className={({ isActive }) =>
+              isActive ? ActiveStyle : InActiveStyle
+            }
           >
             Product Management
-          </a>
-          <a 
-            to="/reports" 
-            className="text-lg text-lt-primary-text-color dark:text-d-primary-text-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color"
-          >
-            Dashboard
-          </a>
-
-          <a 
-            to="/reports" 
-            className="text-lg text-lt-primary-text-color dark:text-d-primary-text-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color"
+          </NavLink>
+          <NavLink
+            to="/dashboard/stock-tracking"
+            className={({ isActive }) =>
+              isActive ? ActiveStyle : InActiveStyle
+            }
           >
             Stock Tracking
-          </a>
-
-          
+          </NavLink>
+          <NavLink
+            to="/dashboard/inventory-reports"
+            className={({ isActive }) =>
+              isActive ? ActiveStyle : InActiveStyle
+            }
+          >
+            Inventory Reports
+          </NavLink>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive ? ActiveStyle : InActiveStyle
+            }
+          >
+            Dashboard
+          </NavLink>
         </nav>
       </div>
     </div>
