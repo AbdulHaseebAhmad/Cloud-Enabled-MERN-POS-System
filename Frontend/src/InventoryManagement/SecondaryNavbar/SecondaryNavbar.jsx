@@ -2,12 +2,12 @@ import { NavLink } from "react-router-dom";
 
 const SecondaryNavbar = () => {
   const ActiveStyle =
-    "text-lt-primary-action-color dark:text-d-primary-action-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color";
+    "text-lt-primary-action-color dark:text-d-primary-action-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color font-medium";
   const InActiveStyle =
-    "text-lt-primary-text-color dark:text-d-primary-text-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color";
+    "text-d-secondary-bg-color hover:text-lt-primary-action-color dark:hover:text-d-primary-action-color font-medium";
 
   return (
-    <div className=" p-4 bg-lt-secondary-bg-color dark:bg-d-secondary-bg-color shadow-md justify-self-center mt-2">
+    <div className=" p-4 bg-lt-secondary-bg-color  shadow-md justify-self-center mt-2  rounded-lg ">
       <div className="container mx-auto flex justify-center items-center">
         <nav className="flex space-x-6">
           <NavLink
