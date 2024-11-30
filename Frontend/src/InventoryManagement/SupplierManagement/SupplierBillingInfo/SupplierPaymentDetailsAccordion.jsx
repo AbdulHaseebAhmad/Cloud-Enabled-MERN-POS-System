@@ -70,7 +70,7 @@ const SupplierPaymentDetailsAccordion = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto bg-lt-secondary-bg-color rounded-lg shadow-md border border-lt-primary-border-color">
-      <h2 className="text-2xl font-semibold text-lt-primary-text-color dark:text-d-primary-text-color mb-6">
+      <h2 className="text-2xl font-bold text-d-primary-bg-color mb-6">
         Supplier Payment Details
       </h2>
       <div className="space-y-4">

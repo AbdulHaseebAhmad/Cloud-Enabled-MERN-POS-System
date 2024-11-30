@@ -1,3 +1,5 @@
+import AddSupplier from "./AddSupplier/AddSuplier";
+import SupplierPaymentDetailsAccordion from "./SupplierBillingInfo/SupplierPaymentDetailsAccordion";
 import ViewSuppliersTable from "./ViewSuppliers/ViewSuppliersTable";
 
 const SupplierManagement = () => {
@@ -50,6 +52,8 @@ const SupplierManagement = () => {
   </div>
 
   <ViewSuppliersTable suppliers={suppliers} />
+  <AddSupplier/>
+  <SupplierPaymentDetailsAccordion/>
 </div>
 
   );
