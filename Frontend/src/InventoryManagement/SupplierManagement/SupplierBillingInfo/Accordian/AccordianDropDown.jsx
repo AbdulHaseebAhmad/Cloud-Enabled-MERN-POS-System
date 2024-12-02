@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import  { useState } from "react";
+import PropTypes from "prop-types";
 
 const SingleDropdown = ({ options, onChange, field }) => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -7,7 +8,7 @@ const SingleDropdown = ({ options, onChange, field }) => {
     const value = event.target.value;
     setSelectedValue(value);
     if (onChange) {
-      onChange(value); // Pass the selected value to the parent component
+      onChange(value); 
     }
   };
 
@@ -16,7 +17,7 @@ const SingleDropdown = ({ options, onChange, field }) => {
       <select
         value={selectedValue}
         onChange={handleChange}
-        className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white dark:text-d-secondary-bg-color cursor-pointer"
+        className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white dark:text-d-secondary-bg-color cursor-pointer opacity-100 font-medium"
       >
         <option value="" disabled>
           {field}
@@ -29,6 +30,11 @@ const SingleDropdown = ({ options, onChange, field }) => {
       </select>
     </div>
   );
+};
+SingleDropdown.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChange: PropTypes.func,
+  field: PropTypes.string.isRequired,
 };
 
 export default SingleDropdown;

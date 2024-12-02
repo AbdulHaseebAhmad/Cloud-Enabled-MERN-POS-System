@@ -1,4 +1,5 @@
 import AccordionDropDown from "./AccordianDropDown";
+import PropTypes from 'prop-types';
 
 export default function Accordi({ toggleId, fieldsData, accordianName,toggleFunction }) {
   const toggleSection = (tid) => {
@@ -16,7 +17,7 @@ export default function Accordi({ toggleId, fieldsData, accordianName,toggleFunc
         {fieldsData.map(({ field, placeholder, type, options }) => (
           <div key={field} className="mb-4">
             <label
-              className="block text-sm font-medium text-lt-primary-text-color dark:text-d-primary-text-color"
+              className="block text-sm font-medium text-d-primary-bg-color"
             >
               {field}
             </label>
@@ -26,12 +27,26 @@ export default function Accordi({ toggleId, fieldsData, accordianName,toggleFunc
               <input
                 type="text"
                 placeholder={placeholder}
-                className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white  dark:text-d-secondary-bg-color"
+                className="font-medium mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white  dark:text-d-secondary-bg-color"
               />
             )}
           </div>
         ))}
-      </div>
-    </div>
+      </div></div>
   );
 }
+
+Accordi.propTypes = {
+  toggleId: PropTypes.string.isRequired,
+  fieldsData: PropTypes.arrayOf(
+    PropTypes.shape({
+      field: PropTypes.string.isRequired,
+      placeholder: PropTypes.string,
+      type: PropTypes.string,
+      options: PropTypes.arrayOf(PropTypes.string)
+    })
+  ).isRequired,
+  accordianName: PropTypes.string.isRequired,
+  toggleFunction: PropTypes.func.isRequired
+};
+
