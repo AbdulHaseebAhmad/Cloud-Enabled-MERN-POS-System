@@ -7,7 +7,11 @@ import {
   billingFieldsData,
   taxFieldsData,
 } from "./Accordian/data";
-const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent }) => {
+import AddSupplier from "../AddSupplier/AddSuplier";
+import SupplierAddedSuccessfully from "../SupplierAddedSuccesfully/SupplierAddedSuccessfully";
+import { motion, AnimatePresence } from "framer-motion";
+
+const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle }) => {
   const [activeSection, setActiveSection] = useState(null);
 
   const toggleSection = (section) => {
@@ -67,14 +71,13 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent }) => {
     },
   ];
 
-  console.log(activeSection);
 
   return (
     <>
       <div className="pl-6 pr-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-lt-primary-text-color dark:text-d-primary-bg-color">
-            Add Supplier
+            {pageTitle} Supplier / Billing Details
           </h2>
           <button
             onClick={() => togglePortal()}
@@ -85,30 +88,50 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent }) => {
         </div>
       </div>
       <div className="p-6 max-w-4xl mx-auto bg-lt-secondary-bg-color rounded-lg shadow-md border border-lt-primary-border-color">
-        <div className="space-y-4">
-          {sections.map(({ sectionName, toggleId, section }) =>
-            activeSection === toggleId ? (
-              section
-            ) : (
-              <button
-                key={sectionName}
-                className="w-full text-left px-4 py-4 font-medium bg-white dark:bg-d-secondary-bg-color dark:text-d-primary-text-color focus:outline-none"
-                onClick={() => toggleSection(toggleId)}
-              >
-                {sectionName}
-              </button>
-            )
-          )}
-        </div>
-        <div className="mt-6">
-          <button
-            type="button"
-            className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
-            onClick={() => nextComponent(() => SupplierPaymentDetailsAccordion)}
+        <AnimatePresence>
+          <motion.div
+            layout
+            key={"toggleId"}
+            initial={{ opacity: 0}}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.5,
+              ease: "easeInOut",
+            }}
+            className="space-y-4"
           >
-            Next
-          </button>
-        </div>
+            {sections.map(({ sectionName, toggleId, section }) =>
+              activeSection === toggleId ? (
+                section
+              ) : (
+                <button
+                  key={sectionName}
+                  className="w-full text-left px-4 py-4 font-medium bg-white dark:bg-d-secondary-bg-color dark:text-d-primary-text-color focus:outline-none"
+                  onClick={() => toggleSection(toggleId)}
+                >
+                  {sectionName}
+                </button>
+              )
+            )}
+          </motion.div>
+          <div className="mt-6 w-full flex justify-between">
+            <button
+              type="button"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color hover:bg-d-primary-action-color text-white py-2 px-4 rounded-md bg-lt-primary-bg-color bg-d-secondary-bg-color"
+              onClick={() => nextComponent(() => AddSupplier)}
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
+              onClick={() => nextComponent(() => SupplierAddedSuccessfully)}
+            >
+              Add Supplier
+            </button>
+          </div>
+        </AnimatePresence>
       </div>
     </>
   );

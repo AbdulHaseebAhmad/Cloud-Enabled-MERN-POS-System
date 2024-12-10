@@ -8,9 +8,9 @@ import InventoryReports from "../InventoryManagement/InventoryReport/InventoryRe
  import ProductsByCategory from "../InventoryManagement/TotalAvailableProducts/ProductsByCategory";
  import StockTracking from "../InventoryManagement/StockTracking/StockTracking";
 
-const router = createBrowserRouter([
+ const router = createBrowserRouter([
   {
-    path: "/dashboard",
+    path: "/",
     element: <InventoryManagemenetRootElement />,
     children: [
       {

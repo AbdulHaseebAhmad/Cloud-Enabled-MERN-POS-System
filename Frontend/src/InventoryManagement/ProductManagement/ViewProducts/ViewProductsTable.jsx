@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
-import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
+//import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
 
-export default function ViewSuppliersTable({
-  suppliers,
+export default function ViewProductsTable({
+  products,
   togglePortal,
   nextComponent,
   setPageTitle,
 }) {
   const showEditView = () => {
-    nextComponent(() => EditSupplierDetails);
+    nextComponent(() => "EditSupplierDetails");
     togglePortal();
     setPageTitle("Edit");
   };
@@ -19,33 +19,34 @@ export default function ViewSuppliersTable({
         <thead>
           <tr>
             <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
+              Product
+            </th>
+            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
+              Category
+            </th>
+            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
+              SKU
+            </th>
+            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
+              Price
+            </th>
+            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
+             Stock
+            </th>
+            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
               Supplier
-            </th>
-            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
-              Contact
-            </th>
-            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
-              Address
-            </th>
-            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
-              Stock
-            </th>
-            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
-              Ordered
-            </th>
-            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
-              Actions
             </th>
           </tr>
         </thead>
         <tbody>
-          {suppliers.map((supplier, index) => (
+          {products.map((product, index) => (
             <tr key={index} className="text-center text-sm md:text-base">
-              <td className="px-4 py-2 truncate">{supplier.name}</td>
-              <td className="px-4 py-2 truncate">{supplier.contact}</td>
-              <td className="px-4 py-2 truncate">{supplier.address}</td>
-              <td className="px-4 py-2 truncate">{supplier.productsInStock}</td>
-              <td className="px-4 py-2 truncate">{supplier.productsOrdered}</td>
+              <td className="px-4 py-2 truncate"><a href="product-detail">{product.name}</a></td>
+              <td className="px-4 py-2 truncate">{product.category}</td>
+              <td className="px-4 py-2 truncate">{product.sku}</td>
+              <td className="px-4 py-2 truncate">{product.price}</td>
+              <td className="px-4 py-2 truncate">{product.stock}</td>
+              <td className="px-4 py-2 truncate">{product.supplier}</td>
               <td className="px-4 py-2 flex justify-center space-x-2">
                 <button
                   className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-1 px-2 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
@@ -83,8 +84,8 @@ export default function ViewSuppliersTable({
   );
 }
 
-ViewSuppliersTable.propTypes = {
-  suppliers: PropTypes.array.isRequired,
+ViewProductsTable.propTypes = {
+  products: PropTypes.array.isRequired,
   togglePortal: PropTypes.func.isRequired,
   nextComponent: PropTypes.func.isRequired,
   setPageTitle: PropTypes.func.isRequired,

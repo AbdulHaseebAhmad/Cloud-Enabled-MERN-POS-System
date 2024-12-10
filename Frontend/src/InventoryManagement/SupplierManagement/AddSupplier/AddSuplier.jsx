@@ -1,13 +1,15 @@
 import { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import SupplierPaymentDetailsAccordion from "../SupplierBillingInfo/SupplierPaymentDetailsAccordion";
-const AddSupplier = ({ togglePortal, nextComponent }) => {
+
+const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
   const formFields = [
     { field: "Supplier Name", placeholder: "Enter Supplier Name" },
     { field: "Supplier Contact", placeholder: "Enter Supplier Contact" },
     { field: "Supplier Address", placeholder: "Enter Supplier Address" },
     { field: "Supplier Id", placeholder: "Generate Supplier Id" },
   ];
+
   const [formData, setFormData] = useState({});
 
   const handleChange = (e) => {
@@ -25,12 +27,12 @@ const AddSupplier = ({ togglePortal, nextComponent }) => {
     <>
       <div className="pl-6 pr-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-lt-primary-text-color dark:text-d-primary-bg-color">
-            Add Supplier
+          <h2 className="text-2xl font-bold  text-d-primary-bg-color">
+            {pageTitle} Supplier / Supplier Details
           </h2>
           <button
             onClick={() => togglePortal()}
-            className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
+            className=" bg-d-primary-action-color text-white py-2 px-4 rounded-md  hover:bg-d-secondary-bg-color"
           >
             Cancel
           </button>
@@ -53,22 +55,31 @@ const AddSupplier = ({ togglePortal, nextComponent }) => {
                   name={field}
                   value={formData.field}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white  dark:text-d-secondary-bg-color"
+                  className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white  text-d-secondary-bg-color"
                   placeholder={placeholder}
                   required
                 />
               </div>
             );
           })}
-          <div className="mt-6">
+          <div className="mt-6 w-full flex justify-between">
             <button
               type="button"
-              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color hover:bg-d-primary-action-color text-white py-2 px-4 rounded-md bg-lt-primary-bg-color bg-d-secondary-bg-color"
               onClick={() =>
                 nextComponent(() => SupplierPaymentDetailsAccordion)
               }
             >
               Next
+            </button>
+            <button
+              type="button"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color hover:bg-d-secondary-bg-color"
+              onClick={() =>
+                nextComponent(() => SupplierPaymentDetailsAccordion)
+              }
+            >
+              Add Payment Details
             </button>
           </div>
         </form>
@@ -79,6 +90,7 @@ const AddSupplier = ({ togglePortal, nextComponent }) => {
 AddSupplier.propTypes = {
   togglePortal: PropTypes.func.isRequired,
   nextComponent: PropTypes.func.isRequired,
+  pageTitle: PropTypes.string.isRequired,
 };
 
 export default AddSupplier;

@@ -1,12 +1,18 @@
 import AccordionDropDown from "./AccordianDropDown";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-export default function Accordi({ toggleId, fieldsData, accordianName,toggleFunction }) {
+export default function Accordi({
+  toggleId,
+  fieldsData,
+  accordianName,
+  toggleFunction,
+}) {
   const toggleSection = (tid) => {
-    toggleFunction(tid)
+    toggleFunction(tid);
   };
   return (
-    <div className="border border-lt-primary-border-color rounded-md">
+    <div
+      className="border border-lt-primary-border-color rounded-md">
       <button
         className="w-full text-left px-4 py-4 font-medium bg-white dark:bg-d-secondary-bg-color dark:text-d-primary-text-color focus:outline-none"
         onClick={() => toggleSection(toggleId)}
@@ -16,13 +22,11 @@ export default function Accordi({ toggleId, fieldsData, accordianName,toggleFunc
       <div className="px-4 py-2">
         {fieldsData.map(({ field, placeholder, type, options }) => (
           <div key={field} className="mb-4">
-            <label
-              className="block text-sm font-medium text-d-primary-bg-color"
-            >
+            <label className="block text-sm font-medium text-d-primary-bg-color">
               {field}
             </label>
             {type && type === "dropdown" ? (
-             <AccordionDropDown options={options} field={field} />
+              <AccordionDropDown options={options} field={field} />
             ) : (
               <input
                 type="text"
@@ -32,7 +36,8 @@ export default function Accordi({ toggleId, fieldsData, accordianName,toggleFunc
             )}
           </div>
         ))}
-      </div></div>
+      </div>
+    </div>
   );
 }
 
@@ -43,10 +48,9 @@ Accordi.propTypes = {
       field: PropTypes.string.isRequired,
       placeholder: PropTypes.string,
       type: PropTypes.string,
-      options: PropTypes.arrayOf(PropTypes.string)
+      options: PropTypes.arrayOf(PropTypes.string),
     })
   ).isRequired,
   accordianName: PropTypes.string.isRequired,
-  toggleFunction: PropTypes.func.isRequired
+  toggleFunction: PropTypes.func.isRequired,
 };
-
