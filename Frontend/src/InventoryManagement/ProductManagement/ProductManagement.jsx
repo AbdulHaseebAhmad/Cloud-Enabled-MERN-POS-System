@@ -13,6 +13,10 @@ const ProductManagement = () => {
   const [currentComponent, setCurrentComponent] = useState(() => {
     return AddProduct;
   });
+
+  const InitialView = () => {
+    setCurrentComponent(()=>AddProduct);
+    setAddSupplier(true);   }
   return (
     <div className="p-4 sm:p-6">
       {addProduct ? (
@@ -34,7 +38,7 @@ const ProductManagement = () => {
               Product Management
             </h2>
             <button
-              onClick={() => setAddSupplier(true)}
+              onClick={InitialView}
               className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
             >
               Add Product

@@ -118,14 +118,14 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
           <div className="mt-6 w-full flex justify-between">
             <button
               type="button"
-              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color hover:bg-d-primary-action-color text-white py-2 px-4 rounded-md bg-lt-primary-bg-color bg-d-secondary-bg-color"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color  text-white py-2 px-4 rounded-md bg-d-primary-bg-color hover:bg-d-primary-action-color"
               onClick={() => nextComponent(() => AddSupplier)}
             >
               Back
             </button>
             <button
               type="button"
-              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-bg-color"
               onClick={() => nextComponent(() => SupplierAddedSuccessfully)}
             >
               Add Supplier
@@ -138,6 +138,7 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
 };
 SupplierPaymentDetailsAccordion.propTypes = {
   togglePortal: PropTypes.func.isRequired,
+  pageTitle: PropTypes.string.isRequired,
   nextComponent: PropTypes.func.isRequired,
 };
 

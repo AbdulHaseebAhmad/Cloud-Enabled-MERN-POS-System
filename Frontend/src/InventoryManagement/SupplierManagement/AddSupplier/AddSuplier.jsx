@@ -22,6 +22,7 @@ const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
     e.preventDefault();
     console.log("Supplier Added:", formData);
   };
+  
 
   return (
     <>
@@ -65,7 +66,7 @@ const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
           <div className="mt-6 w-full flex justify-between">
             <button
               type="button"
-              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color hover:bg-d-primary-action-color text-white py-2 px-4 rounded-md bg-lt-primary-bg-color bg-d-secondary-bg-color"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color text-white py-2 px-4 rounded-md bg-d-primary-bg-color hover:bg-d-primary-action-color"
               onClick={() =>
                 nextComponent(() => SupplierPaymentDetailsAccordion)
               }
@@ -74,7 +75,7 @@ const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
             </button>
             <button
               type="button"
-              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color hover:bg-d-secondary-bg-color"
+              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color  text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-action-color"
               onClick={() =>
                 nextComponent(() => SupplierPaymentDetailsAccordion)
               }
