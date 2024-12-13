@@ -1,25 +1,38 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CurrentStockChart from "./CurrentStockChart/CurrentStockChart";
+import CurrentCriticalStockChart from "./CurrentStockChart/CurrentCriticalChart";
 
 const CurrentStockOverview = () => {
-  const [selected, setSelected] = useState("category");
+  const [selected, setSelected] = useState("Category");
+  const [general, setGeneral] = useState(true);
+  const [critical, setCritical] = useState(false);
+  const [stockValue, setStockValue] = useState(false);
 
+  const categories = [
+    { Category: "Electronics", quantity: 60000 },
+    { Category: "Clothing", quantity: 40000 },
+    { Category: "Foot Wear", quantity: 7000 },
+    { Category: "Kitchen", quantity: 5000 },
+    { Category: "Commodities", quantity: 3000 },
+  ]
+
+  const products = [
+    { Product: "Iphone", quantity: 2000 },
+    { Product: "Jeans", quantity: 8000 },
+    { Product: "High Shoes", quantity: 10000 },
+    { Product: "Spoons", quantity: 1000 },
+    { Product: "Washing Powder", quantity: 33000 },
+  ]
   const [options, setOptions] = useState({
-    data: [
-      { category: "Stocks", amount: 60000 },
-      { category: "Bonds", amount: 40000 },
-      { category: "Cash", amount: 7000 },
-      { category: "Real Estate", amount: 5000 },
-      { category: "Commodities", amount: 3000 },
-    ],
+    data: categories,
     title: {
       text: `Stock By ${selected}`,
     },
     series: [
       {
         type: "donut",
-        calloutLabelKey: "category",
-        angleKey: "amount",
+        calloutLabelKey: selected,
+        angleKey: "quantity",
         innerRadiusRatio: 0.9,
         innerLabels: [
           {
@@ -40,15 +53,20 @@ const CurrentStockOverview = () => {
     ],
   });
 
-  // Use effect to update the options when the selected state changes
   useEffect(() => {
     setOptions((prevOptions) => ({
       ...prevOptions,
+      data: selected === "Category" ? categories : products,
       title: {
         text: `Stock By ${selected}`,
       },
+      series: prevOptions.series.map((seriesItem) => ({
+        ...seriesItem,
+        calloutLabelKey: selected,
+      })),
     }));
-  }, [selected]); // This will trigger when `selected` changes
+  }, [selected]);
+  
 
   return (
     <div className="flex flex-col justify-between items-start w-full h-full">
@@ -65,26 +83,35 @@ const CurrentStockOverview = () => {
           <div className="space-y-4">
             {/* View By Category */}
             <button
-              onClick={() => setSelected("category")}
-              className={`w-full ${selected === "category" ? "bg-d-primary-bg-color" : "bg-d-primary-action-color"} text-white py-2 px-4 rounded-md`}
+              onClick={() => {setSelected("Category"); setGeneral(true)}}
+              className={`w-full ${
+                selected === "Category"
+                  ? "bg-d-primary-bg-color"
+                  : "bg-d-primary-action-color"
+              } text-white py-2 px-4 rounded-md`}
             >
               View By Category
             </button>
 
             {/* View By Product */}
             <button
-              onClick={() => setSelected("product")}
-              className={`w-full ${selected === "product" ? "bg-d-primary-bg-color" : "bg-d-primary-action-color"} text-white py-2 px-4 rounded-md`}
+              onClick={() => {setSelected("Product"); setGeneral(true)}}
+              className={`w-full ${
+                selected === "Product"
+                  ? "bg-d-primary-bg-color"
+                  : "bg-d-primary-action-color"
+              } text-white py-2 px-4 rounded-md`}
             >
               View By Product
             </button>
 
             {/* View By Critical Dropdown */}
             <div className="w-full">
-              <label className="block text-gray-700 mb-2">View By Critical</label>
-              <select
-                className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <label className="block text-gray-700 mb-2">
+                View By Critical
+              </label>
+              <select onClick={()=>{setGeneral(false); setCritical(true)}} className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">Select</option>
                 <option value="category">Category</option>
                 <option value="product">Product</option>
               </select>
@@ -93,9 +120,8 @@ const CurrentStockOverview = () => {
             {/* Stock Value Dropdown */}
             <div className="w-full">
               <label className="block text-gray-700 mb-2">Stock Value</label>
-              <select
-                className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <select onClick={()=>{setGeneral(false); setStockValue(true)}} className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="" >Select</option>
                 <option value="category">Category</option>
                 <option value="product">Product</option>
               </select>
@@ -103,7 +129,8 @@ const CurrentStockOverview = () => {
           </div>
         </div>
         <div className="w-3/4">
-          <CurrentStockChart options={options} title="Selected" />
+          {general && <CurrentStockChart options={options} />}
+          {critical && <CurrentCriticalStockChart/>}
         </div>
       </div>
     </div>
