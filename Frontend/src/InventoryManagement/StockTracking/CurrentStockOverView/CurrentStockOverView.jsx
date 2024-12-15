@@ -14,7 +14,7 @@ const CurrentStockOverview = () => {
     { Category: "Foot Wear", quantity: 7000 },
     { Category: "Kitchen", quantity: 5000 },
     { Category: "Commodities", quantity: 3000 },
-  ]
+  ];
 
   const products = [
     { Product: "Iphone", quantity: 2000 },
@@ -22,7 +22,10 @@ const CurrentStockOverview = () => {
     { Product: "High Shoes", quantity: 10000 },
     { Product: "Spoons", quantity: 1000 },
     { Product: "Washing Powder", quantity: 33000 },
-  ]
+  ];
+
+  const [criticalType, setCriticalType] = useState("");
+  console.log(criticalType);
   const [options, setOptions] = useState({
     data: categories,
     title: {
@@ -66,7 +69,6 @@ const CurrentStockOverview = () => {
       })),
     }));
   }, [selected]);
-  
 
   return (
     <div className="flex flex-col justify-between items-start w-full h-full">
@@ -83,7 +85,11 @@ const CurrentStockOverview = () => {
           <div className="space-y-4">
             {/* View By Category */}
             <button
-              onClick={() => {setSelected("Category"); setGeneral(true)}}
+              onClick={() => {
+                setSelected("Category");
+                setGeneral(true);
+                setCritical(false);
+              }}
               className={`w-full ${
                 selected === "Category"
                   ? "bg-d-primary-bg-color"
@@ -95,7 +101,11 @@ const CurrentStockOverview = () => {
 
             {/* View By Product */}
             <button
-              onClick={() => {setSelected("Product"); setGeneral(true)}}
+              onClick={() => {
+                setSelected("Product");
+                setGeneral(true);
+                setCritical(false);
+              }}
               className={`w-full ${
                 selected === "Product"
                   ? "bg-d-primary-bg-color"
@@ -110,27 +120,40 @@ const CurrentStockOverview = () => {
               <label className="block text-gray-700 mb-2">
                 View By Critical
               </label>
-              <select onClick={()=>{setGeneral(false); setCritical(true)}} className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Select</option>
+              <select
+                onChange={(e) => {
+                  setGeneral(false);
+                  setCritical(true);
+                  setCriticalType(e.target.value);
+                }}
+                className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select</option>
                 <option value="category">Category</option>
                 <option value="product">Product</option>
               </select>
             </div>
 
             {/* Stock Value Dropdown */}
-            <div className="w-full">
+            {/* {<div className="w-full">
               <label className="block text-gray-700 mb-2">Stock Value</label>
-              <select onClick={()=>{setGeneral(false); setStockValue(true)}} className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="" >Select</option>
+              <select
+                onClick={() => {
+                  setGeneral(false);
+                  setStockValue(true);
+                }}
+                className="w-full bg-gray-200 border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select</option>
                 <option value="category">Category</option>
                 <option value="product">Product</option>
               </select>
-            </div>
+            </div>} */}
           </div>
         </div>
         <div className="w-3/4">
           {general && <CurrentStockChart options={options} />}
-          {critical && <CurrentCriticalStockChart/>}
+          {critical && <CurrentCriticalStockChart type={criticalType} />}
         </div>
       </div>
     </div>

@@ -2,8 +2,6 @@ import { AgCharts } from "ag-charts-react";
 import PropTypes from 'prop-types';
 
 const CurrentStockChart = ({options}) => {
-
-
   return <AgCharts options={options}  style={{width:'90%',height:'500px',justifySelf:'center'}}/>;
 };
 CurrentStockChart.propTypes = {
