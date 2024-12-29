@@ -1,0 +1,53 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Compiled files
+dist/
+build/
+*.tsbuildinfo
+
+# Debugging
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Git-specific
+.git/
+
+# Generated coverage reports
+coverage/
+
+# Docker files (if using Docker)
+docker-compose.override.yml
+.dockerignore
+
+# Miscellaneous
+.nyc_output/
+*.log
+*.env.local
+.env.*.local
