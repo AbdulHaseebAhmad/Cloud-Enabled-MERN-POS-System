@@ -61,7 +61,7 @@ const SecondaryNavbar = () => {
             Inventory Reports
           </NavLink>
           <NavLink
-            to="/"
+            to="/inventory-management"
             className={({ isActive }) =>
               isActive ? ActiveStyle : InActiveStyle
             }
@@ -118,7 +118,7 @@ const SecondaryNavbar = () => {
                   Inventory Reports
                 </NavLink>
                 <NavLink
-                  to="/"
+                  to="/inventory-management"
                   className={({ isActive }) =>
                     isActive ? ActiveStyle : InActiveStyle
                   }

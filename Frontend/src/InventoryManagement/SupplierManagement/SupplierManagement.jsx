@@ -1,6 +1,6 @@
 import AddSupplier from "./AddSupplier/AddSuplier";
 import ViewSuppliersTable from "./ViewSuppliers/ViewSuppliersTable";
-import PortalExample from "../Portal/PortalComponent";
+import PortalComponent from "../Portal/PortalComponent";
 import { useState } from "react";
 
 const SupplierManagement = () => {
@@ -26,12 +26,13 @@ const SupplierManagement = () => {
     return AddSupplier;
   });
   const InitialView = () => {
-    setCurrentComponent(()=>AddSupplier);
-    setAddSupplier(true);   }
+    setCurrentComponent(() => AddSupplier);
+    setAddSupplier(true);
+  };
   return (
     <div className="p-4 sm:p-6">
       {addSupplier ? (
-        <PortalExample
+        <PortalComponent
           Component={currentComponent}
           togglePortal={() => {
             setAddSupplier(!addSupplier);

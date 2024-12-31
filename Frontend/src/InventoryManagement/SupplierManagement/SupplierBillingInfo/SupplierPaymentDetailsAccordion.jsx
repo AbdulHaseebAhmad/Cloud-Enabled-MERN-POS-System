@@ -11,8 +11,15 @@ import AddSupplier from "../AddSupplier/AddSuplier";
 import SupplierAddedSuccessfully from "../SupplierAddedSuccesfully/SupplierAddedSuccessfully";
 import { motion, AnimatePresence } from "framer-motion";
 
-const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle }) => {
+const SupplierPaymentDetailsAccordion = ({
+  togglePortal,
+  nextComponent,
+  pageTitle,
+  suppliersData,
+  data
+}) => {
   const [activeSection, setActiveSection] = useState(null);
+  const [paymentDetails, setPaymentDetails] = useState({});
 
   const toggleSection = (section) => {
     setActiveSection((prevSection) =>
@@ -20,16 +27,28 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
     );
   };
 
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setPaymentDetails((prev) => ({ ...prev, [name]: value }));
+  }; // this function is passed to the child to handle changes in fields here in the parent
+
+  const handlePassData = () => {
+    suppliersData(paymentDetails);
+  }; // this function passes formdata of current modal to portal back
   const sections = [
     {
       sectionName: "Bank Account Information",
       toggleId: "bankInfo",
       section: (
         <AccordianForm
+          key="bankInfo"
           toggleId="bankInfo"
           accordianName="Bank Account Information"
           fieldsData={bankFieldsData}
           toggleFunction={toggleSection}
+          onChangeHandler={onChangeHandler}
+          data={data}
+          handlePassData={handlePassData}
         />
       ),
     },
@@ -38,10 +57,15 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
       toggleId: "paymentTerms",
       section: (
         <AccordianForm
+          key="paymentTerms"
           fieldsData={paymentTermsFieldsData}
           accordianName="Payment Terms"
           toggleId="paymentTerms"
           toggleFunction={toggleSection}
+          onChangeHandler={onChangeHandler}
+          data={data}
+          handlePassData={handlePassData}
+
         />
       ),
     },
@@ -50,10 +74,15 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
       toggleId: "taxInfo",
       section: (
         <AccordianForm
+          key="taxInfo"
           fieldsData={taxFieldsData}
           accordianName="Tax Information"
           toggleId="taxInfo"
           toggleFunction={toggleSection}
+          onChangeHandler={onChangeHandler}
+          data={data}
+          handlePassData={handlePassData}
+
         />
       ),
     },
@@ -62,15 +91,19 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
       toggleId: "billingInfo",
       section: (
         <AccordianForm
+          key="billingInfo"
           fieldsData={billingFieldsData}
           accordianName="Billing Information"
           toggleId="billingInfo"
           toggleFunction={toggleSection}
+          onChangeHandler={onChangeHandler}
+          data={data}
+          handlePassData={handlePassData}
+
         />
       ),
     },
   ];
-
 
   return (
     <>
@@ -92,7 +125,7 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
           <motion.div
             layout
             key={"toggleId"}
-            initial={{ opacity: 0}}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{
@@ -126,7 +159,10 @@ const SupplierPaymentDetailsAccordion = ({ togglePortal, nextComponent,pageTitle
             <button
               type="button"
               className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-bg-color"
-              onClick={() => nextComponent(() => SupplierAddedSuccessfully)}
+              onClick={() => {
+                handlePassData();
+                nextComponent(() => SupplierAddedSuccessfully);
+              }}
             >
               Add Supplier
             </button>
@@ -140,6 +176,8 @@ SupplierPaymentDetailsAccordion.propTypes = {
   togglePortal: PropTypes.func.isRequired,
   pageTitle: PropTypes.string.isRequired,
   nextComponent: PropTypes.func.isRequired,
+  suppliersData: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 export default SupplierPaymentDetailsAccordion;

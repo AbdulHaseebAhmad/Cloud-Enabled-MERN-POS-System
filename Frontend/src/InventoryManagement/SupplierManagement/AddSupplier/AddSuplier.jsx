@@ -2,7 +2,13 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import SupplierPaymentDetailsAccordion from "../SupplierBillingInfo/SupplierPaymentDetailsAccordion";
 
-const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
+const AddSupplier = ({
+  togglePortal,
+  nextComponent,
+  pageTitle,
+  suppliersData,
+  data
+}) => {
   const formFields = [
     { field: "Supplier Name", placeholder: "Enter Supplier Name" },
     { field: "Supplier Contact", placeholder: "Enter Supplier Contact" },
@@ -14,7 +20,6 @@ const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -22,7 +27,10 @@ const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
     e.preventDefault();
     console.log("Supplier Added:", formData);
   };
-  
+
+  const handlePassData = () => {
+    suppliersData(formData);
+  }; // this function passes the current modals form data to portal back
 
   return (
     <>
@@ -54,9 +62,9 @@ const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
                   type="text"
                   id="field"
                   name={field}
-                  value={formData.field}
+                  value={data[field]}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white  text-d-secondary-bg-color"
+                  className="font-medium mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white  dark:text-d-secondary-bg-color"
                   placeholder={placeholder}
                   required
                 />
@@ -67,18 +75,20 @@ const AddSupplier = ({ togglePortal, nextComponent, pageTitle }) => {
             <button
               type="button"
               className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color text-white py-2 px-4 rounded-md bg-d-primary-bg-color hover:bg-d-primary-action-color"
-              onClick={() =>
-                nextComponent(() => SupplierPaymentDetailsAccordion)
-              }
+              onClick={() => {
+                handlePassData();
+                nextComponent(() => SupplierPaymentDetailsAccordion);
+              }}
             >
               Next
             </button>
             <button
               type="button"
               className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color  text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-action-color"
-              onClick={() =>
-                nextComponent(() => SupplierPaymentDetailsAccordion)
-              }
+              onClick={() => {
+                handlePassData();
+                nextComponent(() => SupplierPaymentDetailsAccordion);
+              }}
             >
               Add Payment Details
             </button>
@@ -92,6 +102,8 @@ AddSupplier.propTypes = {
   togglePortal: PropTypes.func.isRequired,
   nextComponent: PropTypes.func.isRequired,
   pageTitle: PropTypes.string.isRequired,
+  suppliersData: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 export default AddSupplier;

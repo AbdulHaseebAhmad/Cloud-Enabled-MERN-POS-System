@@ -1,37 +1,47 @@
 import AccordionDropDown from "./AccordianDropDown";
 import PropTypes from "prop-types";
-
 export default function Accordi({
   toggleId,
   fieldsData,
   accordianName,
   toggleFunction,
+  onChangeHandler,
+  data,
+  handlePassData
 }) {
+
   const toggleSection = (tid) => {
     toggleFunction(tid);
   };
+
+ 
+
   return (
-    <div
-      className="border border-lt-primary-border-color rounded-md">
+    <div className="border border-lt-primary-border-color rounded-md" >
       <button
         className="w-full text-left px-4 py-4 font-medium bg-white dark:bg-d-secondary-bg-color dark:text-d-primary-text-color focus:outline-none"
-        onClick={() => toggleSection(toggleId)}
+        onClick={() => {toggleSection(toggleId);handlePassData()}}
       >
         {accordianName}
       </button>
       <div className="px-4 py-2">
         {fieldsData.map(({ field, placeholder, type, options }) => (
-          <div key={field} className="mb-4">
-            <label className="block text-sm font-medium text-d-primary-bg-color">
+          <div key={field} className="mb-4" >
+            <label className="block text-sm font-medium text-d-primary-bg-color" >
               {field}
             </label>
             {type && type === "dropdown" ? (
-              <AccordionDropDown options={options} field={field} />
+              <AccordionDropDown options={options} field={field} onChange={onChangeHandler} data={data}/>
             ) : (
               <input
+                key={field}
                 type="text"
+                name={field}
                 placeholder={placeholder}
+                onChange={onChangeHandler}
                 className="font-medium mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white  dark:text-d-secondary-bg-color"
+                value={data[field]}
+
               />
             )}
           </div>
@@ -53,4 +63,7 @@ Accordi.propTypes = {
   ).isRequired,
   accordianName: PropTypes.string.isRequired,
   toggleFunction: PropTypes.func.isRequired,
+  onChangeHandler: PropTypes.func.isRequired,
+  handlePassData: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
 };
