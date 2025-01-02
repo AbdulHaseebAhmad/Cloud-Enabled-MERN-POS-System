@@ -1,6 +1,9 @@
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+
 export default function PortalComponent({
   Component,
   togglePortal,
@@ -16,7 +19,23 @@ export default function PortalComponent({
   const recieveSupplierData = (data) => {
     setData((prev) => ({ ...prev, ...data }));
   };
-  console.log(data);
+
+  const submithandler = () => {
+    const token = Cookies.get("token");
+    axios
+      .post("http://localhost:5000/api/supplier/create", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return ReactDOM.createPortal(
     <AnimatePresence>
       <motion.div
@@ -36,6 +55,7 @@ export default function PortalComponent({
           pageTitle={pageTitle}
           suppliersData={recieveSupplierData}
           data={data}
+          submithandler={submithandler}
         />{" "}
       </motion.div>
     </AnimatePresence>,

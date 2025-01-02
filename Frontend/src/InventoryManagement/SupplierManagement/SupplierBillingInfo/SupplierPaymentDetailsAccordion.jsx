@@ -16,10 +16,12 @@ const SupplierPaymentDetailsAccordion = ({
   nextComponent,
   pageTitle,
   suppliersData,
-  data
+  data,
+  submithandler,
 }) => {
   const [activeSection, setActiveSection] = useState(null);
   const [paymentDetails, setPaymentDetails] = useState({});
+  const [formIsValid, setFormIsValid] = useState(false);
 
   const toggleSection = (section) => {
     setActiveSection((prevSection) =>
@@ -29,7 +31,24 @@ const SupplierPaymentDetailsAccordion = ({
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    setPaymentDetails((prev) => ({ ...prev, [name]: value }));
+    setPaymentDetails((prev) => ({
+      ...prev,
+      "Payment Details": { ...prev["Payment Details"], [name]: value },
+    }));
+    const allFields = [
+      ...paymentTermsFieldsData,
+      ...bankFieldsData,
+      ...billingFieldsData,
+      ...taxFieldsData,
+    ];
+    const allFieldsFilled = allFields.every((field) => {
+      return (
+        paymentDetails[field] !== "" || data["Payment Details"][field] !== ""
+      );
+    });
+    if (allFieldsFilled) {
+      setFormIsValid(true);
+    }
   }; // this function is passed to the child to handle changes in fields here in the parent
 
   const handlePassData = () => {
@@ -65,7 +84,6 @@ const SupplierPaymentDetailsAccordion = ({
           onChangeHandler={onChangeHandler}
           data={data}
           handlePassData={handlePassData}
-
         />
       ),
     },
@@ -82,7 +100,6 @@ const SupplierPaymentDetailsAccordion = ({
           onChangeHandler={onChangeHandler}
           data={data}
           handlePassData={handlePassData}
-
         />
       ),
     },
@@ -99,7 +116,6 @@ const SupplierPaymentDetailsAccordion = ({
           onChangeHandler={onChangeHandler}
           data={data}
           handlePassData={handlePassData}
-
         />
       ),
     },
@@ -113,7 +129,10 @@ const SupplierPaymentDetailsAccordion = ({
             {pageTitle} Supplier / Billing Details
           </h2>
           <button
-            onClick={() => togglePortal()}
+            onClick={() => {
+              togglePortal();
+              handlePassData();
+            }}
             className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
           >
             Cancel
@@ -157,15 +176,22 @@ const SupplierPaymentDetailsAccordion = ({
               Back
             </button>
             <button
-              type="button"
-              className="border active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-bg-color"
-              onClick={() => {
-                handlePassData();
-                nextComponent(() => SupplierAddedSuccessfully);
-              }}
-            >
-              Add Supplier
-            </button>
+  disabled={!formIsValid}
+  type="button"
+  className={`border py-2 px-4 rounded-md transition ${
+    formIsValid
+      ? "bg-d-primary-bg-color text-white hover:bg-d-primary-action-color active:border-1-d-secondary-bg-colorbg-lt-primary-action-color dark:bg-d-primary-action-color"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300"
+  }`}
+  onClick={() => {
+    if (formIsValid) {
+      submithandler();
+      nextComponent(() => SupplierAddedSuccessfully);
+    }
+  }}
+>
+  Add Supplier
+</button>
           </div>
         </AnimatePresence>
       </div>
@@ -178,6 +204,7 @@ SupplierPaymentDetailsAccordion.propTypes = {
   nextComponent: PropTypes.func.isRequired,
   suppliersData: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
+  submithandler: PropTypes.func.isRequired,
 };
 
 export default SupplierPaymentDetailsAccordion;

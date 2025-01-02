@@ -1,30 +1,28 @@
-//import  { useState } from "react";
 import PropTypes from "prop-types";
 
-const SingleDropdown = ({ options, onChange, field,data }) => {
-  //const [selectedValue, setSelectedValue] = useState("");
+const SingleDropdown = ({ options, onChange, field, data }) => {
+  // const handleChange = (event) => {
+  //   if (onChange) {
+  //     onChange(event);
+  //   }
+  // };
 
-  const handleChange = (event) => {
-   // const {value} = event.target;
-  //  setSelectedValue(value);
-    if (onChange) {
-      onChange(event); 
-    }
-  };
+  // console.log(data);
 
   return (
     <div className="mb-4">
       <select
-        value={data[field]}
-        onChange={handleChange}
+        onChange={(event) => {
+          onChange(event);
+        }}
         className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white dark:text-d-secondary-bg-color cursor-pointer opacity-100 font-medium"
         name={field}
       >
-        <option value="" disabled>
-          {field}
+        <option value={data && data[field] ? data[field] : "Select an option"}>
+          {data && data[field] ? data[field] : "Select an option"}
         </option>
         {options.map((option, index) => (
-          <option key={index} value={option}  className="cursor-pointer">
+          <option key={index} value={option} className="cursor-pointer">
             {option}
           </option>
         ))}
