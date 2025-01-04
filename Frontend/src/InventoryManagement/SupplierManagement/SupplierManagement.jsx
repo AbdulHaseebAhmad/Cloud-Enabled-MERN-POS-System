@@ -1,25 +1,12 @@
 import AddSupplier from "./AddSupplier/AddSuplier";
 import ViewSuppliersTable from "./ViewSuppliers/ViewSuppliersTable";
 import PortalComponent from "../Portal/PortalComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getSuppliers } from "../Redux/Supplier/SupplierActions";
+import { useDispatch } from "react-redux";
 
 const SupplierManagement = () => {
-  const suppliers = [
-    {
-      name: "Supplier X",
-      contact: "123-456-7890",
-      address: "123",
-      productsInStock: 50,
-      productsOrdered: 20,
-    },
-    {
-      name: "Supplier Y",
-      contact: "987-654-3210",
-      address: "123",
-      productsInStock: 50,
-      productsOrdered: 20,
-    },
-  ];
+ 
   const [addSupplier, setAddSupplier] = useState(false);
   const [pageTitle, setPageTitle] = useState("Add");
   const [currentComponent, setCurrentComponent] = useState(() => {
@@ -29,6 +16,10 @@ const SupplierManagement = () => {
     setCurrentComponent(() => AddSupplier);
     setAddSupplier(true);
   };
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getSuppliers());
+  }, []);
   return (
     <div className="p-4 sm:p-6">
       {addSupplier ? (
@@ -76,7 +67,6 @@ const SupplierManagement = () => {
             </div>
           </div>
           <ViewSuppliersTable
-            suppliers={suppliers}
             nextComponent={(Component) => setCurrentComponent(Component)}
             togglePortal={() => {
               setAddSupplier(!addSupplier);

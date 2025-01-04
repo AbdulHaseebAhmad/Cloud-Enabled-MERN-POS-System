@@ -1,21 +1,26 @@
 import PropTypes from "prop-types";
 import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
-
+import { useSelector, useDispatch } from "react-redux";
+import { deleteSupplier } from "../../Redux/Supplier/SupplierActions";
+import AddSupplier from "../AddSupplier/AddSuplier";
 export default function ViewSuppliersTable({
-  suppliers,
   togglePortal,
   nextComponent,
   setPageTitle,
 }) {
   const showEditView = () => {
-    nextComponent(() => EditSupplierDetails);
+    nextComponent(() => AddSupplier);
     togglePortal();
     setPageTitle("Edit");
   };
-
+  const dispatch = useDispatch();
+  const deleteHandle = (id) => {
+    dispatch(deleteSupplier(id))
+  }
+  const suppliersData = useSelector((state) => state.SupplierReducer.data);
   return (
     <div className="overflow-x-auto bg-lt-secondary-bg-color p-4 rounded-lg shadow-md border border-lt-primary-border-color">
-      <table className="min-w-full table-auto border-collapse">
+     {suppliersData.length > 0 ? ( <table className="min-w-full table-auto border-collapse">
         <thead>
           <tr>
             <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
@@ -39,13 +44,13 @@ export default function ViewSuppliersTable({
           </tr>
         </thead>
         <tbody>
-          {suppliers.map((supplier, index) => (
+          {suppliersData.map((supplier, index) => (
             <tr key={index} className="text-center text-sm md:text-base">
-              <td className="px-4 py-2 truncate">{supplier.name}</td>
-              <td className="px-4 py-2 truncate">{supplier.contact}</td>
-              <td className="px-4 py-2 truncate">{supplier.address}</td>
-              <td className="px-4 py-2 truncate">{supplier.productsInStock}</td>
-              <td className="px-4 py-2 truncate">{supplier.productsOrdered}</td>
+              <td className="px-4 py-2 truncate">{supplier['Supplier Name']}</td>
+              <td className="px-4 py-2 truncate">{supplier['Supplier Contact']}</td>
+              <td className="px-4 py-2 truncate">{supplier['Supplier Address']}</td>
+              <td className="px-4 py-2 truncate">{null}</td>
+              <td className="px-4 py-2 truncate">{null}</td>
               <td className="px-4 py-2 flex justify-center space-x-2">
                 <button
                   className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-1 px-2 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
@@ -60,7 +65,7 @@ export default function ViewSuppliersTable({
                     <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
                   </svg>
                 </button>
-                <button className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600">
+                <button onClick={()=>{deleteHandle(supplier._id)}} className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -78,13 +83,12 @@ export default function ViewSuppliersTable({
             </tr>
           ))}
         </tbody>
-      </table>
+      </table>  ) : (<div className="text-center text-lg text-d-secondary-text-color">No Suppliers Found</div>)}
     </div>
   );
 }
 
 ViewSuppliersTable.propTypes = {
-  suppliers: PropTypes.array.isRequired,
   togglePortal: PropTypes.func.isRequired,
   nextComponent: PropTypes.func.isRequired,
   setPageTitle: PropTypes.func.isRequired,

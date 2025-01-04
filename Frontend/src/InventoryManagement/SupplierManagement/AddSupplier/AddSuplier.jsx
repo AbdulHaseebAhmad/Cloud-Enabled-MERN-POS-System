@@ -33,13 +33,13 @@ const AddSupplier = ({
     },
   ];
 
-  // State for form data and form validity
   const [formData, setFormData] = useState({});
+  // State for form data and form validity
   const [formIsValid, setFormIsValid] = useState(false);
   // Validate form dynamically based on required fields
   const validateForm = () => {
     const allFieldsFilled = formFields.every((field) => {
-      return formData[field.name] || data[field.name];
+      return (formData && formData[field.name] || data && data[field.name]);
     });
     setFormIsValid(allFieldsFilled);
   };
@@ -95,8 +95,8 @@ const AddSupplier = ({
                 type="text"
                 id={name}
                 name={name}
-                placeholder={data[name] || placeholder}
-                value={formData[name] || ""}
+                placeholder={data && data[name] || placeholder}
+                value={formData[name] && formData[name]  || ""}
                 onChange={handleChange}
                 className="font-medium mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white dark:text-d-secondary-bg-color"
                 required

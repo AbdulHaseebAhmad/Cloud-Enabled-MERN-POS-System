@@ -118,7 +118,7 @@ export const loginAction = async ({ request }) => {
       loginData
     );
     Cookies.set("token", response.data.token, {
-      expires: 3,
+      expires: 1/24,
       path: "/",
       secure: true,
       sameSite: "Strict",

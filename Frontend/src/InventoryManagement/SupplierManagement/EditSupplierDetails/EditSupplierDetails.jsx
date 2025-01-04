@@ -2,6 +2,7 @@ import AddSupplier from "../AddSupplier/AddSuplier";
 import PropTypes from "prop-types";
 
 export default function EditSupplierDetails({ togglePortal, nextComponent }) {
+  
   return (
     <AddSupplier togglePortal={togglePortal} nextComponent={nextComponent} pageTitle="Edit"/>
   )

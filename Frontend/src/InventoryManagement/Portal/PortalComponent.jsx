@@ -1,8 +1,8 @@
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
+import {addSupplier} from "../Redux/Supplier/SupplierActions"
+import { useDispatch } from "react-redux";
 
 export default function PortalComponent({
   Component,
@@ -13,6 +13,7 @@ export default function PortalComponent({
   const hidePortal = () => {
     togglePortal();
   };
+  const dispatch = useDispatch();
 
   const [data, setData] = useState({});
 
@@ -21,19 +22,7 @@ export default function PortalComponent({
   };
 
   const submithandler = () => {
-    const token = Cookies.get("token");
-    axios
-      .post("http://localhost:5000/api/supplier/create", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(addSupplier(data));
   };
 
   return ReactDOM.createPortal(

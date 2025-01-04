@@ -1,9 +1,14 @@
 import PropTypes from "prop-types";
-
+import {useSelector, useDispatch} from "react-redux";
+import { getSuppliers } from "../../Redux/Supplier/SupplierActions";
 export default function SupplierAddedSuccessfully({ togglePortal }) {
+  const dispatch = useDispatch();
   const hidePortal = () => {
+    dispatch(getSuppliers())
     togglePortal();
   };
+
+  const RequestMessage = useSelector((state) => state.SupplierReducer.msg);
 
   return (
     <div className="px-6 mt-4">
@@ -13,7 +18,7 @@ export default function SupplierAddedSuccessfully({ togglePortal }) {
         </h2>
       </div>
       <div className="p-4 bg-lt-secondary-bg-color border-l-4 border-lt-primary-action-color text-lt-primary-text-color rounded-md font-bold max-w-full sm:max-w-lg mx-auto flex flex-col justify-center">
-        <p className="mb-4 text-center sm:text-left">Supplier Added Successfully</p>
+        <p className="mb-4 text-center sm:text-left">{RequestMessage}</p>
         <button
           onClick={hidePortal}
           className="bg-d-secondary-bg-color text-d-secondary-text-color py-4 px-4 rounded transition hover:bg-d-primary-action-color hover:text-d-primary-text-color w-full sm:w-auto"
