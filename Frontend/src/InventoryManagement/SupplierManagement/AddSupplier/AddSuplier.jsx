@@ -8,30 +8,34 @@ const AddSupplier = ({
   pageTitle,
   suppliersData,
   data,
+  supplier
 }) => {
   // Form fields definition
-  const formFields = [
-    {
-      name: "Supplier Name",
-      label: "Supplier Name",
-      placeholder: "Enter Supplier Name",
-    },
-    {
-      name: "Supplier Contact",
-      label: "Supplier Contact",
-      placeholder: "Enter Supplier Contact",
-    },
-    {
-      name: "Supplier Address",
-      label: "Supplier Address",
-      placeholder: "Enter Supplier Address",
-    },
-    {
-      name: "Supplier Id",
-      label: "Supplier Id",
-      placeholder: "Generate Supplier Id",
-    },
-  ];
+   const formFields =
+    pageTitle === "Edit"
+      ? supplier
+      : [
+          {
+            name: "Supplier Name",
+            label: "Supplier Name",
+            placeholder: "Enter Supplier Name",
+          },
+          {
+            name: "Supplier Contact",
+            label: "Supplier Contact",
+            placeholder: "Enter Supplier Contact",
+          },
+          {
+            name: "Supplier Address",
+            label: "Supplier Address",
+            placeholder: "Enter Supplier Address",
+          },
+          {
+            name: "Supplier Id",
+            label: "Supplier Id",
+            placeholder: "Generate Supplier Id",
+          },
+        ];
 
   const [formData, setFormData] = useState({});
   // State for form data and form validity
@@ -39,7 +43,7 @@ const AddSupplier = ({
   // Validate form dynamically based on required fields
   const validateForm = () => {
     const allFieldsFilled = formFields.every((field) => {
-      return (formData && formData[field.name] || data && data[field.name]);
+      return (formData && formData[field.name]) || (data && data[field.name]);
     });
     setFormIsValid(allFieldsFilled);
   };
@@ -56,6 +60,9 @@ const AddSupplier = ({
   // Run validation after formData changes
   useEffect(() => {
     validateForm();
+    if(supplier){
+      setFormData((prev)=>({...prev, ...supplier}))
+    }
   }, [formData]);
 
   // Handle data submission
@@ -95,8 +102,7 @@ const AddSupplier = ({
                 type="text"
                 id={name}
                 name={name}
-                placeholder={data && data[name] || placeholder}
-                value={formData[name] && formData[name]  || ""}
+                placeholder={ (pageTitle === "Edit" ? name: (data && data[name]) || placeholder ) }
                 onChange={handleChange}
                 className="font-medium mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white dark:text-d-secondary-bg-color"
                 required
@@ -153,6 +159,7 @@ AddSupplier.propTypes = {
   pageTitle: PropTypes.string.isRequired,
   suppliersData: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
+  supplier: PropTypes.object,
 };
 
 export default AddSupplier;

@@ -9,6 +9,7 @@ const SupplierManagement = () => {
  
   const [addSupplier, setAddSupplier] = useState(false);
   const [pageTitle, setPageTitle] = useState("Add");
+  const [editSupplierId, setEditSupplierId] = useState("");
   const [currentComponent, setCurrentComponent] = useState(() => {
     return AddSupplier;
   });
@@ -33,6 +34,7 @@ const SupplierManagement = () => {
             setCurrentComponent(Component);
           }}
           pageTitle={pageTitle}
+          editSupplierId={editSupplierId}
         />
       ) : (
         <>
@@ -72,6 +74,7 @@ const SupplierManagement = () => {
               setAddSupplier(!addSupplier);
             }}
             setPageTitle={(title) => setPageTitle(title)}
+            passEditSupplierId={(id)=>setEditSupplierId(id)}
           />
         </>
       )}

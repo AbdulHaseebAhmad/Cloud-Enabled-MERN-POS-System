@@ -1,15 +1,19 @@
 import PropTypes from "prop-types";
-import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteSupplier } from "../../Redux/Supplier/SupplierActions";
-import AddSupplier from "../AddSupplier/AddSuplier";
+//import AddSupplier from "../AddSupplier/AddSuplier";
+import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
 export default function ViewSuppliersTable({
   togglePortal,
   nextComponent,
   setPageTitle,
+  passEditSupplierId
 }) {
-  const showEditView = () => {
-    nextComponent(() => AddSupplier);
+
+  
+  const showEditView = (id) => {
+    nextComponent(() => EditSupplierDetails);
+    passEditSupplierId(id);
     togglePortal();
     setPageTitle("Edit");
   };
@@ -53,8 +57,9 @@ export default function ViewSuppliersTable({
               <td className="px-4 py-2 truncate">{null}</td>
               <td className="px-4 py-2 flex justify-center space-x-2">
                 <button
+                disabled
                   className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-1 px-2 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
-                  onClick={showEditView}
+                  onClick={()=>{showEditView(supplier._id)}}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -92,4 +97,5 @@ ViewSuppliersTable.propTypes = {
   togglePortal: PropTypes.func.isRequired,
   nextComponent: PropTypes.func.isRequired,
   setPageTitle: PropTypes.func.isRequired,
+  passEditSupplierId: PropTypes.func.isRequired,
 };
