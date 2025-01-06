@@ -2,7 +2,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import ProductVariantAccordion from "../ProductVariant/ProductVariant"
 
-const AddProduct = ({ togglePortal, nextComponent, pageTitle }) => {
+const AddProduct = ({ togglePortal, nextComponent, pageTitle,handleSaveData,savedFormData }) => {
+  //savedFormData is the state that holds the form data for the AddProduct Component that includes the product details and the variants
   const formFields = [
     { field: "Product Name", placeholder: "Enter Product Name" },
     { field: "SKU", placeholder: "Enter Product SKU" },
@@ -19,14 +20,10 @@ const AddProduct = ({ togglePortal, nextComponent, pageTitle }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Product Added:", formData);
-  };
-
+ 
   return (
     <>
-      <div className="pl-6 pr-6">
+      <div className="pl-6 pr-6" >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-d-primary-bg-color">
             {pageTitle} Product / Product Details
@@ -40,7 +37,7 @@ const AddProduct = ({ togglePortal, nextComponent, pageTitle }) => {
         </div>
       </div>
       <div className="p-6 max-w-4xl mx-auto bg-lt-secondary-bg-color rounded-lg shadow-md border border-lt-primary-border-color">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form  className="space-y-2">
           {formFields.map(({ field, placeholder }) => {
             return (
               <div key={field}>
@@ -54,10 +51,9 @@ const AddProduct = ({ togglePortal, nextComponent, pageTitle }) => {
                   type="text"
                   id="field"
                   name={field}
-                  value={formData[field]}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color"
-                  placeholder={placeholder}
+                  placeholder={savedFormData && savedFormData[field] || placeholder}
                   required
                 />
               </div>
@@ -67,14 +63,14 @@ const AddProduct = ({ togglePortal, nextComponent, pageTitle }) => {
             <button
               type="button"
               className="border active:border-1-d-secondary-bg-color bg-d-primary-bg-color hover:bg-d-primary-action-color text-white py-2 px-4 rounded-md"
-              onClick={() => nextComponent(() => ProductVariantAccordion)}
+              onClick={() => {handleSaveData(formData); nextComponent(() => ProductVariantAccordion)}}
             >
               Next
             </button>
             <button
               type="button"
               className="border active:border-1-d-secondary-bg-color bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-action-color"
-              onClick={() => nextComponent(() => ProductVariantAccordion)}
+              onClick={() => {handleSaveData(formData); nextComponent(() => ProductVariantAccordion)}}
             >
               Add Product Variants
             </button>
@@ -89,6 +85,8 @@ AddProduct.propTypes = {
   togglePortal: PropTypes.func.isRequired,
   nextComponent: PropTypes.func.isRequired,
   pageTitle: PropTypes.string.isRequired,
+  handleSaveData: PropTypes.func.isRequired,
+  savedFormData: PropTypes.object.isRequired,
 };
 
 export default AddProduct;

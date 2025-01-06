@@ -20,7 +20,7 @@ const url = import.meta.env.VITE_APP_BACKEND_API_URL;
 const config = {
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${Cookies.gt("token")}`,
+    Authorization: `Bearer ${Cookies.get("token")}`,
   },
 };
 
@@ -29,7 +29,7 @@ const addProduct = (product) => {
     dispatch({ type: ADD_PRODUCT });
     try {
       const response = await axios.post(
-        `${url}/api/products/addproduct`,
+        `${url}/api/product/addproduct`,
         product,
         config
       );

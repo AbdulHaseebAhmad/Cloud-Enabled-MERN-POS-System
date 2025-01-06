@@ -3,7 +3,8 @@ import { config as configDotenv } from "dotenv";
 import authenticationRouter from "./Routes/Authentication/Authentication.js";
 import cors from "cors";
 import mongoose from "mongoose";
-import supplierCrudRouter from "./Routes/Supplier/CRUD/suppliercrud.js";
+import supplierCrudRouter from "./Routes/Supplier/suppliercrud.js";
+import productCrudRouter from "./Routes/Product/productcrud.js";
 
 configDotenv();
 
@@ -27,6 +28,7 @@ mongoose
 app.use(express.json());
 app.use(authenticationRouter);
 app.use(supplierCrudRouter);
+app.use(productCrudRouter);
 
 app.get("/", (request, response) => {
   response.json("Running");

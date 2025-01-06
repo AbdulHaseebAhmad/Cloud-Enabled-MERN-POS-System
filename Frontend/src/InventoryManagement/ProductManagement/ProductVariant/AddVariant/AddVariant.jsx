@@ -4,16 +4,15 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function AddVariant({
   handleChange,
   removeVariant,
-  handleSubmit,
   variants,
   addVariant,
+  index,
+  savedFormData
 }) {
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {variants.map((variant, index) => (
-        <AnimatePresence key={variant.name}>
+    <form  className="space-y-6">
+      <AnimatePresence key={index}>
           <motion.div
-            key={variant.name}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: [10,20] }}
@@ -26,86 +25,83 @@ export default function AddVariant({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label
-                  htmlFor={`name-${index}`}
+                  htmlFor={`name`}
                   className="block text-sm font-medium text-lt-primary-text-color"
                 >
                   Variant Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  id={`name-${index}`}
-                  value={variant.name}
-                  onChange={(e) => handleChange(index, "name", e.target.value)}
+                  name='name'
+                  onChange={(e) => handleChange(index, e)}
                   className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color"
-                  placeholder="e.g., Size or Color"
+                  placeholder={savedFormData?.variants?.[index]?.name || "e.g., Size or Color"}
                   required
                 />
               </div>
               <div>
                 <label
-                  htmlFor={`sku-${index}`}
+                  htmlFor={`sku`}
                   className="block text-sm font-medium text-lt-primary-text-color"
                 >
                   SKU <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  id={`sku-${index}`}
-                  value={variant.sku}
-                  onChange={(e) => handleChange(index, "sku", e.target.value)}
+                  name='sku'
+                  onChange={(e) => handleChange(index,e)}
                   className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color"
-                  placeholder="Enter SKU"
+                  placeholder={savedFormData?.variants?.[index]?.sku || "Enter SKU"}
                   required
                 />
               </div>
               <div>
                 <label
-                  htmlFor={`priceModifier-${index}`}
+                  htmlFor={`priceModifier`}
                   className="block text-sm font-medium text-lt-primary-text-color"
                 >
                   Price Modifier
                 </label>
                 <input
                   type="number"
-                  id={`priceModifier-${index}`}
-                  value={variant.priceModifier}
+                  name='priceModifier'
                   onChange={(e) =>
-                    handleChange(index, "priceModifier", e.target.value)
+                    handleChange(index,e)
                   }
                   className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color"
-                  placeholder="e.g., 10"
+                  placeholder={savedFormData?.variants?.[index]?.priceModifier ||  "e.g., 10"}
                 />
               </div>
               <div>
                 <label
-                  htmlFor={`stock-${index}`}
+                  htmlFor={`stock`}
                   className="block text-sm font-medium text-lt-primary-text-color"
                 >
                   Stock Quantity <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
-                  id={`stock-${index}`}
-                  value={variant.stock}
-                  onChange={(e) => handleChange(index, "stock", e.target.value)}
+                  id={`stock`}
+                  name='stock'
+                  onChange={(e) => handleChange(index, e)}
                   className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color"
-                  placeholder="Enter stock quantity"
+                  placeholder={savedFormData?.variants?.[index]?.stock || "Enter stock quantity"}
                   required
                 />
               </div>
             </div>
             <div className="mt-4">
               <label
-                htmlFor={`image-${index}`}
+                htmlFor={`image`}
                 className="block text-sm font-medium text-lt-primary-text-color"
               >
                 Upload Image
               </label>
               <input
                 type="file"
-                id={`image-${index}`}
+                id={`image`}
                 onChange={(e) =>
-                  handleChange(index, "image", e.target.files[0])
+                  handleChange('index', "image", e.target.files)
                 }
                 className="mt-1 block w-full text-d-secondary-bg-color"
               />
@@ -128,7 +124,6 @@ export default function AddVariant({
             )}
           </motion.div>
         </AnimatePresence>
-      ))}
     </form>
   );
 }
@@ -136,13 +131,8 @@ export default function AddVariant({
 AddVariant.propTypes = {
   handleChange: PropTypes.func.isRequired, // Function to handle input changes
   removeVariant: PropTypes.func.isRequired, // Function to remove a variant
-  handleSubmit: PropTypes.func.isRequired, // Function to handle form submission
   addVariant: PropTypes.func.isRequired, // Function to handle form submission
-  variants: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // Unique identifier for the variant
-      name: PropTypes.string.isRequired, // Name of the variant (e.g., color, size)
-      value: PropTypes.string, // Value of the variant (optional)
-    })
-  ).isRequired, // Array of variant objects
+  variants: PropTypes.array.isRequired, // Array of variant objects
+  index: PropTypes.number.isRequired, // Index of the variant in the array
+  savedFormData: PropTypes.object, // Object of saved form data
 };

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { deleteSupplier } from "../../Redux/Supplier/SupplierActions";
 //import AddSupplier from "../AddSupplier/AddSuplier";
 import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
+import { useEffect,useState } from "react";
 export default function ViewSuppliersTable({
   togglePortal,
   nextComponent,
@@ -10,6 +11,7 @@ export default function ViewSuppliersTable({
   passEditSupplierId
 }) {
 
+  const [suppliersData,setSuppliersData] = useState([]);
   
   const showEditView = (id) => {
     nextComponent(() => EditSupplierDetails);
@@ -21,7 +23,10 @@ export default function ViewSuppliersTable({
   const deleteHandle = (id) => {
     dispatch(deleteSupplier(id))
   }
-  const suppliersData = useSelector((state) => state.SupplierReducer.data);
+  const getSuppliers = useSelector((state) => state.SupplierReducer.data);
+  useEffect(()=>{
+      setSuppliersData(getSuppliers)
+  },[getSuppliers])
   return (
     <div className="overflow-x-auto bg-lt-secondary-bg-color p-4 rounded-lg shadow-md border border-lt-primary-border-color">
      {suppliersData.length > 0 ? ( <table className="min-w-full table-auto border-collapse">

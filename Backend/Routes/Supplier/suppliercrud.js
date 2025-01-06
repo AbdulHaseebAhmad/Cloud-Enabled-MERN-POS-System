@@ -1,6 +1,6 @@
 import { Router } from "express";
-import verifyJWT from "../../../Middlewares/TokenSigningMiddleWare.js";
-import SupplierSchema from "../../../Schemas/Supplier/SupplierSchema.js";
+import verifyJWT from "../../Middlewares/TokenSigningMiddleWare.js";
+import SupplierSchema from "../../Schemas/Supplier/SupplierSchema.js";
 
 const supplierCrudRouter = Router();
 
