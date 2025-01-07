@@ -17,10 +17,11 @@ import {
 import Cookies from "js-cookie";
 
 const url = import.meta.env.VITE_APP_BACKEND_API_URL;
+const token = Cookies.get("token");
 const config = {
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${Cookies.get("token")}`,
+    Authorization: `Bearer ${token}`,
   },
 };
 
@@ -64,7 +65,7 @@ const deleteProduct = (id) => {
         `${url}/api/products/deleteproduct/${id}`,
         config
       );
-      dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: response.data });
+      dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: response.data.id });
     } catch (error) {
       dispatch({ type: DELETE_PRODUCT_FAILURE, payload: error.message });
     }
@@ -74,6 +75,7 @@ const deleteProduct = (id) => {
 const getProducts = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_PRODUCTS });
+    console.log('token', token);  
     try {
       const response = await axios.get(
         `${url}/api/products/getproducts`,

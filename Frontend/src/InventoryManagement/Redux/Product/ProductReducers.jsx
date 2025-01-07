@@ -76,7 +76,7 @@ const initialState = {
       return {
         ...state,
         loading: false,
-        data: action.payload,
+        data: state.data.filter((product) => product._id !== action.payload),
         error: null,
         msg: DELETE_PRODUCT_SUCCESS,
       };

@@ -16,7 +16,7 @@ export default function ViewProductsTable({
 
   return (
     <div className="overflow-x-auto bg-lt-secondary-bg-color p-4 rounded-lg shadow-md border border-lt-primary-border-color">
-      <table className="min-w-full table-auto border-collapse">
+      {products.length > 0 ? (<table className="min-w-full table-auto border-collapse">
         <thead>
           <tr>
             <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
@@ -80,7 +80,11 @@ export default function ViewProductsTable({
             </tr>
           ))}
         </tbody>
-      </table>
+      </table>) : (
+        <div className="text-center text-lg text-lt-secondary-text-color dark:text-d-secondary-text-color">
+          No Products Found
+        </div>
+      )}
     </div>
   );
 }

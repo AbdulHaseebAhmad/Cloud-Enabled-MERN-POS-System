@@ -36,6 +36,9 @@ export default function ViewSuppliersTable({
               Supplier
             </th>
             <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
+              ID
+            </th>
+            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
               Contact
             </th>
             <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
@@ -43,9 +46,6 @@ export default function ViewSuppliersTable({
             </th>
             <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
               Stock
-            </th>
-            <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
-              Ordered
             </th>
             <th className="px-4 py-2 text-left text-d-secondary-bg-color text-sm md:text-base text-center">
               Actions
@@ -56,10 +56,10 @@ export default function ViewSuppliersTable({
           {suppliersData.map((supplier, index) => (
             <tr key={index} className="text-center text-sm md:text-base">
               <td className="px-4 py-2 truncate">{supplier['Supplier Name']}</td>
+              <td className="px-4 py-2 truncate">{supplier['Supplier Id']}</td>
               <td className="px-4 py-2 truncate">{supplier['Supplier Contact']}</td>
               <td className="px-4 py-2 truncate">{supplier['Supplier Address']}</td>
-              <td className="px-4 py-2 truncate">{null}</td>
-              <td className="px-4 py-2 truncate">{null}</td>
+              <td className="px-4 py-2 truncate">{supplier['Total Stock']}</td>
               <td className="px-4 py-2 flex justify-center space-x-2">
                 <button
                 disabled

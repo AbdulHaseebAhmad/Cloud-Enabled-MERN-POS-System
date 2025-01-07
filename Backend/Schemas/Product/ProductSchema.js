@@ -27,7 +27,10 @@ const ProductSchema = new mongoose.Schema({
   },
   variants:{
     type: Array,
-  }
+  },
+  Stock: {
+    type: Number,
+  },  
 });
 
 export default mongoose.model("Product", ProductSchema);
