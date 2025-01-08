@@ -18,6 +18,8 @@ export default function ProductPortal({ togglePortal }) {
     dispatch(addProduct(formData));
   };
 
+  console.log(formData)
+
   return ReactDOM.createPortal(
     <Component
       nextComponent={(nextComponent) => setCurrentComponent(nextComponent)} //this prop calls the function from child here in portal to change the component

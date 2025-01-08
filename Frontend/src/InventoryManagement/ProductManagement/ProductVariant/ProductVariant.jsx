@@ -29,7 +29,6 @@ const ProductVariantAccordion = ({
       targetVariant[name] = files[0];
     }
     targetVariant[name] = value;
-   console.log(variants);
   };
 
   const addVariant = () => {
@@ -52,14 +51,13 @@ const ProductVariantAccordion = ({
           return savedFormData[key] && savedFormData[value] !== undefined;
         });
       })) ? true : variants.every((eachVariant) => {
+        // eslint-disable-next-line no-unused-vars
         return Object.entries(eachVariant).every(([key, value]) => {
-          console.log(key,  value)
           return value !== '' ;
         });
       });
         
     setFormIsValid(isValid);
-    console.log(isValid);
   }, [variants, savedFormData]);
 
   return (
