@@ -18,7 +18,6 @@ export default function ProductPortal({ togglePortal }) {
     dispatch(addProduct(formData));
   };
 
-  console.log(formData)
 
   return ReactDOM.createPortal(
     <Component

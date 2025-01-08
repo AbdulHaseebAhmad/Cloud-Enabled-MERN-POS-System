@@ -75,7 +75,6 @@ const deleteSupplier = (id) => {
 const getSuppliers = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_SUPPLIERS });
-    console.log('token', token);  
     try {
       const response = await axios.get(
         `${url}/api/supplier/getsuppliers`,

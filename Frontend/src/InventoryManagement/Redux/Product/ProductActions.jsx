@@ -75,7 +75,6 @@ const deleteProduct = (id) => {
 const getProducts = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_PRODUCTS });
-    console.log('token', token);  
     try {
       const response = await axios.get(
         `${url}/api/products/getproducts`,
