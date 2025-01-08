@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import AddVariant from "./AddVariant/AddVariant";
 import AddProduct from "../AddProducts/AddProduct";
@@ -10,18 +10,26 @@ const ProductVariantAccordion = ({
   nextComponent,
   handleSaveData,
   savedFormData,
-  saveProducts
+  saveProducts,
 }) => {
-  const [variants, setVariants] = useState(savedFormData?.variants || [
-    { name: "", sku: "", priceModifier: "", stock: "", image: "" },
-  ]);
+  const [variants, setVariants] = useState(
+    savedFormData?.variants || [
+      { name: "", sku: "", priceModifier: "", stock: "", image: "" },
+    ]
+  );
+
+  const [isFormValid, setFormIsValid] = useState(false);
 
   const handleChange = (i, e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
     const targetVariant = variants.find((variant, index) => {
       return index === i;
     });
+    if (name === "image") {
+      targetVariant[name] = files[0];
+    }
     targetVariant[name] = value;
+   console.log(variants);
   };
 
   const addVariant = () => {
@@ -35,6 +43,24 @@ const ProductVariantAccordion = ({
     const updatedVariants = variants.filter((_, i) => i !== index);
     setVariants(updatedVariants);
   };
+
+  useEffect(() => {
+    const isValid =
+     variants.length > 0 && ( savedFormData?.variants?.length !== 0 &&
+      variants.every((eachVariant) => {
+        return Object.entries(eachVariant).every(([key, value]) => {
+          return savedFormData[key] && savedFormData[value] !== undefined;
+        });
+      })) ? true : variants.every((eachVariant) => {
+        return Object.entries(eachVariant).every(([key, value]) => {
+          console.log(key,  value)
+          return value !== '' ;
+        });
+      });
+        
+    setFormIsValid(isValid);
+    console.log(isValid);
+  }, [variants, savedFormData]);
 
   return (
     <>
@@ -53,20 +79,20 @@ const ProductVariantAccordion = ({
       </div>
 
       <div className="p-6 max-w-4xl mx-auto bg-lt-secondary-bg-color rounded-lg shadow-md border border-lt-primary-border-color">
-        {variants.map((variant, index) => {
+        {variants.length > 0 ? variants.map((variant, index) => {
           return (
             <AddVariant
-                key={index}
-                handleChange={handleChange}
-                removeVariant={removeVariant}
-                variants={variants}
-                addVariant={addVariant}
-                index={index}
-                savedFormData={savedFormData}
-                variant={variant}
-              />
+              key={index}
+              handleChange={handleChange}
+              removeVariant={removeVariant}
+              variants={variants}
+              addVariant={addVariant}
+              index={index}
+              savedFormData={savedFormData}
+              variant={variant}
+            />
           );
-        })}
+        }) : <div>No Variants</div>}
         <div className="flex justify-between mt-6">
           <button
             type="button"
@@ -88,16 +114,26 @@ const ProductVariantAccordion = ({
               Add Variant
             </button>
           )}
-          <button
+          {isFormValid ? (
+            <button
+              onClick={() => {
+                handleSaveData({ Variants: variants });
+                saveProducts();
+                nextComponent(() => ProductResponseMessage);
+              }}
+              className=" text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-action-color"
+            >
+              Add Product
+            </button>
+          ):  <button
+            type="button"
+            className="bg-lt-secondary-action-color text-white py-2 px-4 rounded-md hover:bg-d-primary-action-color bg-d-primary-bg-color"
             onClick={() => {
-              handleSaveData({ Variants: variants });
-              saveProducts();
-              nextComponent(() => ProductResponseMessage);
+              handleSaveData({ variants: variants });
             }}
-            className=" text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-action-color"
           >
-            Add Product
-          </button>
+            Save{" "}
+          </button>}
         </div>
       </div>
     </>

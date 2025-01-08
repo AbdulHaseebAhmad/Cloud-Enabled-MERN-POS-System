@@ -11,8 +11,9 @@ export default function AddVariant({
 }) {
   return (
     <form  className="space-y-6">
-      <AnimatePresence key={index}>
+      <AnimatePresence >
           <motion.div
+          key={index}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: [10,20] }}
@@ -96,15 +97,17 @@ export default function AddVariant({
                 className="block text-sm font-medium text-lt-primary-text-color"
               >
                 Upload Image
+                <span className="text-red-500">*</span>
               </label>
               <input
                 type="file"
                 id={`image`}
+                name='image'
                 onChange={(e) =>
-                  handleChange('index', "image", e.target.files)
+                  handleChange(index, e)
                 }
                 className="mt-1 block w-full text-d-secondary-bg-color"
-              />
+                />
             </div>
             <button
               type="button"

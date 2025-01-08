@@ -11,7 +11,6 @@ const AddProduct = ({
   handleSaveData,
   savedFormData,
 }) => {
-  //savedFormData is the state that holds the form data for the AddProduct Component that includes the product details and the variants
   const formFields = [
     { field: "Product Name", placeholder: "Enter Product Name" },
     { field: "SKU", placeholder: "Enter Product SKU" },
@@ -22,28 +21,28 @@ const AddProduct = ({
   ];
 
   const [formData, setFormData] = useState({});
-  const [isFormValid, setFormIsValid] = useState(false);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  useEffect(()=>{
-    const isValid = Object.entries(savedFormData).length !==0 ? formFields.every(({ field }) => {
-      return savedFormData[field] && savedFormData[field] !== "";
-    }) : formFields.every(({ field }) => {
-      return formData[field] && formData[field] !== "";
-    });
-    if(isValid){
-      setFormIsValid(isValid)}
-  },[formData,savedFormData])
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isSavedDataExist, setIsSavedDataExist] = useState(false);
 
   const dispatch = useDispatch();
   const suppliers = useSelector((state) => state.SupplierReducer.data);
 
   useEffect(() => {
     dispatch(getSuppliers());
-  }, []);
+  }, [dispatch]);
+
+  const isFormComplete = (data) =>
+    formFields.every(({ field }) => data[field] && data[field].trim() !== "");
+
+  useEffect(() => {
+    setIsSavedDataExist(isFormComplete(savedFormData));
+    setIsFormValid(isFormComplete(formData));
+  }, [formData, savedFormData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   return (
     <>
@@ -53,7 +52,7 @@ const AddProduct = ({
             {pageTitle} Product / Product Details
           </h2>
           <button
-            onClick={() => togglePortal()}
+            onClick={togglePortal}
             className="bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-d-secondary-bg-color"
           >
             Cancel
@@ -62,23 +61,23 @@ const AddProduct = ({
       </div>
       <div className="p-6 max-w-4xl mx-auto bg-lt-secondary-bg-color rounded-lg shadow-md border border-lt-primary-border-color">
         <form className="space-y-2">
-          {formFields.map(({ field, placeholder }) => {
-            return field !== "Supplier" ? (
+          {formFields.map(({ field, placeholder }) =>
+            field !== "Supplier" ? (
               <div key={field}>
                 <label
-                  htmlFor="field"
+                  htmlFor={field}
                   className="block text-sm font-medium text-lt-primary-text-color"
                 >
                   {field} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  id="field"
+                  id={field}
                   name={field}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color"
                   placeholder={
-                    (savedFormData && savedFormData[field]) || placeholder
+                    savedFormData[field] || placeholder
                   }
                   required
                 />
@@ -96,10 +95,10 @@ const AddProduct = ({
                   name={field}
                   className="mt-1 block w-full p-2 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color"
                   onChange={handleChange}
+                  value={formData[field] || ""}
                 >
-                  <option>
-                    {(savedFormData && savedFormData[field]) ||
-                      "Select Supplier"}
+                  <option value="">
+                    {savedFormData[field] || "Select Supplier"}
                   </option>
                   {suppliers.length > 0 ? (
                     suppliers.map(({ _id, "Supplier Name": supplierName }) => (
@@ -108,41 +107,43 @@ const AddProduct = ({
                       </option>
                     ))
                   ) : (
-                    <option disabled value="No Suppliers Found">
-                      No Suppliers Found Add a Supplier First
+                    <option disabled value="">
+                      No Suppliers Found. Add a Supplier First.
                     </option>
                   )}
                 </select>
               </div>
-            );
-          })}
+            )
+          )}
           <div className="mt-6 w-full flex justify-between">
-            <button
-              disabled={!isFormValid}
-              type="button"
-              className={`border py-2 px-4 rounded-md${
-                isFormValid
-                  ? " text-white active:border-1-d-secondary-bg-color bg-d-primary-bg-color hover:bg-d-primary-action-color"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
-              onClick={() => {
-                handleSaveData(formData);
-                nextComponent(() => ProductVariantAccordion);
-              }}
-            >
-              Next
-            </button>
-           {isFormValid &&  <button
-              disabled={!isFormValid}
-              type="button"
-              className="border active:border-1-d-secondary-bg-color bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-d-primary-bg-color bg-d-primary-action-color"
-              onClick={() => {
-                handleSaveData(formData);
-                nextComponent(() => ProductVariantAccordion);
-              }}
-            >
-              Add Product Variants
-            </button>}
+            {(isSavedDataExist || !isFormValid) && (
+              <button
+                type="button"
+                className={`border py-2 px-4 rounded-md${
+                  isSavedDataExist
+                    ? " text-white bg-d-primary-bg-color hover:bg-d-primary-action-color"
+                    : " bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+                onClick={() => {
+                  handleSaveData(formData);
+                  nextComponent(() => ProductVariantAccordion);
+                }}
+              >
+                Next
+              </button>
+            )}
+            {isFormValid && (
+              <button
+                type="button"
+                className="border py-2 px-4 rounded-md text-white bg-d-primary-bg-color hover:bg-d-primary-action-color"
+                onClick={() => {
+                  handleSaveData(formData);
+                  nextComponent(() => ProductVariantAccordion);
+                }}
+              >
+                Save Product Details
+              </button>
+            )}
           </div>
         </form>
       </div>
