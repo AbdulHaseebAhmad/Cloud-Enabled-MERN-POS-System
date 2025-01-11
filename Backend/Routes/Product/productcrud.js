@@ -1,7 +1,7 @@
 import { Router } from "express";
 import verifyJWT from "../../Middlewares/TokenSigningMiddleWare.js";
 import ProductSchema from "../../Schemas/Product/ProductSchema.js";
-import SupplierSchema from "../../Schemas/Supplier/SupplierSchema.js";
+import SupplierSchema from "../../Schemas/Supplier/SupplierSchema.js"
 const productCrudRouter = Router();
 
 productCrudRouter.post(
@@ -9,14 +9,11 @@ productCrudRouter.post(
   verifyJWT,
   async (req, res) => {
     const product = req.body;
-    const { variants, Supplier } = product;
-    const Stock = variants.reduce((acc, curr) => acc + parseInt(curr.stock, 10), 0);
+    const {variants,Supplier} = product;
+    const Stock = variants.reduce((acc, curr) => acc + curr.stock, 0);
     try {
-      await ProductSchema.create({ ...product, Stock });
-      await SupplierSchema.findOneAndUpdate(
-        { 'Supplier Name': Supplier },
-        { $inc: { 'Total Stock': Stock } }
-      );
+      await ProductSchema.create({...product, Stock});
+      await SupplierSchema.findOneAndUpdate({'Supplier Name': Supplier}, {$inc: {'Total Stock':Stock}});
       res.status(200).json({ message: "Product Added Successfully" });
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -44,11 +41,8 @@ productCrudRouter.delete(
     const id = req.params.id;
     try {
       const findProduct = await ProductSchema.findById(id);
-      const { Supplier, Stock } = findProduct;
-      await SupplierSchema.findOneAndUpdate(
-        { 'Supplier Name': Supplier },
-        { $inc: { 'Total Stock': -parseInt(Stock, 10) } }
-      );
+      const {Supplier, Stock} = findProduct;
+      await SupplierSchema.findOneAndUpdate({'Supplier Name': Supplier}, {$inc: {'Total Stock':-Stock}});
       await ProductSchema.findByIdAndDelete(id);
       res.status(200).json({ message: "Product Deleted Successfully", id });
     } catch (err) {

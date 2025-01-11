@@ -2,15 +2,15 @@ import PropTypes from "prop-types";
 import { deleteProduct } from "../../Redux/Product/ProductActions";
 import { useDispatch } from "react-redux";
 //import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
+import socket from "../../../utilities/Socket-Connection";
 
 export default function ViewProductsTable({
   products,
 
 }) {
-  
   const dispatch = useDispatch();
-
   const deleteProductHandle = (id) => {
+    socket.emit("changesMadeToProducts", "Product Deleted");
     dispatch(deleteProduct(id));
   }
 

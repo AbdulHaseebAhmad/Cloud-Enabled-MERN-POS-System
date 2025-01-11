@@ -4,7 +4,7 @@ import AddProduct from "../AddProducts/AddProduct";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../../Redux/Product/ProductActions";
-
+import socket from "../../../utilities/Socket-Connection";
 export default function ProductPortal({ togglePortal }) {
   const [Component, setCurrentComponent] = useState(() => AddProduct); //This is the state that holds the current Component by default it is AddProduct
   const [formData, setFormData] = useState({}); //This is the state that holds the form data for the AddProduct Component that includes the product details and the variants
@@ -15,6 +15,7 @@ export default function ProductPortal({ togglePortal }) {
   };
 
   const saveProducts = () => {
+    socket.emit("changesMadeToProducts", "Product Added"); //This is the function that is called when the form is submitted to send the data to the backend
     dispatch(addProduct(formData));
   };
 

@@ -4,7 +4,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
   SupplierReducer: suppliersReducer,
-  ProductReducer : productsReducer
+  ProductReducer : productsReducer,
 });
 
 export default rootReducer;

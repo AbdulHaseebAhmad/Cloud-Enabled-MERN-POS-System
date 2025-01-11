@@ -4,7 +4,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 export default function Login() {
   const toastConfig = {position: "top-right",
         autoClose: 1000,
