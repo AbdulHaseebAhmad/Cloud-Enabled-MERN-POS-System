@@ -66,6 +66,11 @@ io.on("connection", (socket) => {
     console.log("changesMadeToProducts", message);
   });
 
+  socket.on("changesMadeToSuppliers", (message) => {
+    io.emit("changesMadeToSuppliers", message);
+    console.log("changesMadeToSuppliers", message);
+  });
+
   socket.on("disconnect", () => {
     console.log("A user disconnected:", socket.id);
   });

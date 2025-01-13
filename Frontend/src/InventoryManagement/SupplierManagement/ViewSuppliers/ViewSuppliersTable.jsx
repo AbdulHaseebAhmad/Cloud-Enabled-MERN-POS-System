@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteSupplier } from "../../Redux/Supplier/SupplierActions";
+import { deleteSupplier,getSuppliers as fetchSuppliers } from "../../Redux/Supplier/SupplierActions";
 //import AddSupplier from "../AddSupplier/AddSuplier";
 import EditSupplierDetails from "../EditSupplierDetails/EditSupplierDetails";
 import { useEffect,useState } from "react";
+import socket from "../../../utilities/Socket-Connection";
 export default function ViewSuppliersTable({
   togglePortal,
   nextComponent,
@@ -21,12 +22,19 @@ export default function ViewSuppliersTable({
   };
   const dispatch = useDispatch();
   const deleteHandle = (id) => {
+    socket.emit('changesMadeToSuppliers', 'Supplier Deleted');
     dispatch(deleteSupplier(id))
   }
   const getSuppliers = useSelector((state) => state.SupplierReducer.data);
   useEffect(()=>{
+    socket.on('changesMadeToSuppliers', (data) => {
+      dispatch(fetchSuppliers());
+      console.log(data)
+    });
       setSuppliersData(getSuppliers)
-  },[getSuppliers])
+  },[getSuppliers,socket])
+
+  
   return (
     <div className="overflow-x-auto bg-lt-secondary-bg-color p-4 rounded-lg shadow-md border border-lt-primary-border-color">
      {suppliersData.length > 0 ? ( <table className="min-w-full table-auto border-collapse">

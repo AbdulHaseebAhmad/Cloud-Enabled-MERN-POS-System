@@ -29,6 +29,7 @@ const addSupplier = (supplier) => {
   return async (dispatch) => {
     dispatch({ type: ADD_SUPPLIER });
     try {
+    
       const response = await axios.post(
         `${url}/api/supplier/createsupplier`,
         supplier,
@@ -76,6 +77,13 @@ const getSuppliers = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_SUPPLIERS });
     try {
+      const token = Cookies.get("token");
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const response = await axios.get(
         `${url}/api/supplier/getsuppliers`,
         config

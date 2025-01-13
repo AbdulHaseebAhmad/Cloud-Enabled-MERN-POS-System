@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import {addSupplier} from "../Redux/Supplier/SupplierActions"
 import { useDispatch } from "react-redux";
+import socket from "../../utilities/Socket-Connection";
 
 export default function PortalComponent({
   Component,
@@ -23,6 +24,7 @@ export default function PortalComponent({
 
   const submithandler = () => {
     dispatch(addSupplier(data));
+    socket.emit('changesMadeToSuppliers', 'Supplier Added');
   };
 
   return ReactDOM.createPortal(

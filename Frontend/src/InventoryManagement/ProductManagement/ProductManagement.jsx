@@ -10,16 +10,19 @@ const ProductManagement = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    socket.on("changesMadeToProducts", (message) => {
-      dispatch(getProducts());
-      console.log("changesMadeToProducts", message);
-    });
     dispatch(getProducts());
   }, [socket]);
 
   useEffect(() => {
     setProducts(productsList);
   }, [productsList, socket]);
+
+  useEffect(()=>{
+    socket.on("changesMadeToProducts", (message) => {
+      dispatch(getProducts());
+      console.log("changesMadeToProducts", message);
+    });
+  },[socket])
 
   const [togglePortal, setTogglePortal] = useState(false);
   return (
