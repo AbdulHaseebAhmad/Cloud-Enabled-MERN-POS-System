@@ -8,7 +8,7 @@ import ProductDetails from "../InventoryManagement/ProductDetail/ProductDetail";
 import ProductsByCategory from "../InventoryManagement/TotalAvailableProducts/ProductsByCategory";
 import StockTracking from "../InventoryManagement/StockTracking/StockTracking";
 import Login from "../InventoryManagement/Authentication/Login.jsx";
-
+import POSCheckoutScreen from "../POS/CheckoutScreen/PosView.jsx";
 import {loginAction, loginLoader} from "../InventoryManagement/Authentication/Login.jsx";
 
 const router = createBrowserRouter([
@@ -20,6 +20,11 @@ const router = createBrowserRouter([
         element:<Login/>,
         action:loginAction,
         loader:loginLoader
+      },
+
+      {
+        path:'pos',
+        element:<POSCheckoutScreen/>
       },
       {
         path: "inventory-management",
