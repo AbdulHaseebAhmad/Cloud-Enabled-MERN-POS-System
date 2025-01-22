@@ -13,7 +13,7 @@ export default function OrderSummary({orderNumber, cartItems, handleQuantityChan
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className='max-h-[100px] overflow-y-auto'>
                 {cartItems.map((item) => (
                   <tr key={item.id} className="p-4">
                     <td className="p-2">{item.name}</td>

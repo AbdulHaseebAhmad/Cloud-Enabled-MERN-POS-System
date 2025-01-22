@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { products } from "../Data/data";
-import ProductTable from "./ProductViewTable/ProductTable";
+import ProductViewGrid from "./ProductViewGrid/ProductViewGrid";
 import OrderSummary from "./OrderSummary/OrderSummary";
 const POSCheckoutScreen = () => {
   const [cartItems, setCartItems] = useState(products);
@@ -81,7 +81,7 @@ const POSCheckoutScreen = () => {
 
       {cartItems.length > 0 ? (<div className="flex pt-0">
         
-        <ProductTable cartItems={cartItems} />
+        <ProductViewGrid cartItems={cartItems} />
         <OrderSummary
           cartItems={cartItems}
           totalPrice={totalPrice}
