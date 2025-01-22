@@ -10,6 +10,8 @@ Reporting and analytics
 AWS cloud deployment and performance optimization
 Technologies Used
 Frontend: React.js, Redux, Tailwind CSS
-Backend: Node.js, Express.js, MongoDB
+Backend: Node.js, Express.js
+Database: MongoDB(Local) AWS Documentdb (Production)
 Cloud: AWS (EC2, S3, etc.)
-Authentication: Passport.js, JWT
+Authentication: AWS Cognito, JWT
+Real-time Updates : Sockets.io
