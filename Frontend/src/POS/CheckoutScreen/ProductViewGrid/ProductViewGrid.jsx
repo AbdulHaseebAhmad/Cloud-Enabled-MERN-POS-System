@@ -43,11 +43,11 @@ export default function ProductViewGrid({ cartItems }) {
         className=" flex gap-6 space-y-0 pt-4 justify-center flex-wrap"
       >
         {currentProducts.map((item) => (
-          <div key={item.id} className="w-[200px]  p-4 bg-white rounded shadow">
+          <div key={item.id} className="w-[210px] p-4 bg-white rounded shadow">
             <img
               src={item.image}
               alt={item.name}
-              className="rounded mb-2 object-fit w-full h-[150px]"
+              className="rounded mb-2 object-fit w-full h-[100px]"
             />
             <div className="text-center">
               <h2 className="font-bold text-lg">{item.name}</h2>

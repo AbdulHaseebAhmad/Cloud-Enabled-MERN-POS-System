@@ -9,7 +9,7 @@ Secure user authentication
 Reporting and analytics
 AWS cloud deployment and performance optimization
 Technologies Used
-Frontend: React.js, Redux, Tailwind CSS
+Frontend: React.js, Redux, Tailwind CSS, toastify, React icons
 Backend: Node.js, Express.js
 Database: MongoDB(Local) AWS Documentdb (Production)
 Cloud: AWS (EC2, S3, etc.)
