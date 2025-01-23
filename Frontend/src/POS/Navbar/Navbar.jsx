@@ -1,8 +1,8 @@
-
+import { NavLink } from "react-router-dom";
 export default function Navbar() {
   return (
     <>
-       <header className="flex justify-between items-center p-4 bg-white shadow">
+      <header className="flex justify-between items-center p-4 bg-white shadow">
         <h1 className="text-xl font-bold">Store Name</h1>
         <div className="flex items-center space-x-4">
           <input
@@ -18,33 +18,45 @@ export default function Navbar() {
         <span className="text-sm">Cashier Name</span>
       </header>
       <nav className="bg-white p-2 border-b border-gray-200 shadow-sm">
-            <ul className="flex space-x-8 justify-center">
-              <li>
-                <a
-                  href="#current-cart"
-                  className="text-sm text-gray-700 hover:text-d-primary-action-color"
-                >
-                  Current Cart
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#open-orders"
-                  className="text-sm text-gray-700 hover:text-d-primary-action-color"
-                >
-                  Open Orders
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#coupons"
-                  className="text-sm text-gray-700 hover:text-d-primary-action-color"
-                >
-                  Coupons
-                </a>
-              </li>
-            </ul>
-          </nav>
+        <ul className="flex space-x-8 justify-center">
+          <li>
+            <NavLink
+              to="/pos/checkout"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-sm text-d-primary-action-color hover:text-d-primary-action-color"
+                  : "text-sm text-gray-700"
+              }
+            >
+              Current Cart
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/pos/open-orders"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-sm text-d-primary-action-color hover:text-d-primary-action-color"
+                  : "text-sm text-gray-700"
+              }
+            >
+              Open Orders
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/pos/coupons"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-sm text-d-primary-action-color hover:text-d-primary-action-color"
+                  : "text-sm text-gray-700"
+              }
+            >
+              Coupons
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
     </>
-  )
+  );
 }

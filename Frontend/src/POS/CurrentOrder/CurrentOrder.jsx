@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { products } from "../../Data/data";
+import { products } from "../Data/data";
 import ProductViewGrid from "./ProductViewGrid/ProductViewGrid";
 import OrderSummary from "./OrderSummary/OrderSummary";
 import { useDispatch } from "react-redux";
-import { posScreenActions } from "../../Redux/PosScreenReducers";
+import { posScreenActions } from "../Redux/PosScreenReducers";
 
 const POSCheckoutScreen = () => {
   const [cartItems, setCartItems] = useState(products);

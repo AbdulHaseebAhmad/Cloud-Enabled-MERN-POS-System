@@ -10,7 +10,8 @@ import ProductDetails from "../InventoryManagement/ProductDetail/ProductDetail";
 import ProductsByCategory from "../InventoryManagement/TotalAvailableProducts/ProductsByCategory";
 import StockTracking from "../InventoryManagement/StockTracking/StockTracking";
 import Login from "../InventoryManagement/Authentication/Login.jsx";
-import POSCheckoutScreen from "../POS/CheckoutScreen/CurrentOrder/CurrentOrder.jsx";
+import CurrentOrder from "../POS/CurrentOrder/CurrentOrder.jsx";
+import OpenOrders from "../POS/OpenOrders/OpenOrders.jsx";
 import {
   loginAction,
   loginLoader,
@@ -18,6 +19,7 @@ import {
 import Posstore from "../POS/Redux/Store.jsx";
 import { Provider } from "react-redux";
 import PosRootElement from "../POS/PosRootElement/PosRootElement.jsx";
+import Coupons from "../POS/Coupons/Coupons.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,17 +34,25 @@ const router = createBrowserRouter([
 
       {
         path: "pos",
-        element: <PosRootElement/>,
-        children:[
+        element: (
+          <Provider store={Posstore}>
+            <PosRootElement />
+          </Provider>
+        ),
+        children: [
           {
-            index:true,
-            element:(
-              <Provider store={Posstore}>
-                <POSCheckoutScreen />
-              </Provider>
-            ),
-          }
-        ]
+            path: "checkout",
+            element: <CurrentOrder />,
+          },
+          {
+            path: "open-orders",
+            element: <OpenOrders />,
+          },
+          {
+            path: "coupons",
+            element: <Coupons />,
+          },
+        ],
       },
       {
         path: "inventory-management",
