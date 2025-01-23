@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import InventoryManagemenetRootElement,{dashboardLoader} from "../InventoryManagement/RootElement/InventoryManagemenetRootElement.jsx";
+import InventoryManagemenetRootElement, {
+  dashboardLoader,
+} from "../InventoryManagement/RootElement/InventoryManagemenetRootElement.jsx";
 import Dashboard from "../InventoryManagement/Dashboard/Dashboard.jsx";
 import InventoryReports from "../InventoryManagement/InventoryReport/InventoryReport";
 import SupplierManagement from "../InventoryManagement/SupplierManagement/SupplierManagement";
@@ -8,28 +10,44 @@ import ProductDetails from "../InventoryManagement/ProductDetail/ProductDetail";
 import ProductsByCategory from "../InventoryManagement/TotalAvailableProducts/ProductsByCategory";
 import StockTracking from "../InventoryManagement/StockTracking/StockTracking";
 import Login from "../InventoryManagement/Authentication/Login.jsx";
-import POSCheckoutScreen from "../POS/CheckoutScreen/PosView.jsx";
-import {loginAction, loginLoader} from "../InventoryManagement/Authentication/Login.jsx";
+import POSCheckoutScreen from "../POS/CheckoutScreen/CurrentOrder/CurrentOrder.jsx";
+import {
+  loginAction,
+  loginLoader,
+} from "../InventoryManagement/Authentication/Login.jsx";
+import Posstore from "../POS/Redux/Store.jsx";
+import { Provider } from "react-redux";
+import PosRootElement from "../POS/PosRootElement/PosRootElement.jsx";
 
 const router = createBrowserRouter([
   {
-    path:"/",
-    children:[
+    path: "/",
+    children: [
       {
-        path:'login',
-        element:<Login/>,
-        action:loginAction,
-        loader:loginLoader
+        path: "login",
+        element: <Login />,
+        action: loginAction,
+        loader: loginLoader,
       },
 
       {
-        path:'pos',
-        element:<POSCheckoutScreen/>
+        path: "pos",
+        element: <PosRootElement/>,
+        children:[
+          {
+            index:true,
+            element:(
+              <Provider store={Posstore}>
+                <POSCheckoutScreen />
+              </Provider>
+            ),
+          }
+        ]
       },
       {
         path: "inventory-management",
         element: <InventoryManagemenetRootElement />,
-        loader:dashboardLoader,
+        loader: dashboardLoader,
         children: [
           {
             index: true,
@@ -61,9 +79,8 @@ const router = createBrowserRouter([
           },
         ],
       },
-
-    ]
-  }
+    ],
+  },
 ]);
 
 export default router;
