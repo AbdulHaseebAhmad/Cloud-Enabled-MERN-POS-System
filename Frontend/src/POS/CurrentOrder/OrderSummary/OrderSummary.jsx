@@ -1,5 +1,15 @@
 import PropTypes from 'prop-types'
+import { useDispatch } from "react-redux";
+import { posScreenActions } from '../../Redux/PosScreenReducers';
+
 export default function OrderSummary({orderNumber, cartItems, handleQuantityChange, handleDeleteItem, handleCheckout, totalPrice}) {
+  const dispatch = useDispatch();
+  const saveOrder = () => {
+    dispatch(posScreenActions.appendOpenOrders({cartItems, totalPrice,orderNumber}));
+  }
+  const cancelOrder = () => {
+    dispatch(posScreenActions.cancelCurrentOrder());
+  }
   return (
     <aside className="w-5/12 p-4 pt-4 bg-white shadow">
   <h2 className="font-bold text-lg mb-4">Order #{orderNumber}</h2>
@@ -65,10 +75,10 @@ export default function OrderSummary({orderNumber, cartItems, handleQuantityChan
 
   <div className="space-y-4">
     <div className="flex justify-between space-x-2">
-      <button className="w-1/3 p-2 bg-white border text-gray-600 rounded hover:bg-gray-100">
+      <button className="w-1/3 p-2 bg-white border text-gray-600 rounded hover:bg-gray-100" onClick={saveOrder}>
         Save
       </button>
-      <button className="w-1/3 p-2 bg-white border text-red-500 rounded hover:bg-red-100">
+      <button className="w-1/3 p-2 bg-white border text-red-500 rounded hover:bg-red-100" onClick={cancelOrder}>
         Cancel
       </button>
       <button className="w-1/3 p-2 bg-white border text-d-primary-action-color rounded hover:bg-d-primary-action-color hover:text-white">

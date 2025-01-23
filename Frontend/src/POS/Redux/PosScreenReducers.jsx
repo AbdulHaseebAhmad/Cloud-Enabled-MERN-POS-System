@@ -20,6 +20,9 @@ const posScreenSlice = createSlice({
         },
         appendOpenOrders (state, action) {
             state.openOrders.push(action.payload);
+            state.currentOrder = []
+        },
+        cancelCurrentOrder (state) {
             state.currentOrder = [];
         }
     }});

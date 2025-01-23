@@ -2,13 +2,29 @@ import { useEffect, useState } from "react";
 import { products } from "../Data/data";
 import ProductViewGrid from "./ProductViewGrid/ProductViewGrid";
 import OrderSummary from "./OrderSummary/OrderSummary";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { posScreenActions } from "../Redux/PosScreenReducers";
 
 const POSCheckoutScreen = () => {
-  const [cartItems, setCartItems] = useState(products);
+  const [cartItems, setCartItems] = useState([]);
   const [orderNumber] = useState("12345");
+  
+  const getReduxItms = useSelector((state) => state.currentCart.currentOrder);
+  
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    setCartItems(getReduxItms);
+    // console.log('2')
+  },[getReduxItms])
+
+
+  useEffect(() => {
+    dispatch(posScreenActions.setCurrentOrder(products));
+    setCartItems(getReduxItms);
+    // console.log('1')
+  }, []); //initial dispatch that sets products to redux, and then sets cartItems to local State; this is temporary and will be changed to once barcode scanner is integrated
+
 
   const handleQuantityChange = (id, action) => {
     setCartItems((prevItems) =>
@@ -35,9 +51,7 @@ const POSCheckoutScreen = () => {
     0
   );
 
-  useEffect(() => {
-    dispatch(posScreenActions.setCurrentOrder(cartItems));
-  }, [cartItems]);
+ 
 
   return (
     <div className="bg-white text-d-bg-primary-color ">
