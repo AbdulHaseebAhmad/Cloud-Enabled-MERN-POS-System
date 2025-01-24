@@ -16,7 +16,7 @@ export default function CheckoutScreen() {
         <div className="flex items-center space-x-4">
           <div className="w-24 h-24 rounded-lg overflow-hidden">
             <img
-              src="https://via.placeholder.com/100"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfxjiT7cqvyFdzqMyEfTh9TslbaFyIyDckdQ&s"
               alt="Order Thumbnail"
               className="w-full h-full object-cover"
             />

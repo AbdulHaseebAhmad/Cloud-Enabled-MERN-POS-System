@@ -5,7 +5,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import supplierCrudRouter from "./Routes/Supplier/suppliercrud.js";
 import productCrudRouter from "./Routes/Product/productcrud.js";
-
+import posRouter from "./Routes/POS/POS.js";
 
 import http from "http"; 
 import { Server } from "socket.io"
@@ -51,7 +51,7 @@ app.use(express.json());
 app.use(authenticationRouter);
 app.use(supplierCrudRouter);
 app.use(productCrudRouter);
-
+app.use(posRouter);
 app.get("/", (request, response) => {
   response.send("Running");
 });

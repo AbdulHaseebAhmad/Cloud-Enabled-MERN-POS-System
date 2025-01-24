@@ -34,7 +34,7 @@ export default function ProductViewGrid({ cartItems }) {
 
   useEffect(() => {}, [cartItems]);
   return (
-    <main className="w-7/12 flex items-center justify-center gap-0 h-[100%] pl-6 pr-6">
+    <main className="w-7/12 flex items-center justify-center gap-0 h-[100%] pl-6 pr-6 bg-lt-primary-bg-color">
       <button onClick={handlePrevious}>
         <FaArrowLeft className="text-blue-500 text-3xl cursor-pointer" />
       </button>
@@ -46,14 +46,14 @@ export default function ProductViewGrid({ cartItems }) {
           <div key={item.id} className="w-[210px] p-4 bg-white rounded shadow">
             <img
               src={item.image}
-              alt={item.name}
+              alt={item['Product Name']}
               className="rounded mb-2 object-fit w-full h-[100px]"
             />
             <div className="text-center">
-              <h2 className="font-bold text-lg">{item.name}</h2>
-              <p className="text-sm">SKU: {item.sku}</p>
-              <p className="text-sm">Quantity: {item.qty}</p>
-              <p className="font-bold">${item.qty * item.price}</p>
+              <h2 className="font-bold text-lg">{item['Product Name']}  {item.name && <small>({ item.name})</small>}</h2>
+              <p className="text-sm">SKU: {item.SKU}</p>
+              <p className="text-sm">Quantity: {item.Qty}</p>
+              <p className="font-bold">${item.Qty * item.Price}</p>
             </div>
           </div>
         ))}
