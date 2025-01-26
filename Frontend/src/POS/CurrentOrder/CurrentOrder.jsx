@@ -3,35 +3,20 @@ import {  useState } from "react";
 import ProductViewGrid from "./ProductViewGrid/ProductViewGrid";
 import OrderSummary from "./OrderSummary/OrderSummary";
 import {  useSelector } from "react-redux";
+import CheckoutModal from "../Modals/Checkout/CheckoutModal";
 // import { posScreenActions } from "../Redux/PosScreenReducers";
 
 const POSCheckoutScreen = () => {
-  // const [cartItems, setCartItems] = useState([]);
   const [orderNumber] = useState("12345");
-  
+  const [isPortalOpen, setIsPortalOpen] = useState(false);
   const getReduxItms = useSelector((state) => state.currentCart.currentOrder);
-  // const dispatch = useDispatch();
-
-  // const handleQuantityChange = (id, action) => {
-  //   setCartItems((prevItems) =>
-  //     prevItems.map((item) =>
-  //       item.id === id
-  //         ? {
-  //             ...item,
-  //             Qty: action === "increase" ? item.Qty + 1 : item.Qty - 1,
-  //           }
-  //         : item
-  //     )
-  //   );
-  // };
-  // const handleDeleteItem = (id) => {
-  //   setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  //   dispatch(posScreenActions.setCurrentOrder(cartItems));
-
-  // };
-
+ 
   const handleCheckout = () => {
-    alert("Proceeding to checkout...");
+    setIsPortalOpen(true);
+  };
+
+  const togglePortal = () => {
+    setIsPortalOpen(false);
   };
 
   const totalPrice = getReduxItms.reduce(
@@ -42,15 +27,16 @@ const POSCheckoutScreen = () => {
  
 
   return (
-    <div className="bg-white text-d-bg-primary-color bg-lt-primary-bg-color ">
+    <>
+      <div className="relative bg-white text-d-bg-primary-color bg-lt-primary-bg-color ">
+      {isPortalOpen && <CheckoutModal onClose={togglePortal}/> } 
+
       {getReduxItms.length > 0 ? (
         <div className="flex pt-0">
           <ProductViewGrid cartItems={getReduxItms} />
           <OrderSummary
             cartItems={getReduxItms}
             totalPrice={totalPrice}
-            // handleQuantityChange={handleQuantityChange}
-            // handleDeleteItem={handleDeleteItem}
             orderNumber={orderNumber}
             handleCheckout={handleCheckout}
           />
@@ -62,6 +48,7 @@ const POSCheckoutScreen = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

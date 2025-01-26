@@ -125,4 +125,5 @@ OrderSummary.propTypes = {
   handleDeleteItem: PropTypes.func,
   handleCheckout: PropTypes.func,
   totalPrice: PropTypes.number,
+  showPortal: PropTypes.func,
 };
