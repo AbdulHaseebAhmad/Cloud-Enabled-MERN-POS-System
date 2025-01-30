@@ -5,20 +5,23 @@ import { posScreenActions } from "../../Redux/PosScreenReducers";
 export default function OrderSummary({
   orderNumber,
   cartItems,
-  //handleQuantityChange,
-  //handleDeleteItem,
   handleCheckout,
   totalPrice,
 }) {
   const dispatch = useDispatch();
-  const saveOrder = () => {
+
+  const handleSaveOrder = () => {
     dispatch(
       posScreenActions.appendOpenOrders({ cartItems, totalPrice, orderNumber })
     );
   };
-  const cancelOrder = () => {
+
+  const handleCancelOrder = () => {
+    
     dispatch(posScreenActions.cancelCurrentOrder());
   };
+
+  
   return (
     <aside className="w-5/12 p-4 pt-4 bg-white shadow">
       <h2 className="font-bold text-lg mb-4">Order #{orderNumber}</h2>
@@ -93,13 +96,13 @@ export default function OrderSummary({
         <div className="flex justify-between space-x-2">
           <button
             className="w-1/3 p-2 bg-white border text-gray-600 rounded hover:bg-gray-100"
-            onClick={saveOrder}
+            onClick={handleSaveOrder}
           >
             Save
           </button>
           <button
             className="w-1/3 p-2 bg-white border text-red-500 rounded hover:bg-red-100"
-            onClick={cancelOrder}
+            onClick={handleCancelOrder}
           >
             Cancel
           </button>

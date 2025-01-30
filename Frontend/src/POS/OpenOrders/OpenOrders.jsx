@@ -1,9 +1,17 @@
-import { useSelector } from "react-redux"
-
+import { useDispatch, useSelector } from "react-redux"
+import { posScreenActions } from "../Redux/PosScreenReducers";
+import {useNavigate} from 'react-router-dom';
 export default function CheckoutScreen() {
 
   const openOrders = useSelector((state) => state.currentCart.openOrders);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleViewOrder = (openOrder) => {
+    dispatch(posScreenActions.setCurrentOrder(openOrder.cartItems));
+    dispatch(posScreenActions.setOrderNumber(openOrder.orderNumber));
+    navigate('/pos/checkout');
+    console.log(openOrder);
+  }
   return (
     <div className="bg-lt-primary-bg-color min-h-screen p-6">
   <div className="max-w-7xl mx-auto">
@@ -23,15 +31,15 @@ export default function CheckoutScreen() {
           </div>
           <div className="flex-1">
             <h2 className="text-lg font-medium text-lt-primary-text-color">
-              Order #12345
+              {order.orderNumber}
             </h2>
             <p className="text-sm text-lt-secondary-text-color">John Doe</p>
             <p className="text-sm text-lt-secondary-text-color">Status: Pending</p>
-            <p className="text-sm text-lt-secondary-text-color">Total: $120.00</p>
+            <p className="text-sm text-lt-secondary-text-color">Total: ${order.totalPrice}</p>
           </div>
         </div>
         <div className="mt-4 text-right">
-          <button className="px-4 py-2 text-sm font-medium text-white bg-lt-primary-action-color rounded-lg hover:opacity-90">
+          <button className="px-4 py-2 text-sm font-medium text-white bg-lt-primary-action-color rounded-lg hover:opacity-90" onClick={()=>{handleViewOrder(order)}}>
             View
           </button>
         </div>

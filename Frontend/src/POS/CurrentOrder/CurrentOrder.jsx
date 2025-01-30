@@ -1,22 +1,33 @@
-import {  useState } from "react";
+import { useState, useEffect } from "react";
 // import { products } from "../Data/data";
 import ProductViewGrid from "./ProductViewGrid/ProductViewGrid";
 import OrderSummary from "./OrderSummary/OrderSummary";
-import {  useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CheckoutModal from "../Modals/Checkout/CheckoutModal";
 // import { posScreenActions } from "../Redux/PosScreenReducers";
+import CashModal from "../Modals/Payment-Methods/Cash/CashModal";
+import { posScreenActions } from "../Redux/PosScreenReducers";
+// import { getProduct } from "../Redux/PosScreenActions";
 
 const POSCheckoutScreen = () => {
-  const [orderNumber] = useState("12345");
   const [isPortalOpen, setIsPortalOpen] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(null);
   const getReduxItms = useSelector((state) => state.currentCart.currentOrder);
- 
+  const orderNumber = useSelector((state) => state.currentCart.orderNumber); //order number
+
+  const dispatch = useDispatch();
   const handleCheckout = () => {
     setIsPortalOpen(true);
   };
 
   const togglePortal = () => {
     setIsPortalOpen(false);
+    setPaymentMethod(null);
+  };
+
+  const onSelectPayment = (paymentMethod) => {
+    console.log("Payment method selected: ", paymentMethod);
+    setPaymentMethod(paymentMethod);
   };
 
   const totalPrice = getReduxItms.reduce(
@@ -24,30 +35,53 @@ const POSCheckoutScreen = () => {
     0
   );
 
- 
+  useEffect(() => {
+    if(orderNumber === null){
+      const generateOrderNumber = () => {
+        return `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      };
+      dispatch(posScreenActions.setOrderNumber(generateOrderNumber()));    }
+  }, [orderNumber]);
 
+  useEffect(() => { 
+    console.log("Current Order: ", getReduxItms);
+  }, [getReduxItms]);
   return (
     <>
       <div className="relative bg-white text-d-bg-primary-color bg-lt-primary-bg-color ">
-      {isPortalOpen && <CheckoutModal onClose={togglePortal}/> } 
-
-      {getReduxItms.length > 0 ? (
-        <div className="flex pt-0">
-          <ProductViewGrid cartItems={getReduxItms} />
-          <OrderSummary
-            cartItems={getReduxItms}
+        {isPortalOpen && !paymentMethod && (
+          <CheckoutModal
+            onClose={togglePortal}
+            onSelectPayment={onSelectPayment}
+          />
+        )}
+        {paymentMethod && (
+          <CashModal
+            onClose={togglePortal}
             totalPrice={totalPrice}
             orderNumber={orderNumber}
-            handleCheckout={handleCheckout}
+            cartItems={getReduxItms}
           />
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2 justify-center items-center h-[80vh]">
-          <h1 className="text-2xl text-gray-500">No items in cart </h1>
-          <small className="text-lg text-d-primary-action-color">Scan Product or Type barcode above</small>
-        </div>
-      )}
-    </div>
+        )}
+        {getReduxItms.length > 0 ? (
+          <div className="flex pt-0">
+            <ProductViewGrid cartItems={getReduxItms} />
+            <OrderSummary
+              cartItems={getReduxItms}
+              totalPrice={totalPrice}
+              orderNumber={orderNumber}
+              handleCheckout={handleCheckout}
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2 justify-center items-center h-[80vh]">
+            <h1 className="text-2xl text-gray-500">No items in cart </h1>
+            <small className="text-lg text-d-primary-action-color">
+              Scan Product or Type barcode above
+            </small>
+          </div>
+        )}
+      </div>
     </>
   );
 };

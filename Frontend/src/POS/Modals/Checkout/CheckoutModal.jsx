@@ -1,6 +1,8 @@
 import ReactDOM from "react-dom";
 
 export default function CheckoutModal({ onClose, onSelectPayment }) {
+
+  
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-d-primary-bg-color text-d-primary-text-color w-[90%] max-w-md p-6 rounded-2xl shadow-xl flex flex-col">

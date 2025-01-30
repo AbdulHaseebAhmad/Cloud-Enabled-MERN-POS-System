@@ -5,11 +5,11 @@ import cors from "cors";
 import mongoose from "mongoose";
 import supplierCrudRouter from "./Routes/Supplier/suppliercrud.js";
 import productCrudRouter from "./Routes/Product/productcrud.js";
-import posRouter from "./Routes/POS/POS.js";
-
+import posRouter from "./Routes/POS/Pos.js";
+import ordersRoute from "./Routes/Orders/Orders.js"
 import http from "http"; 
 import { Server } from "socket.io"
-
+import OrderSchema from "./Schemas/Orders/OrderSchema.js";
 configDotenv();
 
 const app = express();
@@ -52,6 +52,7 @@ app.use(authenticationRouter);
 app.use(supplierCrudRouter);
 app.use(productCrudRouter);
 app.use(posRouter);
+app.use(ordersRoute);
 app.get("/", (request, response) => {
   response.send("Running");
 });
@@ -71,6 +72,7 @@ io.on("connection", (socket) => {
     console.log("changesMadeToSuppliers", message);
   });
 
+  
   socket.on("disconnect", () => {
     console.log("A user disconnected:", socket.id);
   });
