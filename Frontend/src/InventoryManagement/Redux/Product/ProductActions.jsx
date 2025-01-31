@@ -76,6 +76,13 @@ const getProducts = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_PRODUCTS });
     try {
+      const token = Cookies.get("token");
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const response = await axios.get(
         `${url}/api/products/getproducts`,
         config

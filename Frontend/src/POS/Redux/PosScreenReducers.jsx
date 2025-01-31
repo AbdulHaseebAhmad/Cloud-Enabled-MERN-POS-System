@@ -36,10 +36,10 @@ const posScreenSlice = createSlice({
     },
     cancelCurrentOrder(state) {
       state.currentOrder = [];
+      state.openOrders = state.openOrders.filter((item) => item.orderNumber !== state.orderNumber);
       state.orderNumber = null;
     },
     addToCurrentOrder(state, action) {
-      // console.log(action.payload)
       const itemExist = state.currentOrder.find(
         (item) => item.id === action.payload.id
       );
@@ -50,7 +50,6 @@ const posScreenSlice = createSlice({
       }
     },
     decreaseQuantity(state, action) {
-      // console.log(action.payload)
       const itemExist = state.currentOrder.find(
         (item) => item.id === action.payload
       );
@@ -63,7 +62,6 @@ const posScreenSlice = createSlice({
       }
     },
     increaceQuantity(state, action) {
-      //  console.log(action.payload)
       const itemExist = state.currentOrder.find(
         (item) => item.id === action.payload
       );

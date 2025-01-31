@@ -13,7 +13,7 @@ const POSCheckoutScreen = () => {
   const [isPortalOpen, setIsPortalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const getReduxItms = useSelector((state) => state.currentCart.currentOrder);
-  const orderNumber = useSelector((state) => state.currentCart.orderNumber); //order number
+  const orderNumber = useSelector((state) => state.currentCart.orderNumber);  
 
   const dispatch = useDispatch();
   const handleCheckout = () => {
@@ -43,9 +43,7 @@ const POSCheckoutScreen = () => {
       dispatch(posScreenActions.setOrderNumber(generateOrderNumber()));    }
   }, [orderNumber]);
 
-  useEffect(() => { 
-    console.log("Current Order: ", getReduxItms);
-  }, [getReduxItms]);
+  
   return (
     <>
       <div className="relative bg-white text-d-bg-primary-color bg-lt-primary-bg-color ">
