@@ -15,18 +15,19 @@ const url = import.meta.env.VITE_APP_BACKEND_API_URL;
 
 const getProduct = (SKU) => {
   return async (dispatch) => {
-    //dispatch({ type: ADD_PRODUCT });
+    dispatch(posScreenActions.setMessage({message:"Product Scanned Fetching Product",status:'Loading'}));
     console.log(SKU)
     try {
       const response = await axios.post(
         `${url}/api/pos/get-product`,
         {SKU:SKU},
       );
-      //console.log(response.data);
       dispatch(posScreenActions.addToCurrentOrder(response.data));
+      dispatch(posScreenActions.setMessage({message:"Product Added To Cart",status:'success'}));
     } catch (error) {
-      console.log(error.message);
-    }
+      dispatch(posScreenActions.setMessage({message:"Product Fetching Failed",status:'error'}));
+      console.log(error);
+      }
   };
 };
 

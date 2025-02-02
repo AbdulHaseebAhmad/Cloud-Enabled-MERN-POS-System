@@ -9,8 +9,9 @@ export default function OrderSummary({
   totalPrice,
 }) {
   const dispatch = useDispatch();
-
+console.log(cartItems)
   const handleSaveOrder = () => {
+    
     dispatch(
       posScreenActions.appendOpenOrders({ cartItems, totalPrice, orderNumber })
     );

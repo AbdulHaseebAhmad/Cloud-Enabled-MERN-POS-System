@@ -9,6 +9,8 @@ const initialCheckoutState = {
   currentOrderTax: 0,
   currentOrderDiscount: 0,
   currentOrderSubtotal: 0,
+  message:"",
+  status:null
 };
 
 const posScreenSlice = createSlice({
@@ -75,6 +77,10 @@ const posScreenSlice = createSlice({
     setOrderNumber(state, action) {
       state.orderNumber = action.payload;
     },
+    setMessage (state,action){
+      state.message = action.payload.message;
+      state.status = action.payload.status;
+    }
   },
 });
 

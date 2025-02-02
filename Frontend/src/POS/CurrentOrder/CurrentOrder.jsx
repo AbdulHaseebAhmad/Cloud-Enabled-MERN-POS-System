@@ -8,12 +8,15 @@ import CheckoutModal from "../Modals/Checkout/CheckoutModal";
 import CashModal from "../Modals/Payment-Methods/Cash/CashModal";
 import { posScreenActions } from "../Redux/PosScreenReducers";
 // import { getProduct } from "../Redux/PosScreenActions";
+import Toasts from "../Toasts/Toasts";
 
 const POSCheckoutScreen = () => {
   const [isPortalOpen, setIsPortalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const getReduxItms = useSelector((state) => state.currentCart.currentOrder);
   const orderNumber = useSelector((state) => state.currentCart.orderNumber);  
+  const status = useSelector((state) => state.currentCart.status);
+  const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
   const handleCheckout = () => {
@@ -40,12 +43,16 @@ const POSCheckoutScreen = () => {
       const generateOrderNumber = () => {
         return `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
       };
-      dispatch(posScreenActions.setOrderNumber(generateOrderNumber()));    }
+      dispatch(posScreenActions.setOrderNumber(generateOrderNumber()));}
   }, [orderNumber]);
 
-  
+  useEffect(() => {
+    setShowToast(status !== null);
+}, [status]);
+
   return (
     <>
+    { showToast && <Toasts />}
       <div className="relative bg-white text-d-bg-primary-color bg-lt-primary-bg-color ">
         {isPortalOpen && !paymentMethod && (
           <CheckoutModal
