@@ -4,14 +4,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 // import { useDispatch } from "react-redux";
 // import { signInUser } from "../Redux/User/UserActions";
-
 export default function Login() {
-
-  const toastConfig = {
-        position: "top-right",
+  const toastConfig = {position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: false,
@@ -19,18 +15,14 @@ export default function Login() {
         draggable: true,
         progress: undefined,
         theme: "light",}
-
   //const dispatch = useDispatch();
-
   const [formdata, setFormdata] = useState({ username: "", password: "" });
   const submit = useSubmit();
   let errormessage = useActionData(loginAction);
-
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormdata((prev) => ({ ...prev, [name]: value }));
   };
-
   useEffect(() => {
     if (errormessage !== undefined) {
       toast.error(errormessage.error, toastConfig);
@@ -42,13 +34,9 @@ export default function Login() {
     e.preventDefault();
     if(formdata.username === "" || formdata.password === "") {
       toast.error("Please fill in all the fields!", toastConfig);}
-
      else{
-
        toast("Signing in!", toastConfig);
-      
-       // dispatch(signInUser(formdata))
-
+      // dispatch(signInUser(formdata))
       submit(formdata, {
         method: "POST",
         action: "/login",

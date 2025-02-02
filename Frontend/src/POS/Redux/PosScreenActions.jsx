@@ -33,6 +33,7 @@ const getProduct = (SKU) => {
 
 const checkOutOrder = (order) => {
   return async (dispatch) => {
+    dispatch(posScreenActions.setMessage({message:"Processing Purchase",status:'Loading'}));
      try{
       const response = await axios.post(
         `${url}/api/order/checkout`,
@@ -40,8 +41,10 @@ const checkOutOrder = (order) => {
       )
      console.log(response.data)
      dispatch(posScreenActions.cancelCurrentOrder());
+     dispatch(posScreenActions.setMessage({message:"Purchase Successfull",status:'success'}));
     }
     catch (err){
+      dispatch(posScreenActions.setMessage({message:"Purchase Unsuccessfull",status:'error'}));
       console.log(err)
     }
   };
