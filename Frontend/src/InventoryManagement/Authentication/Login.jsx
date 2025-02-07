@@ -116,6 +116,7 @@ export default function Login() {
 export const loginAction = async ({ request }) => {
   try {
     const loginData = await request.json();
+    console.log(loginData)
     const response = await axios.post(
       "http://localhost:5000/api/authenticate/login",
       loginData

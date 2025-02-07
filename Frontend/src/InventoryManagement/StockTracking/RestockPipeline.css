@@ -1,0 +1,66 @@
+/* Custom styles using POS theme */
+.ag-theme-alpine .ag-header {
+    background-color: #1E3E62; /* Primary action color */
+    color: #FFFFFF; /* Text color */
+    font-weight: bold;
+  }
+  
+  .ag-theme-alpine .ag-row-even {
+    background-color: #FFFFFF; /* Light background */
+  }
+  
+  .ag-theme-alpine .ag-row-odd {
+    background-color: #F8FAFC; /* Lighter background */
+  }
+  
+  .ag-theme-alpine .ag-row-hover {
+    background-color: #E2E8F0; /* Light border color */
+  }
+  
+  /* Status indicators */
+  .ag-theme-alpine .critical-restock {
+    background-color: #FF3B30; /* Red for critical stock */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .ag-theme-alpine .status-pending {
+    background-color: #FFDB58; /* Light yellow for pending */
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .ag-theme-alpine .status-in-transit {
+    background-color: #B2D8F0; /* Light blue for in transit */
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .ag-theme-alpine .status-arrived {
+    background-color: #4CAF50; /* Green for arrived */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .ag-theme-alpine .status-delayed {
+    background-color: #FF3B30; /* Red for delayed */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .ag-theme-alpine .ag-button {
+    background-color: #FF6500; /* Primary action color */
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .ag-theme-alpine .ag-button:hover {
+    background-color: #FF3B30; /* Hover effect */
+  }
+  

@@ -1,98 +1,123 @@
-import  { useState } from "react";
-import Alert from "./Alert/Alert"; // Import the Alert component
-import CurrentStockOverview from "./CurrentStockOverView/CurrentStockOverView"; 
-// import PeriodicStockOverview from "./PeriodicStockOverview"; // Import the periodic stock view component
-// import UpdateStock from "./UpdateStock"; // Import the update stock component
+import GlanceBox from "./Components/GlanceBox";
+import { useState } from "react";
+import {
+  faDollarSign,
+  faBoxesStacked,
+  faTriangleExclamation,
+  faChartLine,
+  faReceipt,
+  faUserTag,
+  faRotateLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import ChartExample from "./TestChart";
+import ChartExample2 from "./TestChart2";
+import GridExample from "./Table";
 
-const StockTracking = () => {
-  const [activeView, setActiveView] = useState("currentStock"); // State to manage active view
-
-  const alerts = [
+export default function StockTracking() {
+  const stockGlanceData = [
     {
-      id: 1,
-      alertType: "lowStock",
-      message: "Product B is low in stock (5 units)",
+      dataTitle: "Total Stock",
+      dataValue: "1,200 Items",
+      dataIcon: faBoxesStacked,
     },
     {
-      id: 2,
-      alertType: "lowStockOrderPlaced",
-      message: "Order for Product B has been placed.",
+      dataTitle: "Low Stock",
+      dataValue: "5 Products",
+      dataIcon: faTriangleExclamation,
     },
     {
-      id: 3,
-      alertType: "lowStockOrderPending",
-      message: "Order for Product D is pending.",
+      dataTitle: "Stock Turnover Rate ",
+      dataValue: "$15,250",
+      dataIcon: faDollarSign,
     },
+    { dataTitle: "Dead Stock", dataValue: "Sneakers", dataIcon: faChartLine },
     {
-      id: 4,
-      alertType: "recentlyStocked",
-      message: "Product A has been restocked.",
+      dataTitle: "Fast Moving Stock",
+      dataValue: "Sneakers",
+      dataIcon: faChartLine,
     },
   ];
 
+  const salesGlanceData = [
+    { dataTitle: "Total Sales", dataValue: "$15,250", dataIcon: faDollarSign },
+    { dataTitle: "Average Order Value", dataValue: "$42", dataIcon: faReceipt },
+    {
+      dataTitle: "Best-Selling Product",
+      dataValue: "Sneakers",
+      dataIcon: faChartLine,
+    },
+    { dataTitle: "Sales Per Customer", dataValue: "$42", dataIcon: faUserTag },
+    {
+      dataTitle: "Returned Sales",
+      dataValue: "5% Refund Rate",
+      dataIcon: faRotateLeft,
+    },
+  ];
+
+  const [activeTab, setActiveTab] = useState("stock");
+  const [timeDuration, setTimeDuration] = useState("Today");
+
   return (
-    <div className="p-6">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
-        <h2 className="text-xl sm:text-2xl font-bold  text-d-primary-bg-color mb-2 sm:mb-0">
-          Stock Management
-        </h2>
-        <button
-          onClick={() => setActiveView("updateStock")}
-          className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
-        >
-          Edit Stock
-        </button>
-      </div>
+    <div className="w-full p-4">
+      <h1 className="text-3xl font-bold text-lt-primary-text-color mb-0">
+        Stock Overview
+      </h1>
 
-      {/* Navigation Tabs */}
-      <div className="flex space-x-4 mb-4">
-        <button
-          onClick={() => setActiveView("currentStock")}
-          className={`py-2 px-4 rounded-md ${
-            activeView === "currentStock"
-              ? "bg-lt-primary-action-color text-white"
-              : "bg-lt-primary-bg-color text-lt-primary-text-color"
-          } hover:bg-lt-primary-action-color hover:text-white transition duration-200`}
-        >
-          Current Stock
-        </button>
-        <button
-          onClick={() => setActiveView("periodicStock")}
-          className={`py-2 px-4 rounded-md ${
-            activeView === "periodicStock"
-              ? "bg-lt-primary-action-color text-white"
-              : "bg-lt-primary-bg-color text-lt-primary-text-color"
-          } hover:bg-lt-primary-action-color hover:text-white transition duration-200`}
-        >
-          Periodic Stock Overview
-        </button>
-        <button
-          onClick={() => setActiveView("updateStock")}
-          className={`py-2 px-4 rounded-md ${
-            activeView === "updateStock"
-              ? "bg-lt-primary-action-color text-white"
-              : "bg-lt-primary-bg-color text-lt-primary-text-color"
-          } hover:bg-lt-primary-action-color hover:text-white transition duration-200`}
-        >
-          Update Stock
-        </button>
-      </div>
-
-      {/* Alerts Section */}
-      <div className="flex flex-wrap gap-4 mb-4">
-        {alerts.map((alert) => (
-          <Alert key={alert.id} alertType={alert.alertType} message={alert.message} />
-        ))}
-      </div>
-
-      {/* Content Display */}
-      <div className="mt-6">
-        {activeView === "currentStock" && <CurrentStockOverview />}
-        {activeView === "periodicStock" && "<PeriodicStockOverview />"}
-        {activeView === "updateStock" && "<UpdateStock />"}
+      <div className="w-full p-4 bg-white rounded-2xl shadow-lg">
+        <div className="flex justify-end items-center mb-4">
+          <div className="flex gap-2">
+            <select
+              className="p-2 border rounded-lg"
+              onChange={(e) => setTimeDuration(e.target.value)}
+            >
+              <option value="Today">Today</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Last 6 Months">Last 6 Months</option>
+              <option value="Yearly">Yearly</option>
+            </select>
+            <button
+              className={`px-4 py-2 rounded-lg ${
+                activeTab === "sales"
+                  ? "bg-d-primary-action-color text-white"
+                  : "bg-d-primary-bg-color text-white"
+              }`}
+              onClick={() => setActiveTab("sales")}
+            >
+              Sales
+            </button>
+            <button
+              className={`px-4 py-2 rounded-lg ${
+                activeTab === "stock"
+                  ? "bg-d-primary-action-color text-white"
+                  : "bg-d-primary-bg-color text-white"
+              }`}
+              onClick={() => setActiveTab("stock")}
+            >
+              Stock
+            </button>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {activeTab === "stock"
+            ? stockGlanceData.map((item, index) => (
+                <GlanceBox key={index} {...item} timeDuration={timeDuration} />
+              ))
+            : salesGlanceData.map((item, index) => (
+                <GlanceBox key={index} {...item} timeDuration={timeDuration} />
+              ))}
+        </div>
+        <div className="w-full mt-4 min-h-[400px] border border-1 flex flex-wrap justify-center items-stretch">
+          <ChartExample />
+          <ChartExample2 />
+        </div>
+        <div className="w-full mt-4 min-h-[400px] border border-1 flex flex-wrap justify-center items-stretch pl-2 pr-2">
+          <div className="p-4 flex justify-start items-center w-full">
+              <p className="text-xl font-bold text-[#1E3E62]">Incoming Stock Pipeline</p>
+          </div>
+          <GridExample />
+        </div>
       </div>
     </div>
   );
-};
-
-export default StockTracking;
+}
