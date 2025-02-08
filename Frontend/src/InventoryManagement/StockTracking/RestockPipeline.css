@@ -19,24 +19,27 @@
   
   /* Status indicators */
   .ag-theme-alpine .critical-restock {
-    background-color: #FF3B30; /* Red for critical stock */
+    background-color: #FF6500; /* Primary action color for critical stock */
     color: white;
     padding: 5px;
     border-radius: 5px;
+    font-weight: bold;
   }
   
   .ag-theme-alpine .status-pending {
     background-color: #FFDB58; /* Light yellow for pending */
-    color: black;
+    color: white;
     padding: 5px;
     border-radius: 5px;
+    font-weight: bold;
   }
   
   .ag-theme-alpine .status-in-transit {
-    background-color: #B2D8F0; /* Light blue for in transit */
-    color: black;
+    background-color: #1E3E62; /* Dark blue for in transit */
+    color: white;
     padding: 5px;
     border-radius: 5px;
+    font-weight: bold;
   }
   
   .ag-theme-alpine .status-arrived {
@@ -44,15 +47,17 @@
     color: white;
     padding: 5px;
     border-radius: 5px;
+    font-weight: bold;
   }
   
   .ag-theme-alpine .status-delayed {
-    background-color: #FF3B30; /* Red for delayed */
+    background-color: #FF6500; /* Matching red-orange for delayed */
     color: white;
     padding: 5px;
     border-radius: 5px;
+    font-weight: bold;
   }
-  
+    
   .ag-theme-alpine .ag-button {
     background-color: #FF6500; /* Primary action color */
     color: #FFFFFF;

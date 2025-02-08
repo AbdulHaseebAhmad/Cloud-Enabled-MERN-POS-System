@@ -1,11 +1,12 @@
 import ReactDOM from "react-dom";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 export default function CheckoutModal({ onClose, onSelectPayment }) {
 
   
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-d-primary-bg-color text-d-primary-text-color w-[90%] max-w-md p-6 rounded-2xl shadow-xl flex flex-col">
+      <div className="relative bg-d-primary-bg-color text-d-primary-text-color w-[90%] max-w-md p-6 rounded-2xl shadow-xl flex flex-col">
         <h2 className="text-2xl font-semibold mb-4 text-center">
           Select Payment Method
         </h2>
@@ -36,8 +37,8 @@ export default function CheckoutModal({ onClose, onSelectPayment }) {
           className="mt-6 text-sm text-d-secondary-text-color underline hover:text-red-700 transition text-red-500"
           onClick={onClose}
         >
-          Cancel
-        </button>
+         <FontAwesomeIcon icon={faXmark} className="absolute top-5 right-10 text-xl"/>
+         </button>
       </div>
     </div>,
     document.getElementById("portal-root")

@@ -11,7 +11,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ChartExample from "./TestChart";
 import ChartExample2 from "./TestChart2";
-import GridExample from "./Table";
+import StockPipeLine from "./StockPipeLine";
+import ForeCastPortal from "./Modals/ForeCastPortal";
 
 export default function StockTracking() {
   const stockGlanceData = [
@@ -56,9 +57,14 @@ export default function StockTracking() {
 
   const [activeTab, setActiveTab] = useState("stock");
   const [timeDuration, setTimeDuration] = useState("Today");
-
+  const [showPortal, setShowPortal] = useState(false);
+  const togglePortal = () => {
+    setShowPortal(!showPortal);
+  }
   return (
     <div className="w-full p-4">
+
+      {showPortal && <ForeCastPortal onClose={togglePortal} />}
       <h1 className="text-3xl font-bold text-lt-primary-text-color mb-0">
         Stock Overview
       </h1>
@@ -115,7 +121,7 @@ export default function StockTracking() {
           <div className="p-4 flex justify-start items-center w-full">
               <p className="text-xl font-bold text-[#1E3E62]">Incoming Stock Pipeline</p>
           </div>
-          <GridExample />
+          <StockPipeLine togglePortal={togglePortal}/>
         </div>
       </div>
     </div>
