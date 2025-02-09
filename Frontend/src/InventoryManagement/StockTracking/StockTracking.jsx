@@ -1,5 +1,5 @@
 import GlanceBox from "./Components/GlanceBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   faDollarSign,
   faBoxesStacked,
@@ -13,57 +13,108 @@ import ChartExample from "./TestChart";
 import ChartExample2 from "./TestChart2";
 import StockPipeLine from "./StockPipeLine";
 import ForeCastPortal from "./Modals/ForeCastPortal";
+import { useDispatch, useSelector } from "react-redux";
+import { getLiveMetrics } from "../Redux/Analytics/AnalyticsActions";
 
 export default function StockTracking() {
-  const stockGlanceData = [
+  const liveMetrics = useSelector(
+    (state) => state.AnalyticsReducer.liveMetricsData
+  );
+
+  const [stockGlanceData, setStockGlanceData] = useState([
     {
       dataTitle: "Total Stock",
-      dataValue: "1,200 Items",
+      dataValue: "No Availale Data",
       dataIcon: faBoxesStacked,
     },
     {
       dataTitle: "Low Stock",
-      dataValue: "5 Products",
+      dataValue: "No Availale Data",
       dataIcon: faTriangleExclamation,
     },
     {
-      dataTitle: "Stock Turnover Rate ",
-      dataValue: "$15,250",
+      dataTitle: "Stock Turnover",
+      dataValue: "No Availale Data",
       dataIcon: faDollarSign,
     },
-    { dataTitle: "Dead Stock", dataValue: "Sneakers", dataIcon: faChartLine },
+    {
+      dataTitle: "Dead Stock",
+      dataValue: "No Availale Data",
+      dataIcon: faChartLine,
+    },
     {
       dataTitle: "Fast Moving Stock",
-      dataValue: "Sneakers",
+      dataValue: "No Availale Data",
       dataIcon: faChartLine,
     },
-  ];
+  ]);
 
-  const salesGlanceData = [
-    { dataTitle: "Total Sales", dataValue: "$15,250", dataIcon: faDollarSign },
-    { dataTitle: "Average Order Value", dataValue: "$42", dataIcon: faReceipt },
+  const [salesGlanceData, setSalesGlanceData] = useState([
     {
-      dataTitle: "Best-Selling Product",
-      dataValue: "Sneakers",
+      dataTitle: "Total Sales",
+      dataValue: "No Available Data",
+      dataIcon: faDollarSign,
+    },
+    {
+      dataTitle: "Avg Order Value",
+      dataValue: "No Available Data",
+      dataIcon: faReceipt,
+    },
+    {
+      dataTitle: "Best Product",
+      dataValue: "No Available Data",
       dataIcon: faChartLine,
     },
-    { dataTitle: "Sales Per Customer", dataValue: "$42", dataIcon: faUserTag },
+    {
+      dataTitle: "Sales Per Customer",
+      dataValue: "No Available Data",
+      dataIcon: faUserTag,
+    },
     {
       dataTitle: "Returned Sales",
-      dataValue: "5% Refund Rate",
+      dataValue: "No Available Data",
       dataIcon: faRotateLeft,
     },
-  ];
+  ]);
 
   const [activeTab, setActiveTab] = useState("stock");
   const [timeDuration, setTimeDuration] = useState("Today");
   const [showPortal, setShowPortal] = useState(false);
+
+  const dispatch = useDispatch();
+
   const togglePortal = () => {
     setShowPortal(!showPortal);
-  }
+  };
+
+  useEffect(() => {
+    dispatch(getLiveMetrics());
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === "stock") {
+      setSalesGlanceData((prevData) => {
+        return prevData.map((item) => {
+          return {
+            ...item,
+            dataValue: liveMetrics[item.dataTitle] ? liveMetrics[item.dataTitle] : "No Available Data",
+          };
+        });
+      });
+    } else {
+      setStockGlanceData((prevData) => {
+        return prevData.map((item) => {
+          return {
+            ...item,
+            dataValue: liveMetrics[item.dataTitle] ? liveMetrics[item.dataTitle] : "No Available Data",
+          };
+        });
+      });
+    }
+  }, [liveMetrics]);
+
   return (
     <div className="w-full p-4">
-
       {showPortal && <ForeCastPortal onClose={togglePortal} />}
       <h1 className="text-3xl font-bold text-lt-primary-text-color mb-0">
         Stock Overview
@@ -119,9 +170,11 @@ export default function StockTracking() {
         </div>
         <div className="w-full mt-4 min-h-[400px] border border-1 flex flex-wrap justify-center items-stretch pl-2 pr-2">
           <div className="p-4 flex justify-start items-center w-full">
-              <p className="text-xl font-bold text-[#1E3E62]">Incoming Stock Pipeline</p>
+            <p className="text-xl font-bold text-[#1E3E62]">
+              Incoming Stock Pipeline
+            </p>
           </div>
-          <StockPipeLine togglePortal={togglePortal}/>
+          <StockPipeLine togglePortal={togglePortal} />
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ export default function GlanceBox({
           {dataTitle}
         </h1>
       </div>
-      <h1 className="text-2xl font-bold text-lt-primary-text-color">
+      <h1 className="text-xl font-bold text-lt-primary-text-color">
         {dataValue}
       </h1>
       <div className="flex items-center gap-2 mt-2">

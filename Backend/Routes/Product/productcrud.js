@@ -13,7 +13,7 @@ productCrudRouter.post(
     const Stock = variants.reduce((acc, curr) => acc + curr.stock, 0);
     try {
       await ProductSchema.create({...product, Stock});
-      await SupplierSchema.findOneAndUpdate({'Supplier Name': Supplier}, {$inc: {'Stock':Stock}});
+      await SupplierSchema.findOneAndUpdate({'Supplier Name': Supplier}, {$inc: {'Total Stock':Stock}});
       res.status(200).json({ message: "Product Added Successfully" });
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -42,7 +42,7 @@ productCrudRouter.delete(
     try {
       const findProduct = await ProductSchema.findById(id);
       const {Supplier, Stock} = findProduct;
-      await SupplierSchema.findOneAndUpdate({'Supplier Name': Supplier}, {$inc: {'Stock':-Stock}});
+      await SupplierSchema.findOneAndUpdate({'Supplier Name': Supplier}, {$inc: {'Total Stock':-Stock}});
       await ProductSchema.findByIdAndDelete(id);
       res.status(200).json({ message: "Product Deleted Successfully", id });
     } catch (err) {

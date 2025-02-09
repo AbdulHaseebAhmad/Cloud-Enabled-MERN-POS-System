@@ -9,7 +9,7 @@ import posRouter from "./Routes/POS/Pos.js";
 import ordersRoute from "./Routes/Orders/Orders.js"
 import http from "http"; 
 import { Server } from "socket.io"
-import OrderSchema from "./Schemas/Orders/OrderSchema.js";
+import analyticsRoute from "./Routes/Analytics/analytics.js";
 configDotenv();
 
 const app = express();
@@ -53,6 +53,7 @@ app.use(supplierCrudRouter);
 app.use(productCrudRouter);
 app.use(posRouter);
 app.use(ordersRoute);
+app.use(analyticsRoute);
 app.get("/", (request, response) => {
   response.send("Running");
 });
