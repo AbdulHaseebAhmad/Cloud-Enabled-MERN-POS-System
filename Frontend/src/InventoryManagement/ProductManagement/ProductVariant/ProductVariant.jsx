@@ -28,6 +28,9 @@ const ProductVariantAccordion = ({
     if (name === "image") {
       targetVariant[name] = files[0];
     }
+    if(name === "priceModifier" || name === "stock"){
+      targetVariant[name] = parseInt(value);
+    }
     targetVariant[name] = value;
   };
 

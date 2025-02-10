@@ -8,10 +8,7 @@ const CategoriesSchema = new mongoose.Schema({
     suppliers: { type: Array, default: [] },
     status: { type: String, default: "Active" },
     stock: { type: Number, default: 0 },
-    });
-
-
-
+});
 
 export default mongoose.model("Category", CategoriesSchema);
 

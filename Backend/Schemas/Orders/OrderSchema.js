@@ -20,6 +20,7 @@ const OrderSchema = new mongoose.Schema({
   status: { type: String, default: "Completed" },
   notes: { type: String },
   Supplier: { type: String },
+  Category: { type: String },
 });
 
 

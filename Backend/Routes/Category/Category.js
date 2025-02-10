@@ -16,8 +16,7 @@ categoryRoute.post("/api/category/addcategory", async (req, res) => {
 categoryRoute.get("/api/category/getcategories", async (req, res) => {
   try {
     const categories = await CategoriesSchema.find();
-    console.log(categories)
-    res.status(200).json(categories);
+     res.status(200).json(categories);
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
   }

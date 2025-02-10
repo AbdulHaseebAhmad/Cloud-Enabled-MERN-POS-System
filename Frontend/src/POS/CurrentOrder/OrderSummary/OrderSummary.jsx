@@ -18,7 +18,6 @@ console.log(cartItems)
   };
 
   const handleCancelOrder = () => {
-    
     dispatch(posScreenActions.cancelCurrentOrder());
   };
 

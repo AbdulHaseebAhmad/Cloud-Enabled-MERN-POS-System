@@ -2,12 +2,12 @@ import {
   GET_LIVE_METRICS,
   GET_LIVE_METRICS_SUCCESS,
   GET_LIVE_METRICS_FAILURE,
-//   GET_DISTRIBUTION,
-//   GET_DISTRIBUTION_SUCCESS,
-//   GET_DISTRIBUTION_FAILURE,
-//   GET_INCOMING_STOCK_PIPELINE,
-//   GET_INCOMING_STOCK_PIPELINE_SUCCESS,
-//   GET_INCOMING_STOCK_PIPELINE_FAILURE,
+  GET_DISTRIBUTION,
+  GET_DISTRIBUTION_SUCCESS,
+  GET_DISTRIBUTION_FAILURE,
+  // GET_INCOMING_STOCK_PIPELINE,
+  // GET_INCOMING_STOCK_PIPELINE_SUCCESS,
+  // GET_INCOMING_STOCK_PIPELINE_FAILURE,
 } from "./Constants.jsx";
 
 import axios from "axios";
@@ -22,7 +22,7 @@ const config = {
   },
 };
 
-const getLiveMetrics = () => {
+const getSalesLiveMetrics = () => {
   return async (dispatch) => {
     dispatch({ type: GET_LIVE_METRICS });
     try {
@@ -37,5 +37,35 @@ const getLiveMetrics = () => {
   };
 };
 
+const getStockLiveMetrics = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_LIVE_METRICS });
+    try {
+      const response = await axios.get(
+        `${url}/api/analytics/live-metrics/inventory`,
+        config
+      );
+      dispatch({ type: GET_LIVE_METRICS_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch({ type: GET_LIVE_METRICS_FAILURE, payload: error.message });
+    }
+  };
+}
+const getDistribution = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_DISTRIBUTION });
+    try {
+      const response = await axios.get(
+        `${url}/api/category/getcategories`,
+        config
+      );
+      console.log(response.data);
+      dispatch({ type: GET_DISTRIBUTION_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch({ type: GET_DISTRIBUTION_FAILURE, payload: error.message });
+    }
+  };
+}
 
-export { getLiveMetrics };
+
+export { getSalesLiveMetrics, getDistribution,getStockLiveMetrics };

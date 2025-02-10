@@ -10,11 +10,12 @@ export default function CashModal({
   cartItems,
   totalPrice,
 }) {
+
   const dispatch = useDispatch();
   const [amountGiven, setAmountGiven] = useState("");
   const [change, setChange] = useState(null);
   const [isValid, setIsValid] = useState(false);
-  //console.log(cartItems)
+  console.log(cartItems)
   const handleAmountChange = (e) => {
     const value = e.target.value;
     setAmountGiven(value);
@@ -40,6 +41,7 @@ export default function CashModal({
         sku: item.sku,
         _id: item._id,
         Supplier: item.Supplier,
+        Category:item.Category
       };
     });
     console.log(cartItems);

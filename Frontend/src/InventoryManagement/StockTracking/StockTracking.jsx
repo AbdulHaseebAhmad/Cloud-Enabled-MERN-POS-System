@@ -14,7 +14,11 @@ import ChartExample2 from "./TestChart2";
 import StockPipeLine from "./StockPipeLine";
 import ForeCastPortal from "./Modals/ForeCastPortal";
 import { useDispatch, useSelector } from "react-redux";
-import { getLiveMetrics } from "../Redux/Analytics/AnalyticsActions";
+import {
+  getSalesLiveMetrics,
+  getStockLiveMetrics,
+} from "../Redux/Analytics/AnalyticsActions";
+import socket from "../../utilities/Socket-Connection";
 
 export default function StockTracking() {
   const liveMetrics = useSelector(
@@ -88,30 +92,45 @@ export default function StockTracking() {
   };
 
   useEffect(() => {
-    dispatch(getLiveMetrics());
-  }, [activeTab]);
+    if (activeTab === "sales") {
+      dispatch(getSalesLiveMetrics());
+    } else {
+      dispatch(getStockLiveMetrics());
+    }
+}, [activeTab]);
+
+  
+  useEffect(() => {
+    if (activeTab === "sales") {
+      setSalesGlanceData((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          dataValue: liveMetrics[item.dataTitle] || "No Available Data",
+        }))
+      );
+    } else {
+      setStockGlanceData((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          dataValue: liveMetrics[item.dataTitle] || "No Available Data",
+        }))
+      );
+    }
+  }, [liveMetrics, activeTab]);
 
   useEffect(() => {
-    if (activeTab === "stock") {
-      setSalesGlanceData((prevData) => {
-        return prevData.map((item) => {
-          return {
-            ...item,
-            dataValue: liveMetrics[item.dataTitle] ? liveMetrics[item.dataTitle] : "No Available Data",
-          };
-        });
-      });
-    } else {
-      setStockGlanceData((prevData) => {
-        return prevData.map((item) => {
-          return {
-            ...item,
-            dataValue: liveMetrics[item.dataTitle] ? liveMetrics[item.dataTitle] : "No Available Data",
-          };
-        });
-      });
-    }
-  }, [liveMetrics]);
+    const handleStockChange = () => {
+        if (activeTab === "sales") {
+            dispatch(getSalesLiveMetrics());
+        } else {
+            dispatch(getStockLiveMetrics());
+        }
+    };
+    socket.on("changesMadeToProducts", handleStockChange);
+    return () => {
+        socket.off("changesMadeToProducts", handleStockChange);
+    };
+}, [socket, dispatch, activeTab]);  
 
   return (
     <div className="w-full p-4">
@@ -158,10 +177,10 @@ export default function StockTracking() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {activeTab === "stock"
             ? stockGlanceData.map((item, index) => (
-                <GlanceBox key={index} {...item} timeDuration={timeDuration} />
+                <GlanceBox key={index} dataValue={item.dataValue} dataIcon={item.dataIcon} dataTitle={item.dataTitle} timeDuration={timeDuration} />
               ))
             : salesGlanceData.map((item, index) => (
-                <GlanceBox key={index} {...item} timeDuration={timeDuration} />
+                <GlanceBox key={index} dataValue={item.dataValue} dataIcon={item.dataIcon} dataTitle={item.dataTitle} timeDuration={timeDuration} />
               ))}
         </div>
         <div className="w-full mt-4 min-h-[400px] border border-1 flex flex-wrap justify-center items-stretch">

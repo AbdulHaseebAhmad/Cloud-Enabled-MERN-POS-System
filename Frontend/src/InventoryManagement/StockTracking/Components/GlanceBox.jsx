@@ -1,16 +1,13 @@
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowUp,
-  faArrowDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 export default function GlanceBox({
   dataTitle,
   dataValue,
   dataIcon,
-  timeDuration
+  timeDuration,
 }) {
   const [isIncreased] = useState("false");
 
@@ -24,14 +21,17 @@ export default function GlanceBox({
           <FontAwesomeIcon icon={dataIcon} />
         </div>
         <h1 className="text-lg font-bold text-lt-secondary-text-color">
-          {dataTitle}
+          {dataTitle}{" "}
         </h1>
       </div>
       <h1 className="text-xl font-bold text-lt-primary-text-color">
         {dataValue}
       </h1>
       <div className="flex items-center gap-2 mt-2">
-        <FontAwesomeIcon icon={isIncreased ? faArrowUp : faArrowDown} className={isIncreased ?'text-green-500':'text-red-500'}/>
+        <FontAwesomeIcon
+          icon={isIncreased ? faArrowUp : faArrowDown}
+          className={isIncreased ? "text-green-500" : "text-red-500"}
+        />
         <div className="flex items-center gap-2">
           <p> +$1,200 </p>
           <small className="text-lt-secondary-text-color">

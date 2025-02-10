@@ -4,7 +4,6 @@ const posRouter = Router();
 
 posRouter.post("/api/pos/get-product", async (req, res) => {
   const { SKU } = req.body;
-  console.log(SKU)
   try{
     let product = await ProductSchema.findOne(
       { "variants.sku": SKU },

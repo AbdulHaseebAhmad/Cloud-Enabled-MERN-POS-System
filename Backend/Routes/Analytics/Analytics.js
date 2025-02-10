@@ -10,8 +10,7 @@ analyticsRoute.get(
   "/api/analytics/live-metrics/sales",
   timeStamp,
   async (req, res) => {
-    console.log(req.dateAggregatedOrders);
-    const totalOrders = req.dateAggregatedOrders.length;
+     const totalOrders = req.dateAggregatedOrders.length;
     const totalSales = req.dateAggregatedOrders.reduce(
       (acc, order) => acc + order.totalPrice,
       0
@@ -57,5 +56,63 @@ analyticsRoute.get(
       });
   }
 );
+
+
+analyticsRoute.get("/api/analytics/live-metrics/inventory", timeStamp, async (req, res) => {
+  const {dateAggregatedOrders} = req;
+  try{
+    const totalProducts = await ProductSchema.countDocuments();
+    const totalStocks = await ProductSchema.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalStocks: {
+            $sum: "$Stock"
+          }
+        }
+      }
+    ]);
+    const lowStock = await ProductSchema.find({Stock: {$lt: 200}},{
+      _id:1,
+      'Product Name':1,
+      'Stock':1
+    }).sort({ Stock: 1 })  
+    .limit(1);
+
+    let fastMovingStock = Object.entries(
+      req.dateAggregatedOrders
+        .map(({ cartItems }) => {
+          return cartItems;
+        })
+        .reduce((acc, cartItems) => {
+          cartItems.forEach(({ "Product Name": name, Qty }) => {
+            if (acc[name]) {
+              acc[name] += Qty;
+            } else {
+              acc[name] = Qty;
+            }
+          });
+          return acc;
+        }, {})
+    ).reduce(
+      (acc, [name, qty]) => {
+        if (acc[1] < qty) {
+          acc = [name, qty];
+        }
+        return acc;
+      },
+      ["", 0]
+    );
+    res.status(200).json({
+      // "Total Products": totalProducts,
+      "Total Stock": totalStocks[0].totalStocks,
+      "Low Stock": lowStock[0]['Product Name'],
+      "Fast Moving Stock": fastMovingStock[0]
+    });
+  }
+  catch(err){
+    return res.status(500).json({error: err.message});
+  }
+});
 
 export default analyticsRoute;
