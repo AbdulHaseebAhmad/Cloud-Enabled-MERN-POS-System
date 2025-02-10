@@ -10,6 +10,7 @@ import ordersRoute from "./Routes/Orders/Orders.js"
 import http from "http"; 
 import { Server } from "socket.io"
 import analyticsRoute from "./Routes/Analytics/analytics.js";
+import categoryRoute from "./Routes/Category/Category.js";
 configDotenv();
 
 const app = express();
@@ -54,6 +55,7 @@ app.use(productCrudRouter);
 app.use(posRouter);
 app.use(ordersRoute);
 app.use(analyticsRoute);
+app.use(categoryRoute);
 app.get("/", (request, response) => {
   response.send("Running");
 });
