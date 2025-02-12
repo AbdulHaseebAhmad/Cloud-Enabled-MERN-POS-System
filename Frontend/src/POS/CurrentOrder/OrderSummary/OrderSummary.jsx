@@ -46,7 +46,7 @@ console.log(cartItems)
                   <td className="flex items-center justify-center space-x-2 p-2 ">
                     <button
                       onClick={() =>
-                        dispatch(posScreenActions.decreaseQuantity(item.id))
+                        dispatch(posScreenActions.decreaseQuantity(item.sku))
                       }
                       className="px-2 bg-d-primary-bg-color text-white rounded hover:bg-d-primary-action-color"
                     >
@@ -55,17 +55,17 @@ console.log(cartItems)
                     <span className="text-xl">{item.Qty}</span>
                     <button
                       onClick={() =>
-                        dispatch(posScreenActions.increaceQuantity(item.id))
+                        dispatch(posScreenActions.increaceQuantity(item.sku))
                       }
                       className="px-2 bg-d-primary-bg-color text-white rounded hover:bg-d-primary-action-color"
                     >
                       +
                     </button>
                   </td>
-                  <td className="p-2 text-center ">${item.Price}</td>
+                  <td className="p-2 text-center ">${(item.Price + item.priceModifier)}</td>
                   <td className="flex items-center justify-center space-x-2 p-2 ">
                     <button
-                      onClick={() => dispatch(posScreenActions.removeItemFromCurrentOrder(item.id)) }
+                      onClick={() => dispatch(posScreenActions.removeItemFromCurrentOrder(item.sku)) }
                       className="text-red-500 hover:text-red-700"
                     >
                       &times;

@@ -133,7 +133,7 @@ const AddProduct = ({
                   
                 </select>
                 {(field === "Category") && (
-                  <button className="absolute top-20 right-5 text-xs text-d-primary-action-color bg-d-primary-bg-color py-2 px-2 rounded-lg hover:bg-d-secondary-bg-color transition-all duration-200"
+                  <button type="button" className="absolute top-20 right-5 text-xs text-d-primary-action-color bg-d-primary-bg-color py-2 px-2 rounded-lg hover:bg-d-secondary-bg-color transition-all duration-200"
                   onClick={()=>setCategoryTogglePortal(true)}>
                     Cant find your category? Add a new one
                   </button>

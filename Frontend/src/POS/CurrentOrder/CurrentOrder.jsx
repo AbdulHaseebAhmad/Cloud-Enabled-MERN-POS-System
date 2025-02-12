@@ -34,7 +34,7 @@ const POSCheckoutScreen = () => {
   };
 
   const totalPrice = getReduxItms.reduce(
-    (acc, item) => acc + item.Qty * item.Price,
+    (acc, item) => acc + item.Qty * (item.Price + item.priceModifier),
     0
   );
 

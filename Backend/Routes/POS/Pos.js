@@ -16,8 +16,9 @@ posRouter.post("/api/pos/get-product", async (req, res) => {
         Category: 1,
         "variants.$": 1,
       }
-    );
-    product = {...product._doc, ...product._doc.variants[0],Qty:1,id:product._id};
+    ).lean();;
+    product = { ...product, ...product.variants[0], Qty: 1, id: product._id };
+    console.log(product)
     res.status(200).send(product);
   }
   catch (err){

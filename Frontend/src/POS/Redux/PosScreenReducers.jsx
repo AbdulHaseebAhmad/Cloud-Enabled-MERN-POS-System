@@ -43,7 +43,7 @@ const posScreenSlice = createSlice({
     },
     addToCurrentOrder(state, action) {
       const itemExist = state.currentOrder.find(
-        (item) => item.id === action.payload.id
+        (item) => item.sku === action.payload.sku
       );
       if (itemExist) {
         itemExist.Qty += 1;
@@ -53,25 +53,25 @@ const posScreenSlice = createSlice({
     },
     decreaseQuantity(state, action) {
       const itemExist = state.currentOrder.find(
-        (item) => item.id === action.payload
+        (item) => item.sku === action.payload
       );
       if (itemExist.Qty > 1) {
         itemExist.Qty -= 1;
       } else {
         state.currentOrder = state.currentOrder.filter(
-          (item) => item.id !== action.payload
+          (item) => item.sku !== action.payload
         );
       }
     },
     increaceQuantity(state, action) {
       const itemExist = state.currentOrder.find(
-        (item) => item.id === action.payload
+        (item) => item.sku === action.payload
       );
       itemExist.Qty += 1;
     },
     removeItemFromCurrentOrder(state, action) {
       state.currentOrder = state.currentOrder.filter(
-        (item) => item.id !== action.payload
+        (item) => item.sku !== action.payload
       );
     },
     setOrderNumber(state, action) {

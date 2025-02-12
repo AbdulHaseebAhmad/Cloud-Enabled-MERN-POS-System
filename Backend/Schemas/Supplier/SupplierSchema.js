@@ -23,6 +23,7 @@ const SupplierSchema = new mongoose.Schema({
   },
   "Total Stock": {
     type: Number,
+    default: 0,
   },
 });
 

@@ -4,6 +4,7 @@ import { getProducts } from "../../Redux/Product/ProductActions";
 export default function ProductResponseMessage({ togglePortal }) {
 
   const dispatch = useDispatch();
+  
   const hidePortal = () => {
     dispatch(getProducts())
     togglePortal();

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export default function ProductViewGrid({ cartItems }) {
   const [currentProducts, setCurrentProducts] = useState(cartItems.slice(0, 6));
   const [currentIndex, setCurrentIndex] = useState(3);
-
+  console.log(currentProducts);
   const handleNext = () => {
     if (currentIndex + 3 < cartItems.length) {
       setCurrentIndex(currentIndex + 3);
@@ -50,10 +50,10 @@ export default function ProductViewGrid({ cartItems }) {
               className="rounded mb-2 object-fit w-full h-[100px]"
             />
             <div className="text-center">
-              <h2 className="font-bold text-lg">{item['Product Name']}  {item.name && <small>({ item.name})</small>}</h2>
+              <h2 className="font-bold text-lg">{item['Product Name']}{item.name && <small>({ item.name})</small>}</h2>
               <p className="text-sm">SKU: {item.SKU}</p>
               <p className="text-sm">Quantity: {item.Qty}</p>
-              <p className="font-bold">${item.Qty * item.Price}</p>
+              <p className="font-bold">${item.Qty * (item.Price + item.priceModifier)}</p>
             </div>
           </div>
         ))}

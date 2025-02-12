@@ -16,12 +16,15 @@ export default function ProductPortal({ togglePortal }) {
   };
 
   const saveProducts = () => {
-    socket.emit("changesMadeToProducts", "Product Added"); //This is the function that is called when the form is submitted to send the data to the backend
     dispatch(addProduct(formData));
+    setTimeout(()=>{
+      socket.emit("changesMadeToProducts", "Product Added"); //This is the function that is called when the form is submitted to send the data to the backend
+    },3000)
   };
 
 
   return ReactDOM.createPortal(
+   
     <Component
       nextComponent={(nextComponent) => setCurrentComponent(nextComponent)} //this prop calls the function from child here in portal to change the component
       togglePortal={togglePortal}
@@ -29,7 +32,8 @@ export default function ProductPortal({ togglePortal }) {
       pageTitle="Add"
       savedFormData={formData}
       saveProducts={saveProducts}
-    />,
+    />
+    ,
     document.getElementById("portal-root")
   );
 }

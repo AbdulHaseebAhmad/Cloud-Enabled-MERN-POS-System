@@ -30,6 +30,7 @@ const ProductVariantAccordion = ({
     }
     if(name === "priceModifier" || name === "stock"){
       targetVariant[name] = parseInt(value);
+      console.log(typeof(targetVariant[name]))
     }
     targetVariant[name] = value;
   };

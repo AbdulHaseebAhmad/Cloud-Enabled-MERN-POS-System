@@ -11,6 +11,7 @@ import http from "http";
 import { Server } from "socket.io"
 import analyticsRoute from "./Routes/Analytics/analytics.js";
 import categoryRoute from "./Routes/Category/Category.js";
+import snapshotRoute from "./Routes/Snapshots/snapshots.js";
 configDotenv();
 
 const app = express();
@@ -56,6 +57,7 @@ app.use(posRouter);
 app.use(ordersRoute);
 app.use(analyticsRoute);
 app.use(categoryRoute);
+app.use(snapshotRoute)
 app.get("/", (request, response) => {
   response.send("Running");
 });
