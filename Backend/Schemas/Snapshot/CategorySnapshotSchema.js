@@ -6,7 +6,7 @@ const CategorySnapshotSchema = new mongoose.Schema({
         required: true
     },
     Stock: {
-        type: String,
+        type: "Number",
         required: true
     },
     date: {
@@ -16,11 +16,7 @@ const CategorySnapshotSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true
-    }, 
-    newProduct: {
-        type: Boolean,
-        required: true
-    }
+    },
 })
 
 export default mongoose.model("CategorySnapshot", CategorySnapshotSchema);

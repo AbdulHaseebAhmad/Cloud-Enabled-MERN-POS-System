@@ -16,8 +16,7 @@ const ProductSnapshotSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true
-    }, // re stock or out of stock
-    
+    },
 })
 
 export default mongoose.model("ProductSnapshot", ProductSnapshotSchema);

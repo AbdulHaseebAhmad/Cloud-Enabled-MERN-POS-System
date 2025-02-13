@@ -12,6 +12,9 @@ import { Server } from "socket.io"
 import analyticsRoute from "./Routes/Analytics/analytics.js";
 import categoryRoute from "./Routes/Category/Category.js";
 import snapshotRoute from "./Routes/Snapshots/snapshots.js";
+import cron from "node-cron";
+import takeDailySnapshot from "./utilities/dailySnapshotFunction.js";
+
 configDotenv();
 
 const app = express();
@@ -48,6 +51,7 @@ mongoose
   .catch((err) => console.error("Database connection error:", err));
 
 
+
   
 app.use(express.json());
 app.use(authenticationRouter);
@@ -60,6 +64,12 @@ app.use(categoryRoute);
 app.use(snapshotRoute)
 app.get("/", (request, response) => {
   response.send("Running");
+});
+
+cron.schedule("0 23 * * *", () => {
+  takeDailySnapshot();
+}, {
+  timezone: "UTC" // Adjust as per your timezone
 });
 
 

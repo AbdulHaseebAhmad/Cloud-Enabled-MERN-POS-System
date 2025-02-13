@@ -5,6 +5,9 @@ import {
   GET_DISTRIBUTION,
   GET_DISTRIBUTION_SUCCESS,
   GET_DISTRIBUTION_FAILURE,
+  GET_MONTHLY_TRENDS,
+  GET_MONTHLY_TRENDS_SUCCESS,
+  GET_MONTHLY_TRENDS_FAILURE,
   // GET_INCOMING_STOCK_PIPELINE,
   // GET_INCOMING_STOCK_PIPELINE_SUCCESS,
   // GET_INCOMING_STOCK_PIPELINE_FAILURE,
@@ -50,7 +53,7 @@ const getStockLiveMetrics = () => {
       dispatch({ type: GET_LIVE_METRICS_FAILURE, payload: error.message });
     }
   };
-}
+};
 const getDistribution = () => {
   return async (dispatch) => {
     dispatch({ type: GET_DISTRIBUTION });
@@ -65,7 +68,21 @@ const getDistribution = () => {
       dispatch({ type: GET_DISTRIBUTION_FAILURE, payload: error.message });
     }
   };
-}
+};
 
+const getMonthlyTrendsData = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_MONTHLY_TRENDS });
+    try {
+      const response = await axios.get(
+        `${url}/api/snapshots/category/snapshot`,
+        config
+      );
+      dispatch({ type: GET_MONTHLY_TRENDS_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch({ type: GET_MONTHLY_TRENDS_FAILURE, payload: error.message });
+    }
+  };
+};
 
-export { getSalesLiveMetrics, getDistribution,getStockLiveMetrics };
+export { getSalesLiveMetrics, getDistribution, getStockLiveMetrics,getMonthlyTrendsData };

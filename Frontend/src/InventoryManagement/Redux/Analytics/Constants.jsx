@@ -7,7 +7,9 @@ const GET_DISTRIBUTION_FAILURE = "Failed to Fetch Distribution Data";
 const GET_INCOMING_STOCK_PIPELINE = "Fetching Incoming Stock Pipeline";
 const GET_INCOMING_STOCK_PIPELINE_SUCCESS = "Fetched Incoming Stock Pipeline Successfully";
 const GET_INCOMING_STOCK_PIPELINE_FAILURE = "Failed to Fetch Incoming Stock Pipeline";
-
+const GET_MONTHLY_TRENDS = "Fetching Monthly Trends";
+const GET_MONTHLY_TRENDS_SUCCESS = "Fetched Monthly Trends Successfully";
+const GET_MONTHLY_TRENDS_FAILURE = "Failed to Fetch Monthly Trends";
 export {
     GET_LIVE_METRICS,
     GET_LIVE_METRICS_SUCCESS,
@@ -18,4 +20,7 @@ export {
     GET_INCOMING_STOCK_PIPELINE,
     GET_INCOMING_STOCK_PIPELINE_SUCCESS,
     GET_INCOMING_STOCK_PIPELINE_FAILURE,
+    GET_MONTHLY_TRENDS,
+    GET_MONTHLY_TRENDS_SUCCESS,
+    GET_MONTHLY_TRENDS_FAILURE,
 };

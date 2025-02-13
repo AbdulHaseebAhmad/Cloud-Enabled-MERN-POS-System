@@ -10,7 +10,7 @@ import {
   faRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import ChartExample from "./TestChart";
-import ChartExample2 from "./TestChart2";
+import ChartExample2 from "./Testchart2";
 import StockPipeLine from "./StockPipeLine";
 import ForeCastPortal from "./Modals/ForeCastPortal";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +24,8 @@ export default function StockTracking() {
   const liveMetrics = useSelector(
     (state) => state.AnalyticsReducer.liveMetricsData
   );
+
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const [stockGlanceData, setStockGlanceData] = useState([
     {
@@ -184,8 +186,8 @@ export default function StockTracking() {
               ))}
         </div>
         <div className="w-full mt-4 min-h-[400px] border border-1 flex flex-wrap justify-center items-stretch">
-          <ChartExample />
-          <ChartExample2 />
+          <ChartExample onCategoryChange={(category)=>setSelectedCategory(category)}/>
+          <ChartExample2 selectedCategory={selectedCategory} />
         </div>
         <div className="w-full mt-4 min-h-[400px] border border-1 flex flex-wrap justify-center items-stretch pl-2 pr-2">
           <div className="p-4 flex justify-start items-center w-full">

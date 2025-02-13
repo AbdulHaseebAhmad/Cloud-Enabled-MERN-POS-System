@@ -8,6 +8,9 @@ import {
     GET_INCOMING_STOCK_PIPELINE,
     GET_INCOMING_STOCK_PIPELINE_SUCCESS,
     GET_INCOMING_STOCK_PIPELINE_FAILURE,
+    GET_MONTHLY_TRENDS,
+    GET_MONTHLY_TRENDS_SUCCESS,
+    GET_MONTHLY_TRENDS_FAILURE,
 } from "./Constants.jsx";
 
 
@@ -21,6 +24,11 @@ const initialStatus = {
     distributionLoading: false,
     distributionError: null,
     distributionMessage: "",
+
+    MonthlyTrendsData: [],
+    MonthlyTrendsLoading: false,
+    MonthlyTrendsError: null,
+    MonthlyTrendsMessage: "",
 
     inComingStockPipelineData: [],
     inComingStockPipelineLoading: false,
@@ -76,6 +84,29 @@ const analyticsReducer = (state = initialStatus, action) => {
                 distributionError: action.payload,
                 distributionMessage: GET_DISTRIBUTION_FAILURE,
             };
+        case GET_MONTHLY_TRENDS:
+            return {
+                ...state,
+                MonthlyTrendsLoading: true,
+                MonthlyTrendsMessage: GET_MONTHLY_TRENDS,
+            };
+        case GET_MONTHLY_TRENDS_SUCCESS:
+            return {
+                ...state,
+                MonthlyTrendsLoading: false,
+                MonthlyTrendsData: action.payload,
+                MonthlyTrendsError: null,
+                MonthlyTrendsMessage: GET_MONTHLY_TRENDS_SUCCESS,
+            };
+        case GET_MONTHLY_TRENDS_FAILURE:
+            return {
+                ...state,
+                MonthlyTrendsLoading: false,
+                MonthlyTrendsData: [],
+                MonthlyTrendsError: action.payload,
+                MonthlyTrendsMessage: GET_MONTHLY_TRENDS_FAILURE,
+            };
+
         case GET_INCOMING_STOCK_PIPELINE:
             return {
                 ...state,
@@ -98,6 +129,7 @@ const analyticsReducer = (state = initialStatus, action) => {
                 inComingStockPipelineError: action.payload,
                 inComingStockPipelineMessage: GET_INCOMING_STOCK_PIPELINE_FAILURE,
             };
+
         default:
             return state;
     }

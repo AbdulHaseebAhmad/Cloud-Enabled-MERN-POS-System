@@ -3,18 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDistribution } from "../Redux/Analytics/AnalyticsActions";
 import { AgCharts } from "ag-charts-react";
 import socket from "../../utilities/Socket-Connection";
+import PropTypes from "prop-types";
 
-const ChartExample = () => {
+const ChartExample = ({ onCategoryChange }) => {
   const dispatch = useDispatch();
   const stockDistributionData = useSelector((state) => state.AnalyticsReducer.distributionData);
   const stockDistributionLoading = useSelector((state) => state.AnalyticsReducer.distributionLoading);
   const stockDistributionMessage = useSelector((state) => state.AnalyticsReducer.distributionMessage);
   const [chartData, setCharData] = useState([]);
-  
+
   useEffect(() => {
-    dispatch(getDistribution());  
-  }, [dispatch]); 
-  
+    dispatch(getDistribution());
+  }, [dispatch]);
+
   useEffect(() => {
     if (stockDistributionData?.length > 0) {
       setCharData(stockDistributionData.map(({ name, stock }) => ({
@@ -22,37 +23,42 @@ const ChartExample = () => {
         amount: stock,
       })));
     }
-  }, [stockDistributionData]);  
-  
+  }, [stockDistributionData]);
+
   useEffect(() => {
     const handleStockChange = (message) => {
-      dispatch(getDistribution());  
+      dispatch(getDistribution());
       console.log("changesMadeToProducts", message);
     };
     socket.on("changesMadeToProducts", handleStockChange);
-  
+
     return () => {
       socket.off("changesMadeToProducts", handleStockChange);
     };
-  }, [socket, dispatch]);  
-  
+  }, [socket, dispatch]);
+
   const options = {
     title: {
       text: "Stock Distribution (Category)",
       color: "#1E3E62",
       fontWeight: "bold",
     },
-    data: chartData,   
+    data: chartData,
     series: [
       {
         type: "pie",
         angleKey: "amount",
         calloutLabelKey: "asset",
         sectorLabelKey: "amount",
+        listeners: {
+          nodeClick: (event) => {
+            var datum = event.datum;
+            onCategoryChange(datum["asset"]);
+          }
+        },
         sectorLabel: {
           color: "white",
           fontWeight: "bold",
-          formatter: ({ value }) => `$${(value / 1000).toFixed(0)}K`,
         },
         fills: [
           "#FF6500", "#264653", "#073B4C", "#D62828", "#F4A261",
@@ -66,19 +72,22 @@ const ChartExample = () => {
   };
 
   return (
-<>
-  {chartData?.length > 0 ? (
-    <AgCharts options={options} className="h-[400px] w-[30%]" />
-  ) : (
-    stockDistributionLoading ? (
-      <p className="text-lg font-semibold text-gray-600 animate-pulse">Loading...</p>
-    ) : (
-      <p className="text-lg font-medium text-red-600">{stockDistributionMessage}</p>
-    )
-  )}
-</>
-
+    <>
+      {chartData?.length > 0 ? (
+        <AgCharts options={options} className="h-[400px] w-[30%]" />
+      ) : (
+        stockDistributionLoading ? (
+          <p className="text-lg font-semibold text-gray-600 animate-pulse">Loading...</p>
+        ) : (
+          <p className="text-lg font-medium text-red-600">{stockDistributionMessage}</p>
+        )
+      )}
+    </>
   );
 };
 
 export default ChartExample;
+
+ChartExample.propTypes = {
+  onCategoryChange: PropTypes.func.isRequired,  
+};
