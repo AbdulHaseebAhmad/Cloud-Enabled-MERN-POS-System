@@ -7,7 +7,6 @@ import InventoryReports from "../InventoryManagement/InventoryReport/InventoryRe
 import SupplierManagement from "../InventoryManagement/SupplierManagement/SupplierManagement";
 import ProductManagement from "../InventoryManagement/ProductManagement/ProductManagement";
 import ProductDetails from "../InventoryManagement/ProductDetail/ProductDetail";
-import ProductsByCategory from "../InventoryManagement/TotalAvailableProducts/ProductsByCategory";
 import StockTracking from "../InventoryManagement/StockTracking/StockTracking";
 import Login from "../InventoryManagement/Authentication/Login.jsx";
 import CurrentOrder from "../POS/CurrentOrder/CurrentOrder.jsx";
@@ -20,6 +19,7 @@ import Posstore from "../POS/Redux/Store.jsx";
 import { Provider } from "react-redux";
 import PosRootElement from "../POS/PosRootElement/PosRootElement.jsx";
 import Coupons from "../POS/Coupons/Coupons.jsx";
+import ProductManagementNew from "../Latest/ProductManagement/ProductManagement.jsx";
 
 const router = createBrowserRouter([
   {
@@ -80,8 +80,8 @@ const router = createBrowserRouter([
             element: <ProductDetails />,
           },
           {
-            path: "products-by-category",
-            element: <ProductsByCategory />,
+            path: "test",
+            element: <ProductManagementNew />,
           },
           {
             path: "stock-tracking",

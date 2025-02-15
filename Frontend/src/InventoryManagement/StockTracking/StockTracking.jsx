@@ -25,7 +25,7 @@ export default function StockTracking() {
     (state) => state.AnalyticsReducer.liveMetricsData
   );
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Electronics");
 
   const [stockGlanceData, setStockGlanceData] = useState([
     {
