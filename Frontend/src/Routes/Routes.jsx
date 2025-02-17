@@ -79,10 +79,10 @@ const router = createBrowserRouter([
             path: "product-details",
             element: <ProductDetails />,
           },
-          {
-            path: "test",
-            element: <ProductManagementNew />,
-          },
+          // {
+          //   path: "test",
+          //   element: <ProductManagementNew />,
+          // },
           {
             path: "stock-tracking",
             element: <StockTracking />,

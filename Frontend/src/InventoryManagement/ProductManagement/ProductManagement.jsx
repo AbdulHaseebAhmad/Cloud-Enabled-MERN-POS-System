@@ -1,71 +1,157 @@
+import GlanceBox from "../../InventoryManagement/StockTracking/Components/GlanceBox";
 import { useEffect, useState } from "react";
-import ViewProductsTable from "./ViewProducts/ViewProductsTable";
-import ProductPortal from "./ProductPortal/ProductPortal";
+import {
+  faDollarSign,
+  faChartLine,
+  faReceipt,
+  faUserTag,
+  faRotateLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../Redux/Product/ProductActions";
+import {
+  getSalesLiveMetrics,
+  getStockLiveMetrics,
+} from "../../InventoryManagement/Redux/Analytics/AnalyticsActions";
 import socket from "../../utilities/Socket-Connection";
-const ProductManagement = () => {
-  const [products, setProducts] = useState([]);
-  const productsList = useSelector((state) => state.ProductReducer.data);
+import ProductTable from "./ProductTable/ProductTable";
+import AddProductModal from "./ProductModal/AddProductModal";
+import { clearProductDetails } from "../../InventoryManagement/Redux/Product/ProductActions";
+
+export default function ProductManagement() {
+  const liveMetrics = useSelector(
+    (state) => state.AnalyticsReducer.liveMetricsData
+  );
+
+  const [stockGlanceData, setStockGlanceData] = useState([
+    {
+      dataTitle: "Total Inv. Value",
+      dataValue: "No Available Data",
+      dataIcon: faDollarSign,
+    },
+    {
+      dataTitle: "Avg Product Price",
+      dataValue: "No Available Data",
+      dataIcon: faReceipt,
+    },
+    {
+      dataTitle: "New Products",
+      dataValue: "No Available Data",
+      dataIcon: faChartLine,
+    },
+    {
+      dataTitle: "Fast Moving ",
+      dataValue: "No Available Data",
+      dataIcon: faUserTag,
+    },
+    {
+      dataTitle: "Dead Products",
+      dataValue: "No Available Data",
+      dataIcon: faRotateLeft,
+    },
+    {
+      dataTitle: "Out-of-Stock",
+      dataValue: "No Available Data",
+      dataIcon: faRotateLeft,
+    },
+  ]);
+
+  const [activeTab, setActiveTab] = useState("stock");
+  const [timeDuration, setTimeDuration] = useState("Today");
+  const [showPortal, setShowPortal] = useState(false);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [socket]);
+
+  const togglePortal = () => {
+    dispatch(clearProductDetails());
+    setShowPortal(!showPortal);
+  };
 
   useEffect(() => {
-    setProducts(productsList);
-  }, [productsList, socket]);
+    setStockGlanceData((prevData) =>
+      prevData.map((item) => ({
+        ...item,
+        dataValue: liveMetrics[item.dataTitle] || "No Available Data",
+      }))
+    );
+  }, [liveMetrics, activeTab]);
 
-  useEffect(()=>{
-    socket.on("changesMadeToProducts", (message) => {
-      dispatch(getProducts());
-      console.log("changesMadeToProducts", message);
-    });
-  },[socket])
+  useEffect(() => {
+    const handleStockChange = () => {
+      if (activeTab === "sales") {
+        dispatch(getSalesLiveMetrics());
+      } else {
+        dispatch(getStockLiveMetrics());
+      }
+    };
+    socket.on("changesMadeToProducts", handleStockChange);
+    return () => {
+      socket.off("changesMadeToProducts", handleStockChange);
+    };
+  }, [socket, dispatch, activeTab]);
 
-  const [togglePortal, setTogglePortal] = useState(false);
+
   return (
-    <div className="p-4 sm:p-6">
-      {togglePortal ? (
-        <ProductPortal togglePortal={() => setTogglePortal(false)} />
-      ) : (
-        <>
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
-            <h2 className="text-xl sm:text-2xl font-bold text-lt-primary-text-color dark:text-d-primary-bg-color mb-2 sm:mb-0">
-              Product Management
-            </h2>
+    <div className="w-full p-4">
+      {showPortal && <AddProductModal onClose={togglePortal} />}
+      <h1 className="text-3xl font-bold text-lt-primary-text-color mb-0">
+        Product Management
+      </h1>
+
+      <div className="w-full p-4 bg-white rounded-2xl shadow-lg">
+        <div className="flex justify-end items-center mb-4">
+          <div className="flex gap-2">
+            <select
+              className="p-2 border rounded-lg"
+              onChange={(e) => setTimeDuration(e.target.value)}
+            >
+              <option value="Today">Today</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Last 6 Months">Last 6 Months</option>
+              <option value="Yearly">Yearly</option>
+            </select>
             <button
-              onClick={() => setTogglePortal(true)}
-              className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
+              className={`px-4 py-2 rounded-lg ${
+                activeTab === "stock"
+                  ? "bg-d-primary-action-color text-white"
+                  : "bg-d-primary-bg-color text-white"
+              }`}
+              onClick={() => setActiveTab("stock")}
+            >
+              Stock
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto scrollbar-hide py-1 ">
+          <div className="inline-grid grid-flow-col auto-cols-[minmax(250px,_1fr)] gap-4">
+            {activeTab === "stock" &&
+              stockGlanceData.map((item, index) => (
+                <GlanceBox
+                  key={index}
+                  dataValue={item.dataValue}
+                  dataIcon={item.dataIcon}
+                  dataTitle={item.dataTitle}
+                  timeDuration={timeDuration}
+                />
+              ))}
+          </div>
+        </div>
+
+        <div className="w-full mt-4 min-h-[400px] border border-1 flex flex-wrap justify-center items-stretch pl-2 pr-2">
+          <div className="p-4 flex justify-between items-center w-full">
+            <h3 className="text-2xl font-bold text-[#1E3E62]">
+             Product List
+            </h3>
+            <button
+              onClick={togglePortal}
+              className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-2 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
             >
               Add Product
             </button>
           </div>
-          <div className="flex flex-col sm:flex-row justify-center mb-4">
-            <div className="relative w-full sm:w-1/3">
-              <input
-                type="text"
-                placeholder="Search Suppliers..."
-                className="w-full p-2 pl-4 border border-lt-primary-border-color rounded-md bg-white dark:text-d-secondary-bg-color focus:outline-none"
-              />
-              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-2 px-2 sm:px-4 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path d="M11 2a9 9 0 1 0 6.33 15.59l4.67 4.67a1 1 0 0 0 1.41-1.42l-4.67-4.67A9 9 0 0 0 11 2zM11 16a7 7 0 1 1 0-14 7 7 0 0 1 0 14z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <ViewProductsTable products={products} />
-        </>
-      )}
+          <ProductTable togglePortal={togglePortal} />
+        </div>
+      </div>
     </div>
   );
-};
-
-export default ProductManagement;
+}

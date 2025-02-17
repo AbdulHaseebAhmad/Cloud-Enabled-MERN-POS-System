@@ -11,13 +11,27 @@ import {
   FETCH_PRODUCTS,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAILURE,
+  ADD_PRODUCT_Details,
+  ADD_PRODUCT_Variants,
+  CLEAR_PRODUCT_Dtails,
+  CLEAR_TRANSITIONAL_DATA,
 } from "./Constants";
+
 
 const initialState = {
   loading: false,
   data: [],
   error: null,
   msg: "",
+  productDetails:{
+    'Product Name':'' ,
+    SKU: '',
+    Price: '',
+    Description: '',
+    Category: '',
+    Supplier: '',
+    variants: [],
+ }
 };
 
  const productsReducer = (state = initialState, action) => {
@@ -110,6 +124,39 @@ const initialState = {
         error: action.payload,
         msg: FETCH_PRODUCTS_FAILURE,
       };
+      case ADD_PRODUCT_Details:
+        return {
+          ...state,
+          productDetails: {...state.productDetails, ...action.payload},
+        };
+      case ADD_PRODUCT_Variants:
+        return {
+          ...state,
+          productDetails: {
+            ...state.productDetails,
+            variants:action.payload,
+          }
+        };
+      case CLEAR_PRODUCT_Dtails:
+        return {
+          ...state,
+          productDetails: {
+            'Product Name':'' ,
+            SKU: '',
+            Price: '',
+            Description: '',
+            Category: '',
+            Supplier: '',
+            variants: [],
+         },
+        };
+      case CLEAR_TRANSITIONAL_DATA:
+        return {
+          ...state,
+          loading: false,
+          error: null,
+          msg: "",
+        };
     default:
       return state;
   }

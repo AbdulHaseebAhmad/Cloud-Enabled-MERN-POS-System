@@ -31,20 +31,20 @@ productCrudRouter.post(
           projection: { stock: 1 }, // Correct way to return only the stock field
         }
       );
-      await CategorySnapshotSchema.create({
-        Category: product.Category,
-        Stock: currentCategoryStock.stock,
-        date: new Date(),
-        status: "Re-Stock",
-        newProduct: true,
-      });
+      // await CategorySnapshotSchema.create({
+      //   Category: product.Category,
+      //   Stock: currentCategoryStock.stock,
+      //   date: new Date(),
+      //   status: "Re-Stock",
+      //   newProduct: true,
+      // });
 
-      await ProductSnapshotSchema.create({
-        Product: product["Product Name"],
-        Stock: Stock,
-        date: new Date(),
-        status: "Initial Stock",
-      });
+      // await ProductSnapshotSchema.create({
+      //   Product: product["Product Name"],
+      //   Stock: Stock,
+      //   date: new Date(),
+      //   status: "Initial Stock",
+      // });
 
       res.status(200).json({ message: "Product Added Successfully" });
     } catch (err) {

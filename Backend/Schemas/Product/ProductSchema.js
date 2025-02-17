@@ -18,7 +18,7 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   Category: {
-    type: Object,
+    type: String,
     required: true,
   },
   Supplier: {

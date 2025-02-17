@@ -12,6 +12,10 @@ import {
   FETCH_PRODUCTS,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAILURE,
+  ADD_PRODUCT_Details,
+  ADD_PRODUCT_Variants,
+  CLEAR_PRODUCT_Dtails,
+  CLEAR_TRANSITIONAL_DATA
 } from "./Constants";
 
 import Cookies from "js-cookie";
@@ -35,6 +39,7 @@ const addProduct = (product) => {
         config
       );
       dispatch({ type: ADD_PRODUCT_SUCCESS, payload: response.data });
+      dispatch({ type: CLEAR_PRODUCT_Dtails});
     } catch (error) {
       dispatch({ type: ADD_PRODUCT_FAILURE, payload: error.message });
     }
@@ -94,4 +99,28 @@ const getProducts = () => {
   };
 };
 
-export { addProduct, updateProduct, deleteProduct, getProducts };
+const setProduct = (productDetails)=>{
+  return async (dispatch)=>{
+    dispatch({type:ADD_PRODUCT_Details,payload:productDetails})
+  }
+}
+const setVariants = (variantsArray) => {
+  console.log("Variants Array",variantsArray)
+  return async (dispatch) => {
+    dispatch({ type: ADD_PRODUCT_Variants, payload: variantsArray });
+  };  
+}
+
+const clearProductDetails = () => {
+  return async (dispatch) => {
+    dispatch({ type: CLEAR_PRODUCT_Dtails});
+  };
+};
+
+const clearTransitionalData = () =>{
+  return async (dispatch) => {
+    dispatch({ type: CLEAR_TRANSITIONAL_DATA});
+  };
+}
+
+export { addProduct, updateProduct, deleteProduct, getProducts,setProduct,setVariants,clearProductDetails,clearTransitionalData };

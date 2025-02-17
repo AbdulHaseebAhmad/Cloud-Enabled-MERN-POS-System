@@ -7,17 +7,17 @@ import {
   faUserTag,
   faRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
-//import ForeCastPortal from "../../InventoryManagement/StockTracking/Modals/ForeCastPortal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSalesLiveMetrics,
   getStockLiveMetrics,
 } from "../../InventoryManagement/Redux/Analytics/AnalyticsActions";
 import socket from "../../utilities/Socket-Connection";
-import ProductTable from "../ProductTable";
-import AddProductModal from "../ProductModal/AddProductModal";
+import ProductTable from "./ProductTable/ProductTable";
+import AddProductModal from "./ProductModal/AddProductModal";
+import { clearProductDetails } from "../../InventoryManagement/Redux/Product/ProductActions";
 
-export default function ProductManagementNew() {
+export default function ProductManagement() {
   const liveMetrics = useSelector(
     (state) => state.AnalyticsReducer.liveMetricsData
   );
@@ -62,6 +62,7 @@ export default function ProductManagementNew() {
   const dispatch = useDispatch();
 
   const togglePortal = () => {
+    dispatch(clearProductDetails());
     setShowPortal(!showPortal);
   };
 
