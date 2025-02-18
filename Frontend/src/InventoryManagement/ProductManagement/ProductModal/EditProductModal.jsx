@@ -9,23 +9,28 @@ import { useEffect, useState } from "react";
 import AddProductForm from "../AddProductFom/AddProductForm";
 import AddVariant from "../AddVariant/AddVariant";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct } from "../../../InventoryManagement/Redux/Product/ProductActions";
+import {  updateProduct } from "../../../InventoryManagement/Redux/Product/ProductActions";
 import Toasts from "../Toasts/Toasts";
+import socket from "../../../utilities/Socket-Connection";
 
-export default function AddProductModal({ onClose }) {
+
+export default function EditProductModal({ onClose, id }) {
   const product = useSelector((state) => state.ProductReducer.productDetails);
+ // console.log();
   const productError = useSelector((state) => state.ProductReducer.error);
   const productLoading = useSelector((state) => state.ProductReducer.loading);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showToast, setShowToast] = useState(false);
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [newProduct, setNewProduct] = useState({});
   const dispatch = useDispatch();
 
+ 
+
+  // useEffect(()=>{console.log(product)},[product])
   const screens = [
-    { title: "Add Product Details", component: <AddProductForm /> },
-    { title: "Add Product Variants", component: <AddVariant /> },
+    { title: "Edit Product Details", component: <AddProductForm /> },
+    { title: "Edit Product Variants", component: <AddVariant /> },
   ];
 
   const swapScreen = (e) => {
@@ -39,7 +44,6 @@ export default function AddProductModal({ onClose }) {
   };
 
   useEffect(() => {
-    console.log(product);
     if (product) {
       const newProduct = Object.fromEntries(
         Object.entries(product).map(([key, value]) => {
@@ -58,6 +62,7 @@ export default function AddProductModal({ onClose }) {
           return [key, value];
         })
       );
+      console.log(id)
 
       setNewProduct(newProduct);
     }
@@ -66,7 +71,8 @@ export default function AddProductModal({ onClose }) {
   const submitHandle = () => {
     setIsSubmitted(true);
     setShowToast(true);
-    dispatch(addProduct(newProduct));
+    socket.emit("changesMadeToProducts",newProduct);
+    dispatch(updateProduct(newProduct,id));
   };
 
   useEffect(() => {

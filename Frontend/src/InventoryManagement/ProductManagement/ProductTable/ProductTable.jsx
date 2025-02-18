@@ -10,18 +10,31 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import "../../../InventoryManagement/StockTracking/RestockPipeline.css"; 
 import socket from "../../../utilities/Socket-Connection";
+import PropTypes from "prop-types";
 
-export default function ProductTable() {
+export default function ProductTable({ setShowEditPortal }) {
+
   useEffect(() => {
     dispatch(getProducts());
+    
   }, []);
-  const product = useSelector((state) => state.ProductReducer.data);
 
+  useEffect(() => {
+    socket.on("changesMadeToProducts", () => {
+      dispatch(getProducts());
+    });
+  }, [socket]);
+
+  const product = useSelector((state) => state.ProductReducer.data);
   const dispatch = useDispatch();
   const deleteProductHandle = (id) => {
     socket.emit("changesMadeToProducts", "Product Deleted");
     dispatch(deleteProduct(id));
   };
+
+  const editProductHandle = (id) => {
+    setShowEditPortal(id);}
+
   const [rowData, setRowData] = useState(product);
 
   useEffect(() => {
@@ -42,6 +55,10 @@ export default function ProductTable() {
         return (<span className="flex gap-2 pt-1 pb-1">
           <button
             className="bg-lt-primary-action-color dark:bg-d-primary-action-color text-white py-1 px-2 rounded-md hover:bg-lt-primary-bg-color dark:hover:bg-d-secondary-bg-color"
+            onClick={() => {
+              editProductHandle(id);
+            }
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -97,4 +114,7 @@ export default function ProductTable() {
       </div>
     </div>
   );
+}
+ProductTable.propTypes = {
+  setShowEditPortal: PropTypes.func,
 }

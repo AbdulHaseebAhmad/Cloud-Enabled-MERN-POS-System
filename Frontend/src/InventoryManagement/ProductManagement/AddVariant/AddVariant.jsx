@@ -8,12 +8,26 @@ export default function AddVariant() {
   const variantsDetails = useSelector((state) => state.ProductReducer.productDetails.variants);
 
   const variantTemplate = {
-    "Variant Name": "",
-    SKU: "",
-    "Price Modifier": 0,
-    Stock: 0,
-    Image: "",
+    name:{
+      placeHolder: "Variant Name",
+      value: ""
+    },
+    sku:{
+      placeHolder: "SKU",
+      value: ""
+    },
+    priceModifier:{
+      placeHolder:"Price Modifier",
+      value: 0,},
+    stock:{
+      placeHolder:"Stock",
+      value: 0,
+    },
+    image:{
+      placeHolder:"Image",
+      value: "",}
   };
+
   const [variants, setVariantsState] = useState([variantTemplate]);
 
 
@@ -23,14 +37,14 @@ export default function AddVariant() {
     }
   }, [variantsDetails]);
 
-  const handleChange = (index, key, value) => {
-    const updatedVariants = variants.map((variant, i) =>
-      i === index ? { ...variant, [key]: value } : variant
-    );
-    updatedVariants[index][key] = value;
-    setVariantsState(updatedVariants);
-    dispatch(setVariants(updatedVariants));
-  };
+    const handleChange = (index, key, value) => {
+      const updatedVariants = variants.map((variant, i) =>
+        i === index ? { ...variant, [key]: value } : variant
+      );
+     // updatedVariants[index][key] = value;
+      setVariantsState(updatedVariants);
+      dispatch(setVariants(updatedVariants));
+    };
 
   const addVariant = () => {
     setVariantsState([...variants, { ...variantTemplate }]);
@@ -58,10 +72,10 @@ export default function AddVariant() {
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Object.keys(variantTemplate).map((key) => (
+            {Object.entries(variantTemplate).map(([key,{placeHolder,value}]) => (
               <div key={key}>
                 <label className="block text-sm text-lt-secondary-bg-color">
-                  {key} <span className="text-red-500">*</span>
+                  {placeHolder} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type={
@@ -71,7 +85,8 @@ export default function AddVariant() {
                       ? "file"
                       : "text"
                   }
-                  value={key === "Image" ? undefined : variant[key]}
+                  name={key}
+                  value={key === "Image" ? undefined : typeof(variant[key]) === 'object' ? value : variant[key]}
                   onChange={(e) => handleChange(index, key, e.target.value)}
                   className="mt-1 block w-full p-3 border border-lt-primary-border-color rounded-md bg-white text-d-secondary-bg-color font-medium"
                 />

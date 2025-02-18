@@ -14,7 +14,6 @@ productCrudRouter.post(
     const product = req.body;
     const { variants, Supplier } = product;
     const Stock = variants.reduce((acc, curr) => acc + parseInt(curr.stock), 0);
-    let currentCategoryStock = 0;
     try {
       await ProductSchema.create({ ...product, Stock });
       await SupplierSchema.findOneAndUpdate(
@@ -31,23 +30,53 @@ productCrudRouter.post(
           projection: { stock: 1 }, // Correct way to return only the stock field
         }
       );
-      // await CategorySnapshotSchema.create({
-      //   Category: product.Category,
-      //   Stock: currentCategoryStock.stock,
-      //   date: new Date(),
-      //   status: "Re-Stock",
-      //   newProduct: true,
-      // });
-
-      // await ProductSnapshotSchema.create({
-      //   Product: product["Product Name"],
-      //   Stock: Stock,
-      //   date: new Date(),
-      //   status: "Initial Stock",
-      // });
-
       res.status(200).json({ message: "Product Added Successfully" });
     } catch (err) {
+      console.log(err)
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+productCrudRouter.put(
+  "/api/products/updateproduct/:id",
+  verifyJWT,
+  async (req, res) => {
+    const id = req.params.id;
+    console.log(id)
+    const product = req.body;
+    const { variants, Supplier } = product;
+    const newStock = variants.reduce((acc, curr) => acc + parseInt(curr.stock), 0);
+
+    try {
+      const findProduct = await ProductSchema.findById(id);
+      const { Supplier: oldSupplier, Stock: oldStock, Category } = findProduct;
+      await SupplierSchema.findOneAndUpdate(
+        { "Supplier Name": oldSupplier },
+        { $inc: { "Total Stock": -oldStock } }
+      );
+
+      await CategoriesSchema.findOneAndUpdate(
+        { name: Category },
+        { $inc: { stock: -oldStock } }
+      );
+
+      await ProductSchema.findByIdAndUpdate(id, { ...product, Stock: newStock });
+      await SupplierSchema.findOneAndUpdate(
+        { "Supplier Name": Supplier },
+        { $inc: { "Total Stock": newStock } }
+      );
+      await CategoriesSchema.findOneAndUpdate(
+        { name: product.Category },
+        {
+          $push: { products: product["Product Name"], suppliers: Supplier },
+          $inc: { stock: newStock },
+        }
+      );
+      res.status(200).json({ message: "Product Updated Successfully" });
+      req.io.emit("changesMadeToProducts", { message: "Product Updated Successfully" });
+    } catch (err) {
+      console.log(err)
       res.status(500).json({ message: err.message });
     }
   }

@@ -15,6 +15,9 @@ import {
   ADD_PRODUCT_Variants,
   CLEAR_PRODUCT_Dtails,
   CLEAR_TRANSITIONAL_DATA,
+  FETCH_PRODUCT,
+  FETCH_PRODUCT_SUCCESS,
+  FETCH_PRODUCT_FAILURE,
 } from "./Constants";
 
 
@@ -68,7 +71,6 @@ const initialState = {
       return {
         ...state,
         loading: false,
-        data: action.payload,
         error: null,
         msg: UPDATE_PRODUCT_SUCCESS,
       };
@@ -76,7 +78,6 @@ const initialState = {
       return {
         ...state,
         loading: false,
-        data: [],
         error: action.payload,
         msg: UPDATE_PRODUCT_FAILURE,
       };
@@ -124,6 +125,28 @@ const initialState = {
         error: action.payload,
         msg: FETCH_PRODUCTS_FAILURE,
       };
+    case FETCH_PRODUCT:
+      return {
+        ...state,
+        loading: true,
+        msg: FETCH_PRODUCT,
+      };
+    case FETCH_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        productDetails: state.data.find((product) => product._id === action.payload),
+        error: null,
+        msg: FETCH_PRODUCT_SUCCESS,
+      };
+    case FETCH_PRODUCT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        productDetails: {},
+        error: action.payload,
+        msg: FETCH_PRODUCT_FAILURE,
+      };  
       case ADD_PRODUCT_Details:
         return {
           ...state,

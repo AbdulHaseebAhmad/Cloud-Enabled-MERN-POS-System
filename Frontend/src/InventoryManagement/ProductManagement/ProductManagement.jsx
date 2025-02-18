@@ -15,7 +15,8 @@ import {
 import socket from "../../utilities/Socket-Connection";
 import ProductTable from "./ProductTable/ProductTable";
 import AddProductModal from "./ProductModal/AddProductModal";
-import { clearProductDetails } from "../../InventoryManagement/Redux/Product/ProductActions";
+import { clearProductDetails, fetchProductToUpdate } from "../../InventoryManagement/Redux/Product/ProductActions";
+import EditProductModal from "./ProductModal/EditProductModal";
 
 export default function ProductManagement() {
   const liveMetrics = useSelector(
@@ -58,6 +59,8 @@ export default function ProductManagement() {
   const [activeTab, setActiveTab] = useState("stock");
   const [timeDuration, setTimeDuration] = useState("Today");
   const [showPortal, setShowPortal] = useState(false);
+  const [showEditPortal,setShowEditPortal] = useState(false);
+  const [pId,setPid] = useState("");
 
   const dispatch = useDispatch();
 
@@ -65,6 +68,13 @@ export default function ProductManagement() {
     dispatch(clearProductDetails());
     setShowPortal(!showPortal);
   };
+
+  const toggleEditPortal = (id) => {
+    setPid(id);
+    dispatch(fetchProductToUpdate(id))
+    setShowEditPortal(!showEditPortal);
+  }
+
 
   useEffect(() => {
     setStockGlanceData((prevData) =>
@@ -93,6 +103,7 @@ export default function ProductManagement() {
   return (
     <div className="w-full p-4">
       {showPortal && <AddProductModal onClose={togglePortal} />}
+      {showEditPortal && <EditProductModal onClose={toggleEditPortal} id={pId}/> }
       <h1 className="text-3xl font-bold text-lt-primary-text-color mb-0">
         Product Management
       </h1>
@@ -149,7 +160,7 @@ export default function ProductManagement() {
               Add Product
             </button>
           </div>
-          <ProductTable togglePortal={togglePortal} />
+          <ProductTable setShowEditPortal={toggleEditPortal} />
         </div>
       </div>
     </div>

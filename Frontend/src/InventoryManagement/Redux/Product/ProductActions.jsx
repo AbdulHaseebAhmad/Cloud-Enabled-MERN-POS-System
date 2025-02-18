@@ -15,7 +15,10 @@ import {
   ADD_PRODUCT_Details,
   ADD_PRODUCT_Variants,
   CLEAR_PRODUCT_Dtails,
-  CLEAR_TRANSITIONAL_DATA
+  CLEAR_TRANSITIONAL_DATA,
+  FETCH_PRODUCT,
+  FETCH_PRODUCT_SUCCESS,
+  FETCH_PRODUCT_FAILURE,
 } from "./Constants";
 
 import Cookies from "js-cookie";
@@ -39,19 +42,20 @@ const addProduct = (product) => {
         config
       );
       dispatch({ type: ADD_PRODUCT_SUCCESS, payload: response.data });
-      dispatch({ type: CLEAR_PRODUCT_Dtails});
+      dispatch({ type: CLEAR_PRODUCT_Dtails });
     } catch (error) {
       dispatch({ type: ADD_PRODUCT_FAILURE, payload: error.message });
     }
   };
 };
 
-const updateProduct = (product) => {
+const updateProduct = (product,id) => {
   return async (dispatch) => {
+    console.log(id)
     dispatch({ type: UPDATE_PRODUCT });
     try {
       const response = await axios.put(
-        `${url}/api/products/updateproduct`,
+        `${url}/api/products/updateproduct/${id}`,
         product,
         config
       );
@@ -99,28 +103,51 @@ const getProducts = () => {
   };
 };
 
-const setProduct = (productDetails)=>{
-  return async (dispatch)=>{
-    dispatch({type:ADD_PRODUCT_Details,payload:productDetails})
-  }
-}
+const setProduct = (productDetails) => {
+  return async (dispatch) => {
+    dispatch({ type: ADD_PRODUCT_Details, payload: productDetails });
+  };
+};
 const setVariants = (variantsArray) => {
-  console.log("Variants Array",variantsArray)
+  console.log("Variants Array", variantsArray);
   return async (dispatch) => {
     dispatch({ type: ADD_PRODUCT_Variants, payload: variantsArray });
-  };  
-}
-
-const clearProductDetails = () => {
-  return async (dispatch) => {
-    dispatch({ type: CLEAR_PRODUCT_Dtails});
   };
 };
 
-const clearTransitionalData = () =>{
+const clearProductDetails = () => {
   return async (dispatch) => {
-    dispatch({ type: CLEAR_TRANSITIONAL_DATA});
+    dispatch({ type: CLEAR_PRODUCT_Dtails });
   };
-}
+};
 
-export { addProduct, updateProduct, deleteProduct, getProducts,setProduct,setVariants,clearProductDetails,clearTransitionalData };
+const clearTransitionalData = () => {
+  return async (dispatch) => {
+    dispatch({ type: CLEAR_TRANSITIONAL_DATA });
+  };
+};
+
+const fetchProductToUpdate = (id) => {
+  return async (dispatch) => {
+    dispatch({ type: FETCH_PRODUCT });
+    try {
+      dispatch({ type: FETCH_PRODUCT_SUCCESS, payload: id });
+    }
+    catch (error) {
+      dispatch({ type: FETCH_PRODUCT_FAILURE, payload: error.message });
+  };  };
+};
+
+
+
+export {
+  addProduct,
+  updateProduct,
+  deleteProduct,
+  getProducts,
+  setProduct,
+  setVariants,
+  clearProductDetails,
+  clearTransitionalData,
+  fetchProductToUpdate,
+};
