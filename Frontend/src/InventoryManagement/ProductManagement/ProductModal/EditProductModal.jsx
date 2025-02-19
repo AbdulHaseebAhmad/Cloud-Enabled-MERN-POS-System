@@ -104,7 +104,7 @@ export default function EditProductModal({ onClose, id }) {
               type="submit"
               className="w-96  text-white py-4 px-4 rounded-md  dark:hover:bg-d-primary-action-color bg-d-secondary-bg-color"
             >
-              Save Product
+              Update Product
             </button>
           )}
         </div>
