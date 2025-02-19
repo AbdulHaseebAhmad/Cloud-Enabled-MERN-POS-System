@@ -20,7 +20,7 @@ productCrudRouter.post(
         { "Supplier Name": Supplier },
         { $inc: { "Total Stock": Stock } }
       );
-      currentCategoryStock = await CategoriesSchema.findOneAndUpdate(
+       await CategoriesSchema.findOneAndUpdate(
         { name: product.Category },
         {
           $push: { products: product["Product Name"], suppliers: Supplier },
@@ -103,7 +103,6 @@ productCrudRouter.delete(
     try {
       const findProduct = await ProductSchema.findById(id);
       const { Supplier, Stock, Category } = findProduct;
-      console.log(Supplier, Stock, Category);
       await SupplierSchema.findOneAndUpdate(
         { "Supplier Name": Supplier },
         { $inc: { "Total Stock": -Stock } }

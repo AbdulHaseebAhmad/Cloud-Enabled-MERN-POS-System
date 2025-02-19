@@ -4,14 +4,13 @@ import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { useEffect, useState } from "react";
 ModuleRegistry.registerModules([AllCommunityModule]);
 import {
-  deleteProduct,
   getProducts,
 } from "../../../InventoryManagement/Redux/Product/ProductActions";
 import { useDispatch, useSelector } from "react-redux";
 import "../../../InventoryManagement/StockTracking/RestockPipeline.css"; 
 import socket from "../../../utilities/Socket-Connection";
 import PropTypes from "prop-types";
-
+import DeleteProductModal from "../ProductModal/DeleteProductModal";
 export default function ProductTable({ setShowEditPortal }) {
 
   useEffect(() => {
@@ -26,10 +25,14 @@ export default function ProductTable({ setShowEditPortal }) {
   }, [socket]);
 
   const product = useSelector((state) => state.ProductReducer.data);
+  const [showDeleteModal,setDeleteModal] = useState(false);
+  const [productId, setProductId] = useState("");
+
   const dispatch = useDispatch();
+
   const deleteProductHandle = (id) => {
-    socket.emit("changesMadeToProducts", "Product Deleted");
-    dispatch(deleteProduct(id));
+    setProductId(id);
+    setDeleteModal(true);
   };
 
   const editProductHandle = (id) => {
@@ -102,6 +105,7 @@ export default function ProductTable({ setShowEditPortal }) {
       className="restock-pipeline-section hide-scrollbar"
       style={{ width: "100%", paddingBottom: "20px" }}
     >
+    {showDeleteModal && <DeleteProductModal setDeleteModal={setDeleteModal} productId={productId} />}
       <div id="myGrid" className="ag-theme-alpine">
         <AgGridReact
           columnDefs={colDefs}

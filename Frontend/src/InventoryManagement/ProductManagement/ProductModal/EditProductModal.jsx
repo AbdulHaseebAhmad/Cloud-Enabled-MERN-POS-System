@@ -16,7 +16,6 @@ import socket from "../../../utilities/Socket-Connection";
 
 export default function EditProductModal({ onClose, id }) {
   const product = useSelector((state) => state.ProductReducer.productDetails);
- // console.log();
   const productError = useSelector((state) => state.ProductReducer.error);
   const productLoading = useSelector((state) => state.ProductReducer.loading);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -71,9 +70,9 @@ export default function EditProductModal({ onClose, id }) {
   const submitHandle = () => {
     setIsSubmitted(true);
     setShowToast(true);
-    socket.emit("changesMadeToProducts",newProduct);
     dispatch(updateProduct(newProduct,id));
-  };
+    socket.emit("changesMadeToProducts", "Product Edited");
+    socket.emit("changesMadeToSuppliers", "Product Edited");  };
 
   useEffect(() => {
     if (isSubmitted && productLoading === false && productError === null) {

@@ -57,7 +57,6 @@ const initialState = {
       return {
         ...state,
         loading: false,
-        data: [],
         error: action.payload,
         msg: ADD_PRODUCT_FAILURE,
       };
@@ -99,7 +98,6 @@ const initialState = {
       return {
         ...state,
         loading: false,
-        data: [],
         error: action.payload,
         msg: DELETE_PRODUCT_FAILURE,
       };

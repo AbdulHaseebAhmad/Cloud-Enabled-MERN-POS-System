@@ -11,6 +11,7 @@ import AddVariant from "../AddVariant/AddVariant";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../../InventoryManagement/Redux/Product/ProductActions";
 import Toasts from "../Toasts/Toasts";
+import socket from "../../../utilities/Socket-Connection";
 
 export default function AddProductModal({ onClose }) {
   const product = useSelector((state) => state.ProductReducer.productDetails);
@@ -67,6 +68,8 @@ export default function AddProductModal({ onClose }) {
     setIsSubmitted(true);
     setShowToast(true);
     dispatch(addProduct(newProduct));
+    socket.emit("changesMadeToProducts", "Product Added");
+    socket.emit("changesMadeToSuppliers", "Product Added");
   };
 
   useEffect(() => {
