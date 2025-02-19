@@ -9,8 +9,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getSalesLiveMetrics,
-  getStockLiveMetrics,
+  getProductMetrics,
+
 } from "../../InventoryManagement/Redux/Analytics/AnalyticsActions";
 import socket from "../../utilities/Socket-Connection";
 import ProductTable from "./ProductTable/ProductTable";
@@ -23,6 +23,15 @@ export default function ProductManagement() {
     (state) => state.AnalyticsReducer.liveMetricsData
   );
 
+useEffect(()=>{
+  console.log(liveMetrics);
+
+},[liveMetrics])
+
+useEffect(()=>{
+  dispatch(getProductMetrics());
+
+},[])
   const [stockGlanceData, setStockGlanceData] = useState([
     {
       dataTitle: "Total Inv. Value",
@@ -40,7 +49,7 @@ export default function ProductManagement() {
       dataIcon: faChartLine,
     },
     {
-      dataTitle: "Fast Moving ",
+      dataTitle: "Fast Moving",
       dataValue: "No Available Data",
       dataIcon: faUserTag,
     },
@@ -88,9 +97,9 @@ export default function ProductManagement() {
   useEffect(() => {
     const handleStockChange = () => {
       if (activeTab === "sales") {
-        dispatch(getSalesLiveMetrics());
+        dispatch(getProductMetrics());
       } else {
-        dispatch(getStockLiveMetrics());
+        dispatch(getProductMetrics());
       }
     };
     socket.on("changesMadeToProducts", handleStockChange);

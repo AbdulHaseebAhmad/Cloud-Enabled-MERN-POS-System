@@ -11,6 +11,9 @@ import {
   // GET_INCOMING_STOCK_PIPELINE,
   // GET_INCOMING_STOCK_PIPELINE_SUCCESS,
   // GET_INCOMING_STOCK_PIPELINE_FAILURE,
+  GET_PRODUCT_METRICS,
+  GET_PRODUCT_METRICS_SUCCESS,
+  GET_PRODUCT_METRICS_FAILURE,
 } from "./Constants.jsx";
 
 import axios from "axios";
@@ -85,4 +88,25 @@ const getMonthlyTrendsData = () => {
   };
 };
 
-export { getSalesLiveMetrics, getDistribution, getStockLiveMetrics,getMonthlyTrendsData };
+const getProductMetrics = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_PRODUCT_METRICS });
+    try {
+      console.log("ap")
+      const response = await axios.get(
+        `${url}/api/analytics/live-metrics/products`,
+        config
+      );
+      dispatch({ type: GET_PRODUCT_METRICS_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch({ type: GET_PRODUCT_METRICS_FAILURE, payload: error.message });
+    }
+  };
+};
+export {
+  getSalesLiveMetrics,
+  getDistribution,
+  getStockLiveMetrics,
+  getMonthlyTrendsData,
+  getProductMetrics
+};

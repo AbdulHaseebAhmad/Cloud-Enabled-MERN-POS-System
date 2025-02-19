@@ -11,6 +11,9 @@ import {
     GET_MONTHLY_TRENDS,
     GET_MONTHLY_TRENDS_SUCCESS,
     GET_MONTHLY_TRENDS_FAILURE,
+    GET_PRODUCT_METRICS,
+  GET_PRODUCT_METRICS_SUCCESS,
+  GET_PRODUCT_METRICS_FAILURE,
 } from "./Constants.jsx";
 
 
@@ -129,7 +132,28 @@ const analyticsReducer = (state = initialStatus, action) => {
                 inComingStockPipelineError: action.payload,
                 inComingStockPipelineMessage: GET_INCOMING_STOCK_PIPELINE_FAILURE,
             };
-
+        case GET_PRODUCT_METRICS:
+            return {
+                ...state,
+                liveMetricsLoading: true,
+                liveMetricsMessage: GET_PRODUCT_METRICS,
+            };
+        case GET_PRODUCT_METRICS_SUCCESS:
+            return {
+                ...state,
+                liveMetricsLoading: false,
+                liveMetricsData: action.payload,
+                liveMetricsError: null,
+                liveMetricsMessage: GET_PRODUCT_METRICS_SUCCESS,
+            };
+        case GET_PRODUCT_METRICS_FAILURE:
+            return {
+                ...state,
+                liveMetricsLoading: false,
+                liveMetricsData: [],
+                liveMetricsError: action.payload,
+                liveMetricsMessage: GET_PRODUCT_METRICS_FAILURE,
+            };
         default:
             return state;
     }
