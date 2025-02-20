@@ -6,7 +6,7 @@ const ProductSnapshotSchema = new mongoose.Schema({
         required: true
     },
     Stock: {
-        type: String,
+        type: Number,
         required: true
     },
     date: {

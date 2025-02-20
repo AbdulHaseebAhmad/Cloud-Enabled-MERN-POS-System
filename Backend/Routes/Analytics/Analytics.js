@@ -3,6 +3,7 @@ import OrderSchema from "../../Schemas/Orders/OrderSchema.js";
 import ProductSchema from "../../Schemas/Product/ProductSchema.js";
 import SupplierSchema from "../../Schemas/Supplier/SupplierSchema.js";
 import timeStamp from "../../Middlewares/TimeStamp.js";
+import ProductSnapshotSchema from "../../Schemas/Snapshot/ProductSnapshotSchema.js";
 
 const analyticsRoute = Router();
 
@@ -79,60 +80,95 @@ analyticsRoute.get(
   "/api/analytics/live-metrics/inventory",
   timeStamp,
   async (req, res) => {
-    const { dateAggregatedOrders } = req;
-    try {
+    const { startDate, endDate } = req;
+    try{
       const totalProducts = await ProductSchema.countDocuments();
-      const totalStocks = await ProductSchema.aggregate([
+      let lowStock = await ProductSchema.aggregate([
+        {
+          $unwind: "$variants",
+        },
+        {
+          $match: {
+            "variants.stock": { $lt: 200 },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            "Product Name": 1,
+            Stock: "$variants.stock",
+            "Variant Name": "$variants.name",
+          },
+        },
+        {
+          $sort: { Stock: 1 },
+        },
+        {
+          $limit: 1,
+        },
+      ]);
+
+      let fastMovingProduct = await OrderSchema.aggregate([
+        { $match: { createdDate: { $gte: startDate, $lte: endDate } } },
+        { $unwind: "$cartItems" },
         {
           $group: {
-            _id: null,
-            totalStocks: {
-              $sum: "$Stock",
+            _id: "$cartItems.Product Name",
+            totalQty: {
+              $sum: "$cartItems.Qty",
             },
           },
         },
+        { $sort: { totalQty: 1 } },
+        { $limit: 1 },
       ]);
-      const lowStock = await ProductSchema.find(
-        { Stock: { $lt: 200 } },
-        {
-          _id: 1,
-          "Product Name": 1,
-          Stock: 1,
-        }
-      )
-        .sort({ Stock: 1 })
-        .limit(1);
 
-      let fastMovingStock = Object.entries(
-        dateAggregatedOrders
-          .map(({ cartItems }) => {
-            return cartItems;
-          })
-          .reduce((acc, cartItems) => {
-            cartItems.forEach(({ "Product Name": name, Qty }) => {
-              if (acc[name]) {
-                acc[name] += Qty;
-              } else {
-                acc[name] = Qty;
-              }
-            });
-            return acc;
-          }, {})
-      ).reduce(
-        (acc, [name, qty]) => {
-          if (acc[1] < qty) {
-            acc = [name, qty];
-          }
-          return acc;
+      let deadStock = await ProductSnapshotSchema.aggregate([
+        {
+          $match: {
+            date: { $gte: startDate, $lte: endDate },
+          },
         },
-        ["", 0]
-      );
+        {
+          $sort: { date: 1, Stock:-1 },
+        },
+        {
+          $group: {
+            _id: "$Product",
+            firstStock: { $first: "$Stock" },
+            lastStock: { $last: "$Stock" },
+            firstDate: { $first: "$date" },
+            lastDate: { $last: "$date" },
+          },
+        },
+        {
+          $match: {
+            $expr: { $eq: ["$firstStock", "$lastStock"] },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            "Product Name": "$_id",
+            Stock: "$firstStock",
+            Date: "$firstDate",
+          },
+        },
+        {
+          $sort: { Date: 1 },
+        },
+        {
+          $limit: 1,
+        },
+      ]);
+
+
+
+      lowStock = `${lowStock[0]?.["Product Name"]} (${lowStock[0]?.["Variant Name"]})`  ?? "No Low Stock";
+      fastMovingProduct = fastMovingProduct[0]?._id ?? "No Fast Moving Product";
+      deadStock = deadStock[0]?.["Product Name"] ?? "No Dead Stock";
       res.status(200).json({
-        // "Total Products": totalProducts,
-        "Total Stock": totalStocks[0].totalStocks,
-        "Low Stock": lowStock[0]["Product Name"],
-        "Fast Moving Stock": fastMovingStock[0],
-      });
+        "Total Stock":totalProducts, "Low Stock":lowStock,"Fast Moving Stock":fastMovingProduct,"Dead Stock":deadStock});
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -145,7 +181,6 @@ analyticsRoute.get(
   async (req, res) => {
     const { startDate, endDate } = req;
     try {
-
       //totalProductsValue totalStock avgProductValue not time bound
       const totalProductsValuee = await ProductSchema.aggregate([
         { $unwind: "$variants" },
@@ -162,7 +197,7 @@ analyticsRoute.get(
               ],
             },
             TotalStock: {
-              $add: ["$variants.stock"],
+              $sum: ["$variants.stock"],
             },
             isOutOfStock: {
               $cond: {
@@ -199,10 +234,10 @@ analyticsRoute.get(
 
       let newProducts = await ProductSchema.find({
         createdDate: { $gte: startDate, $lte: endDate },
-      }).sort({ createdDate: -1 }).limit(1);
+      })
+        .sort({ createdDate: -1 })
+        .limit(1);
 
-      
-      
       //fm not time bound
       const fastMovingProduct = await OrderSchema.aggregate([
         { $match: { createdDate: { $gte: startDate, $lte: endDate } } },
@@ -240,21 +275,61 @@ analyticsRoute.get(
         },
       ]);
 
+      let deadStock = await ProductSnapshotSchema.aggregate([
+        {
+          $match: {
+            date: { $gte: startDate, $lte: endDate },
+          },
+        },
+        {
+          $sort: { date: 1, Stock:-1 },
+        },
+        {
+          $group: {
+            _id: "$Product",
+            firstStock: { $first: "$Stock" },
+            lastStock: { $last: "$Stock" },
+            firstDate: { $first: "$date" },
+            lastDate: { $last: "$date" },
+          },
+        },
+        {
+          $match: {
+            $expr: { $eq: ["$firstStock", "$lastStock"] },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            "Product Name": "$_id",
+            Stock: "$firstStock",
+            Date: "$firstDate",
+          },
+        },
+        {
+          $sort: { Date: 1 },
+        },
+        {
+          $limit: 1,
+        },
+      ]);
+
       const fm = fastMovingProduct?.[0]?._id ?? "No Data";
-      const totalProductsValue =
-        totalProductsValuee?.[0]?.totalProductsValue ?? 0;
+      const totalProductsValue = totalProductsValuee?.[0]?.totalProductsValue ?? 0;
       const avgProductValue = totalProductsValuee?.[0]?.avgProductValue ?? 0;
-      const outOfStockProduct =
-        outOfStock?.[0]?.productName ?? "No Out Of Stock";
-      const totalProducts = totalProductsValuee[0].totalStock ?? 0;
+      const outOfStockProduct = outOfStock?.[0]?.productName ?? "No Out Of Stock";
+      const totalProducts = totalProductsValuee[0]?.totalStock ?? 0;
       newProducts = newProducts[0]?.["Product Name"] ?? "No New Products";
+      deadStock = deadStock[0]?.["Product Name"] ?? "No Dead Stock";
+
       res.status(200).json({
         "Total Products": totalProducts,
         "Total Inv. Value": `$${totalProductsValue}`,
         "Fast Moving": fm,
         "Avg Product Price": `$${parseInt(avgProductValue, 10)}`,
         "Out-of-Stock": outOfStockProduct,
-        "New Products":newProducts
+        "New Products": newProducts,
+        "Dead Products":deadStock,
       });
     } catch (err) {
       console.log(err);
@@ -264,3 +339,5 @@ analyticsRoute.get(
 );
 
 export default analyticsRoute;
+
+
