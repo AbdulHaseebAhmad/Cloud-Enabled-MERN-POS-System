@@ -10,45 +10,65 @@ analyticsRoute.get(
   "/api/analytics/live-metrics/sales",
   timeStamp,
   async (req, res) => {
-    const totalOrders = req.dateAggregatedOrders.length;
-    const totalSales = req.dateAggregatedOrders.reduce(
-      (acc, order) => acc + order.totalPrice,
-      0
-    );
-    const averageOrderValue = totalSales / totalOrders;
-
-    let bestSellingProduct = Object.entries(
-      req.dateAggregatedOrders
-        .map(({ cartItems }) => {
-          return cartItems;
-        })
-        .reduce((acc, cartItems) => {
-          cartItems.forEach(({ "Product Name": name, Qty }) => {
-            if (acc[name]) {
-              acc[name] += Qty;
-            } else {
-              acc[name] = Qty;
-            }
-          });
-          return acc;
-        }, {})
-    ).reduce(
-      (acc, [name, qty]) => {
-        if (acc[1] < qty) {
-          acc = [name, qty];
-        }
-        return acc;
+    const { startDate, endDate } = req;
+    const dateAggregatedOrders = await OrderSchema.aggregate([
+      {
+        $match: {
+          createdDate: { $gte: startDate, $lte: endDate },
+        },
       },
-      ["", 0]
-    );
+      {
+        $group: {
+          _id: null,
+          totalSales: {
+            $sum: "$totalPrice",
+          },
+          totalOrders: {
+            $sum: 1,
+          },
+          avergeOrderValue: {
+            $avg: "$totalPrice",
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalSales: 1,
+          totalOrders: 1,
+          avergeOrderValue: 1,
+        },
+      },
+    ]);
+
+    const bestSellingProduct = await OrderSchema.aggregate([
+      {
+        $match: {
+          createdDate: { $gte: startDate, $lte: endDate },
+        },
+      },
+      { $unwind: "$cartItems" },
+      {
+        $group: {
+          _id: "$cartItems.Product Name",
+          totalQty: {
+            $sum: "$cartItems.Qty",
+          },
+        },
+      },
+      { $sort: { totalQty: -1 } },
+      { $limit: 1 },
+    ]);
 
     const salesPerCustomer = "No Data";
     const RreturnedSales = "No Data";
 
     return res.status(200).json({
-      "Total Sales": `$ ${totalSales.toFixed(2)}`,
-      "Avg Order Value": `$ ${averageOrderValue.toFixed(2)}`,
-      "Best Product": bestSellingProduct[0],
+      "Total Sales": `$ ${dateAggregatedOrders[0]?.totalSales?.toFixed(2)}`,
+      "Avg Order Value": `$ ${dateAggregatedOrders[0]?.avergeOrderValue?.toFixed(
+        2
+      )}`,
+      "Best Product": bestSellingProduct[0]?._id,
       "Sales Per Customer": salesPerCustomer,
       "Returned Sales": RreturnedSales,
     });
@@ -84,7 +104,7 @@ analyticsRoute.get(
         .limit(1);
 
       let fastMovingStock = Object.entries(
-        req.dateAggregatedOrders
+        dateAggregatedOrders
           .map(({ cartItems }) => {
             return cartItems;
           })
@@ -123,7 +143,10 @@ analyticsRoute.get(
   "/api/analytics/live-metrics/products",
   timeStamp,
   async (req, res) => {
+    const { startDate, endDate } = req;
     try {
+
+      //totalProductsValue totalStock avgProductValue not time bound
       const totalProductsValuee = await ProductSchema.aggregate([
         { $unwind: "$variants" },
         {
@@ -173,7 +196,16 @@ analyticsRoute.get(
           },
         },
       ]);
+
+      let newProducts = await ProductSchema.find({
+        createdDate: { $gte: startDate, $lte: endDate },
+      }).sort({ createdDate: -1 }).limit(1);
+
+      
+      
+      //fm not time bound
       const fastMovingProduct = await OrderSchema.aggregate([
+        { $match: { createdDate: { $gte: startDate, $lte: endDate } } },
         { $unwind: "$cartItems" },
         {
           $group: {
@@ -204,18 +236,31 @@ analyticsRoute.get(
           },
         },
         {
-          $match: { outOfStock: true }, 
-        }
+          $match: { outOfStock: true },
+        },
       ]);
-      const fm = fastMovingProduct[0]._id;
-      const  {totalProductsValue,avgProductValue} = totalProductsValuee[0];
-      // const {productName,variantName} = outOfStock[0] ? outOfStock[0] : {productName:"No Out-of-Stock Products",variantName:"No Out-of-Stock Products"};
 
-      res.status(200).json({ 'Total Inv. Value':`$${totalProductsValue}`,"Fast Moving":fm,"Avg Product Price":`$${parseInt(avgProductValue,10)}`,"Out-of-Stock":outOfStock[0] ? outOfStock[0].productName : "No Out Of Stock" });
+      const fm = fastMovingProduct?.[0]?._id ?? "No Data";
+      const totalProductsValue =
+        totalProductsValuee?.[0]?.totalProductsValue ?? 0;
+      const avgProductValue = totalProductsValuee?.[0]?.avgProductValue ?? 0;
+      const outOfStockProduct =
+        outOfStock?.[0]?.productName ?? "No Out Of Stock";
+      const totalProducts = totalProductsValuee[0].totalStock ?? 0;
+      newProducts = newProducts[0]?.["Product Name"] ?? "No New Products";
+      res.status(200).json({
+        "Total Products": totalProducts,
+        "Total Inv. Value": `$${totalProductsValue}`,
+        "Fast Moving": fm,
+        "Avg Product Price": `$${parseInt(avgProductValue, 10)}`,
+        "Out-of-Stock": outOfStockProduct,
+        "New Products":newProducts
+      });
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: err.message });
     }
   }
 );
+
 export default analyticsRoute;

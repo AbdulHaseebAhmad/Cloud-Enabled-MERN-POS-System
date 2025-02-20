@@ -37,6 +37,9 @@ const ProductSchema = new mongoose.Schema({
   Stock: {
     type: Number,
   },  
+  createdDate :{
+    type:Date, default: () => new Date() 
+  }
 });
 
 export default mongoose.model("Product", ProductSchema);

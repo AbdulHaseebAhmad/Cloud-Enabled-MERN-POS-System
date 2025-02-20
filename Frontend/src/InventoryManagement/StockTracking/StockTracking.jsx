@@ -95,11 +95,11 @@ export default function StockTracking() {
 
   useEffect(() => {
     if (activeTab === "sales") {
-      dispatch(getSalesLiveMetrics());
+      dispatch(getSalesLiveMetrics(timeDuration));
     } else {
-      dispatch(getStockLiveMetrics());
+      dispatch(getStockLiveMetrics(timeDuration));
     }
-}, [activeTab]);
+}, [activeTab,timeDuration,dispatch]);
 
   
   useEffect(() => {
@@ -123,16 +123,16 @@ export default function StockTracking() {
   useEffect(() => {
     const handleStockChange = () => {
         if (activeTab === "sales") {
-            dispatch(getSalesLiveMetrics());
+            dispatch(getSalesLiveMetrics(timeDuration));
         } else {
-            dispatch(getStockLiveMetrics());
+            dispatch(getStockLiveMetrics(timeDuration));
         }
     };
     socket.on("changesMadeToProducts", handleStockChange);
     return () => {
         socket.off("changesMadeToProducts", handleStockChange);
     };
-}, [socket, dispatch, activeTab]);  
+}, [socket, dispatch, activeTab,timeDuration]);  
 
   return (
     <div className="w-full p-4">

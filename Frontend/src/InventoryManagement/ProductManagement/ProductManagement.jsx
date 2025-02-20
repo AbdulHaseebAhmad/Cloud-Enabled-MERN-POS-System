@@ -6,6 +6,7 @@ import {
   faReceipt,
   faUserTag,
   faRotateLeft,
+  faBoxOpen
 } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -28,11 +29,13 @@ useEffect(()=>{
 
 },[liveMetrics])
 
-useEffect(()=>{
-  dispatch(getProductMetrics());
 
-},[])
   const [stockGlanceData, setStockGlanceData] = useState([
+    {
+      dataTitle:"Total Products",
+      dataValue:"No Available Data",
+      dataIcon:faBoxOpen,
+    },
     {
       dataTitle: "Total Inv. Value",
       dataValue: "No Available Data",
@@ -53,6 +56,7 @@ useEffect(()=>{
       dataValue: "No Available Data",
       dataIcon: faUserTag,
     },
+    
     {
       dataTitle: "Dead Products",
       dataValue: "No Available Data",
@@ -72,7 +76,10 @@ useEffect(()=>{
   const [pId,setPid] = useState("");
 
   const dispatch = useDispatch();
-
+  useEffect(()=>{
+    dispatch(getProductMetrics(timeDuration));
+  
+  },[timeDuration])
   const togglePortal = () => {
     dispatch(clearProductDetails());
     setShowPortal(!showPortal);
@@ -97,16 +104,16 @@ useEffect(()=>{
   useEffect(() => {
     const handleStockChange = () => {
       if (activeTab === "sales") {
-        dispatch(getProductMetrics());
+        dispatch(getProductMetrics(timeDuration));
       } else {
-        dispatch(getProductMetrics());
+        dispatch(getProductMetrics(timeDuration));
       }
     };
     socket.on("changesMadeToProducts", handleStockChange);
     return () => {
       socket.off("changesMadeToProducts", handleStockChange);
     };
-  }, [socket, dispatch, activeTab]);
+  }, [socket, dispatch, activeTab,timeDuration]);
 
 
   return (

@@ -28,12 +28,12 @@ const config = {
   },
 };
 
-const getSalesLiveMetrics = () => {
+const getSalesLiveMetrics = (timeDuration) => {
   return async (dispatch) => {
     dispatch({ type: GET_LIVE_METRICS });
     try {
       const response = await axios.get(
-        `${url}/api/analytics/live-metrics/sales`,
+        `${url}/api/analytics/live-metrics/sales?timeStamp=${timeDuration}`,
         config
       );
       dispatch({ type: GET_LIVE_METRICS_SUCCESS, payload: response.data });
@@ -43,12 +43,12 @@ const getSalesLiveMetrics = () => {
   };
 };
 
-const getStockLiveMetrics = () => {
+const getStockLiveMetrics = (timeDuration) => {
   return async (dispatch) => {
     dispatch({ type: GET_LIVE_METRICS });
     try {
       const response = await axios.get(
-        `${url}/api/analytics/live-metrics/inventory`,
+        `${url}/api/analytics/live-metrics/inventory?timeStamp=${timeDuration}`,
         config
       );
       dispatch({ type: GET_LIVE_METRICS_SUCCESS, payload: response.data });
@@ -88,13 +88,14 @@ const getMonthlyTrendsData = () => {
   };
 };
 
-const getProductMetrics = () => {
+const getProductMetrics = (timeStamp) => {
   return async (dispatch) => {
+    console.log(timeStamp)
     dispatch({ type: GET_PRODUCT_METRICS });
     try {
       console.log("ap")
       const response = await axios.get(
-        `${url}/api/analytics/live-metrics/products`,
+        `${url}/api/analytics/live-metrics/products?timeStamp=${timeStamp}`,
         config
       );
       dispatch({ type: GET_PRODUCT_METRICS_SUCCESS, payload: response.data });
