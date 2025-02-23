@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CheckoutModal from "../Modals/Checkout/CheckoutModal";
 // import { posScreenActions } from "../Redux/PosScreenReducers";
 import CashModal from "../Modals/Payment-Methods/Cash/CashModal";
-import { posScreenActions } from "../Redux/PosScreenReducers";
+import { posScreenActions } from "../Redux/PosScreen/PosScreenReducers";
 // import { getProduct } from "../Redux/PosScreenActions";
 import Toasts from "../Toasts/Toasts";
 

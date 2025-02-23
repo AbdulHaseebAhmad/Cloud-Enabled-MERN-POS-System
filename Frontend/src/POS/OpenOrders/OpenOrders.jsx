@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { posScreenActions } from "../Redux/PosScreenReducers";
+import { posScreenActions } from "../Redux/PosScreen/PosScreenReducers";
 import { useNavigate } from "react-router-dom";
 export default function CheckoutScreen() {
   const openOrders = useSelector((state) => state.currentCart.openOrders);

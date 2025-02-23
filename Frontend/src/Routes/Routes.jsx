@@ -17,9 +17,8 @@ import {
 } from "../InventoryManagement/Authentication/Login.jsx";
 import Posstore from "../POS/Redux/Store.jsx";
 import { Provider } from "react-redux";
-import PosRootElement from "../POS/PosRootElement/PosRootElement.jsx";
+import PosRootElement, {PosLoader} from "../POS/PosRootElement/PosRootElement.jsx";
 import Coupons from "../POS/Coupons/Coupons.jsx";
-import ProductManagementNew from "../Latest/ProductManagement/ProductManagement.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +38,7 @@ const router = createBrowserRouter([
             <PosRootElement />
           </Provider>
         ),
+        loader:PosLoader,
         children: [
           {
             path: "checkout",

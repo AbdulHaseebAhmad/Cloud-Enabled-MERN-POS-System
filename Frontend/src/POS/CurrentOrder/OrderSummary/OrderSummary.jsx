@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { posScreenActions } from "../../Redux/PosScreenReducers";
+import { posScreenActions } from "../../Redux/PosScreen/PosScreenReducers";
 
 export default function OrderSummary({
   orderNumber,

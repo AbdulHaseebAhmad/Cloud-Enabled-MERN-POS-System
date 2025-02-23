@@ -1,4 +1,5 @@
 import  { Signin_In_User, Signin_In_User_Success, Signin_In_User_Failure } from './Constants';
+import { jwtDecode } from "jwt-decode";
 
 
 const initialState = {
@@ -8,6 +9,7 @@ const initialState = {
     token: '',
     isAuthenticated: false,
 };
+
 
 
 const UserReducer = (state = initialState, action) => {
@@ -21,7 +23,7 @@ const UserReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                user: action.payload,
+                user: jwtDecode(action.payload),
                 token: action.payload.token,
                 isAuthenticated: true,
             };
@@ -31,6 +33,24 @@ const UserReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload,
                 user: {},
+            };
+        
+        case "SET_USER_DATA":
+            return {
+                ...state,
+                loading: true,
+            };
+        case "SET_USER_DATA_SUCCESS":
+            return {
+                ...state,
+                loading: false,
+                user: action.payload,
+            };
+        case "SET_USER_DATA_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
             };
         default:
             return state;

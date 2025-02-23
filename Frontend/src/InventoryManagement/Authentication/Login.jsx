@@ -6,6 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { useDispatch } from "react-redux";
 // import { signInUser } from "../Redux/User/UserActions";
+
+import { jwtDecode } from "jwt-decode";
+
 export default function Login() {
   const toastConfig = {position: "top-right",
         autoClose: 1000,
@@ -116,18 +119,24 @@ export default function Login() {
 export const loginAction = async ({ request }) => {
   try {
     const loginData = await request.json();
-    console.log(loginData)
     const response = await axios.post(
       "http://localhost:5000/api/authenticate/login",
       loginData
     );
-    Cookies.set("token", response.data.token, {
+    const token = response.data.token;
+    Cookies.set("token", token, {
       expires: 1/24,
       path: "/",
       secure: true,
       sameSite: "Strict",
     });
-    return redirect("/inventory-management");
+    //Store.dispatch(setUserData());
+    const userData = jwtDecode(token);
+    if(userData['cognito:groups'][0] === "Admins"){
+      return redirect("/inventory-management")
+    } else {
+      return redirect("/pos/checkout")
+    }
   // eslint-disable-next-line no-unused-vars
   } catch (error) {
     return { error: "Login failed. Please check your credentials." };
@@ -135,7 +144,14 @@ export const loginAction = async ({ request }) => {
 };
 
 export const loginLoader = () => {
-  if (Cookies.get("token")) {
-    return redirect("/inventory-management")}
+  const token = Cookies.get("token");
+  if (token) {
+    const userData = jwtDecode(token);
+    if(userData['cognito:groups'][0] === "Admins"){
+      return redirect("/inventory-management")
+    } else {
+      return redirect("/pos/checkout")
+    }
+  }
   return null;
 };

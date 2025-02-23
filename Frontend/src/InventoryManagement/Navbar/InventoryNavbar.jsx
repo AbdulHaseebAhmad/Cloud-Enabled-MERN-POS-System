@@ -2,7 +2,11 @@ import { useState } from "react";
 import logo from "../../assets/logo.jpg";
 import Cookies from "js-cookie";
 import {useNavigate} from "react-router-dom";
+import { useSelector } from "react-redux";
+
 const InventoryNavbar = () => {
+  const userData = useSelector((state) => state.UserReducer.user);
+  
   const navigate = useNavigate();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -30,7 +34,7 @@ const InventoryNavbar = () => {
             Store: Outlet 1 / ID: #12345
           </div>
           <div className="text-sm font-medium">
-            Employee: John Doe / ID: #67890
+            Employee: {userData?.preferred_username}
           </div>
         </div>
 

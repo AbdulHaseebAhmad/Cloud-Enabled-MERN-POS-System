@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
-import { checkOutOrder } from "../../../Redux/PosScreenActions";
+import { checkOutOrder } from "../../../Redux/PosScreen/PosScreenActions";
 import socket from "../../../../utilities/Socket-Connection";
 
 export default function CashModal({

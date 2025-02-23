@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { posScreenActions } from "../Redux/PosScreenReducers";
+import { posScreenActions } from "../Redux/PosScreen/PosScreenReducers";
 
 export default function Toasts() {
 
