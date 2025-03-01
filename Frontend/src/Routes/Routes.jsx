@@ -19,6 +19,7 @@ import Posstore from "../POS/Redux/Store.jsx";
 import { Provider } from "react-redux";
 import PosRootElement, {PosLoader} from "../POS/PosRootElement/PosRootElement.jsx";
 import Coupons from "../POS/Coupons/Coupons.jsx";
+import SupplierManagementNew from "../Latest/SupplierManagemt/SuplierManagement.jsx";
 
 const router = createBrowserRouter([
   {
@@ -79,13 +80,13 @@ const router = createBrowserRouter([
             path: "product-details",
             element: <ProductDetails />,
           },
-          // {
-          //   path: "test",
-          //   element: <ProductManagementNew />,
-          // },
           {
             path: "stock-tracking",
             element: <StockTracking />,
+          },
+          {
+            path: "test",
+            element: <SupplierManagementNew />,
           },
         ],
       },

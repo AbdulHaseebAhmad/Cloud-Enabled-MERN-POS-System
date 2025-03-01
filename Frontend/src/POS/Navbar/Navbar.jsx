@@ -25,7 +25,7 @@ export default function Navbar() {
 
   const logOutHandler = () => {
     Cookies.remove("token");
-    if (!Cookies.get("token")) {
+    if (!Cookies.remove("token")) {
       navigate("/login");
     }
   };
@@ -34,37 +34,37 @@ export default function Navbar() {
     <>
       <header className="flex flex-wrap justify-between items-center p-4 bg-d-primary-bg-color shadow-md">
         {/* Logo */}
-        <div className="flex items-center space-x-2 mb-2 md:mb-0">
+        <div className="flex items-center space-x-2 mb-2 md:mb-0 border">
           <img src={logo} alt="Company Logo" className="h-10 w-auto" />
           <h1 className="text-xl font-bold text-d-primary-text-color">POS</h1>
         </div>
 
         {/* Search & Scan */}
-        <div className="flex flex-col md:flex-row items-center w-full md:w-auto space-y-2 md:space-y-0 md:space-x-4">
+        <div className="flex flex-col md:flex-row items-center w-full md:w-2/4 justify-end space-y-2 md:space-y-0 md:space-x-4  ">
           <input
             type="text"
             placeholder="Scan or Enter SKU"
-            className="p-2 border rounded w-full md:w-64 bg-white text-black"
+            className="p-2 border rounded w-full md:w-80 bg-white text-black"
             onChange={handleScan}
           />
           <div className="flex space-x-2">
             <button
-              className="p-2 bg-d-primary-action-color text-white rounded hover:bg-d-secondary-bg-color transition"
+              className="p-2 bg-d-primary-action-color text-white rounded hover:bg-d-secondary-bg-color transition w-16"
               onClick={handleSubmitSKU}
             >
               Search
             </button>
-            <button
-              className="p-2 bg-d-primary-action-color text-white rounded hover:bg-d-secondary-bg-color transition"
+            {<button
+              className="p-2 bg-d-primary-action-color text-white rounded hover:bg-d-secondary-bg-color transition w-16"
               onClick={handleSubmitSKU}
             >
               Scan
-            </button>
+            </button>}
           </div>
         </div>
 
         {/* Date, Cashier Name & Logout */}
-        <div className="flex items-center space-x-4 mt-2 md:mt-0">
+        <div className="flex items-center space-x-4 mt-2 md:mt-0 ">
           <div className="text-sm text-d-primary-text-color">
             <div>Date: {new Date().toLocaleDateString()}</div>
             <div>Cashier: {userData?.preferred_username || "N/A"}</div>
