@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
+import { setSupplierDetails } from "../../../InventoryManagement/Redux/Supplier/SupplierActions";
 // import { setProduct } from "../../../InventoryManagement/Redux/Product/ProductActions"
+
 export default function AddSuplierForm() {
-  const productDetails = useSelector(
-    (state) => state.ProductReducer.productDetails
+  const supplierDetails = useSelector(
+    (state) => state.SupplierReducer.supplierDetails
   );
+
+  console.log(supplierDetails);
 
   const dispatch = useDispatch();
   const productTemplate = {
@@ -21,7 +25,7 @@ export default function AddSuplierForm() {
     },
     "Supplier Address": {
       name: "Supplier Address",
-      type: "number",
+      type: "text",
       placeholder: "Supplier Address",
     },
     "Supplier Contact": {
@@ -38,13 +42,13 @@ export default function AddSuplierForm() {
 
   const [product, setProductState] = useState(
     Object.entries(productTemplate).reduce((acc, [key]) => {
-      acc[key] = productDetails?.[key] || "";
+      acc[key] = supplierDetails?.[key] || "";
       return acc;
     }, {})
   );
 
   useEffect(() => {
-    // dispatch(setProduct(product));
+    dispatch(setSupplierDetails({key:"General",details:product}));
   }, [product, dispatch]);
 
   const handleChange = (key, value) => {

@@ -4,7 +4,7 @@ import InventoryManagemenetRootElement, {
 } from "../InventoryManagement/RootElement/InventoryManagemenetRootElement.jsx";
 import Dashboard from "../InventoryManagement/Dashboard/Dashboard.jsx";
 import InventoryReports from "../InventoryManagement/InventoryReport/InventoryReport";
-import SupplierManagement from "../InventoryManagement/SupplierManagement/SupplierManagement";
+import SupplierManagement from "../InventoryManagement/SupplierManagemt/SuplierManagement.jsx";
 import ProductManagement from "../InventoryManagement/ProductManagement/ProductManagement";
 import ProductDetails from "../InventoryManagement/ProductDetail/ProductDetail";
 import StockTracking from "../InventoryManagement/StockTracking/StockTracking";
@@ -19,7 +19,6 @@ import Posstore from "../POS/Redux/Store.jsx";
 import { Provider } from "react-redux";
 import PosRootElement, {PosLoader} from "../POS/PosRootElement/PosRootElement.jsx";
 import Coupons from "../POS/Coupons/Coupons.jsx";
-import SupplierManagementNew from "../Latest/SupplierManagemt/SuplierManagement.jsx";
 
 const router = createBrowserRouter([
   {
@@ -84,10 +83,10 @@ const router = createBrowserRouter([
             path: "stock-tracking",
             element: <StockTracking />,
           },
-          {
-            path: "test",
-            element: <SupplierManagementNew />,
-          },
+          // {
+          //   path: "test",
+          //   element: <SupplierManagementNew />,
+          // },
         ],
       },
     ],

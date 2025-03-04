@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Toasts() {
-  const message = useSelector((state) => state.ProductReducer.msg);
-  const error = useSelector((state) => state.ProductReducer.error);
-  const loading = useSelector((state) => state.ProductReducer.loading);
+  const message = useSelector((state) => state.SupplierReducer.msg);
+  const error = useSelector((state) => state.SupplierReducer.error);
+  const loading = useSelector((state) => state.SupplierReducer.loading);
   
   const toastIdRef = useRef(null);  
 

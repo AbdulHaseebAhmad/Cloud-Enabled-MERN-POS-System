@@ -15,8 +15,8 @@ import {
 import socket from "../../utilities/Socket-Connection";
 import SuplierTable from "./SuplierTable/SuplierTable";
 import AddSuplierModal from "./SuplierModal/AddSuplierModal";
-import { clearProductDetails, fetchProductToUpdate } from "../../InventoryManagement/Redux/Product/ProductActions";
 import EditSuplierModal from "./SuplierModal/EditSuplierModal";
+import { clearSupplierDetails, fetchSupplierToUpdate } from "../../InventoryManagement/Redux/Supplier/SupplierActions";
 
 export default function SupplierManagementNew() {
     const liveMetrics = useSelector(
@@ -79,14 +79,15 @@ export default function SupplierManagementNew() {
         dispatch(getProductMetrics(timeDuration));
       
       },[timeDuration])
+
       const togglePortal = () => {
-        dispatch(clearProductDetails());
+        dispatch(clearSupplierDetails());
         setShowPortal(!showPortal);
       };
     
       const toggleEditPortal = (id) => {
         setPid(id);
-        dispatch(fetchProductToUpdate(id))
+        dispatch(fetchSupplierToUpdate(id))
         setShowEditPortal(!showEditPortal);
       }
     

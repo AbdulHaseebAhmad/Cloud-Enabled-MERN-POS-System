@@ -12,6 +12,13 @@ import {
   FETCH_SUPPLIERS,
   FETCH_SUPPLIERS_SUCCESS,
   FETCH_SUPPLIERS_FAILURE,
+  //ADD_PAYMENT_DETAILS,
+  ADD_SUPPLIER_DETAILS_SUCCESS,
+  ADD_PAYMENT_DETAILS_SUCCESS,
+  CLEAR_SUPPLIER_DETAILS,
+  FETCH_SUPPLIER,
+  FETCH_SUPPLIER_SUCCESS,
+  FETCH_SUPPLIER_FAILURE,
 } from "./Constants";
 
 import Cookies from "js-cookie";
@@ -29,7 +36,6 @@ const addSupplier = (supplier) => {
   return async (dispatch) => {
     dispatch({ type: ADD_SUPPLIER });
     try {
-    
       const response = await axios.post(
         `${url}/api/supplier/createsupplier`,
         supplier,
@@ -42,12 +48,12 @@ const addSupplier = (supplier) => {
   };
 };
 
-const updateSupplier = (supplier) => {
+const updateSupplier = (supplier,id) => {
   return async (dispatch) => {
     dispatch({ type: UPDATE_SUPPLIER });
     try {
       const response = await axios.put(
-        `${url}/api/suppliers/updatesupplier`,
+        `${url}/api/supplier/updatesupplier/${id}`,
         supplier,
         config
       );
@@ -95,4 +101,46 @@ const getSuppliers = () => {
   };
 };
 
-export { addSupplier, updateSupplier, deleteSupplier, getSuppliers };
+const setSupplierDetails = (supplierDetails) => {
+  return async (dispatch) => {
+    const { key, details } = supplierDetails;
+    if (key === "General") {
+      dispatch({
+        type: ADD_SUPPLIER_DETAILS_SUCCESS,
+        payload: details,
+      });
+    } else if (key === "Payment Details") {
+      console.log(details);
+      dispatch({ type: ADD_PAYMENT_DETAILS_SUCCESS, payload: details });
+    }
+  };
+};
+
+const clearSupplierDetails = () =>{
+  return async(dispatch) => {
+    dispatch({type:CLEAR_SUPPLIER_DETAILS})
+  }
+}
+
+
+const fetchSupplierToUpdate = (id) => {
+  return async (dispatch) => {
+    dispatch({ type: FETCH_SUPPLIER });
+    try {
+      dispatch({ type: FETCH_SUPPLIER_SUCCESS, payload: id });
+    }
+    catch (error) {
+      dispatch({ type: FETCH_SUPPLIER_FAILURE, payload: error.message });
+  };  };
+};
+
+
+export {
+  addSupplier,
+  updateSupplier,
+  deleteSupplier,
+  getSuppliers,
+  setSupplierDetails,
+  clearSupplierDetails,
+  fetchSupplierToUpdate
+};

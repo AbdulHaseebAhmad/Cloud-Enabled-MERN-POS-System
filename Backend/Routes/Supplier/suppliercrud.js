@@ -28,15 +28,16 @@ supplierCrudRouter.get(
 );
 
 supplierCrudRouter.put(
-  "/api/supplier/updatesupplier",
+  "/api/supplier/updatesupplier/:id",
   verifyJWT,
   async (req, res) => {
-    const { _id, supplierDetails } = req.body;
-
+    const id = req.params.id;
+    const supplier = req.body;
+    console.log(supplier)
     try {
       const updateSupplier = await SupplierSchema.findByIdAndUpdate(
-        { _id: _id },
-        supplierDetails
+        { _id: id },
+        supplier
       );
       res.status(200).json({ message: "Supplier Updated Successfully" });
     } catch (err) {

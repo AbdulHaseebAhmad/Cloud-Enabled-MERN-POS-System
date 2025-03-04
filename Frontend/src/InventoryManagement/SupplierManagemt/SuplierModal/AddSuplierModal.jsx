@@ -6,30 +6,28 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ReactDOM from "react-dom";
 import { useEffect, useState } from "react";
-// import AddProductForm from "../AddProductFom/AddProductForm";
-// import AddVariant from "../AddVariant/AddVariant";
+import AddSuplierForm from "../AddSuplierForm/AddSuplierForm";
+import AddBankDetails from "../AddBankDetails/AddBankDetails";
 import { useDispatch, useSelector } from "react-redux";
-import {  updateProduct } from "../../../InventoryManagement/Redux/Product/ProductActions";
 import Toasts from "../Toasts/Toasts";
 import socket from "../../../utilities/Socket-Connection";
+import {  motion } from "framer-motion";
+import { addSupplier } from "../../../InventoryManagement/Redux/Supplier/SupplierActions";
 
-
-export default function EditSuplierModal({ onClose, id }) {
-  const product = useSelector((state) => state.ProductReducer.productDetails);
-  const productError = useSelector((state) => state.ProductReducer.error);
-  const productLoading = useSelector((state) => state.ProductReducer.loading);
+export default function AddSuplierModal({ onClose }) {
+  const supplierDetails = useSelector((state)=> state.SupplierReducer.supplierDetails);
+  const supplierError = useSelector((state) => state.SupplierReducer.error);
+  const supplierLoading = useSelector((state) => state.SupplierReducer.loading);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showToast, setShowToast] = useState(false);
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [newProduct, setNewProduct] = useState({});
+  const [isAccordianOpen,setIsAccordianOpen] = useState(false);
   const dispatch = useDispatch();
 
- 
-
-  // useEffect(()=>{console.log(product)},[product])
   const screens = [
-    { title: "Edit Product Details", component: <AddProductForm /> },
-    { title: "Edit Product Variants", component: <AddVariant /> },
+    { title: "Add Supplier Details", component: <AddSuplierForm /> },
+    { title: "Add Supplier Bank Details", component: <AddBankDetails isAccordianOpen={(data)=>setIsAccordianOpen(data)} /> },
   ];
 
   const swapScreen = (e) => {
@@ -42,44 +40,25 @@ export default function EditSuplierModal({ onClose, id }) {
     }
   };
 
-  useEffect(() => {
-    if (product) {
-      const newProduct = Object.fromEntries(
-        Object.entries(product).map(([key, value]) => {
-          if (key === "variants") {
-            return [
-              key,
-              value.map((variant) => ({
-                priceModifier: parseInt(variant["priceModifier"]),
-                stock: parseInt(variant.stock),
-                name: variant['name'],
-                image: variant.image,
-                sku: variant.sku,
-              })),
-            ];
-          }
-          return [key, value];
-        })
-      );
-      console.log(id)
+  useEffect(()=>{
+    setIsAccordianOpen(false);
+  },[currentIndex])
 
-      setNewProduct(newProduct);
-    }
-  }, [product]);
+
 
   const submitHandle = () => {
     setIsSubmitted(true);
     setShowToast(true);
-    dispatch(updateProduct(newProduct,id));
-    socket.emit("changesMadeToProducts", "Product Edited");
-    socket.emit("changesMadeToSuppliers", "Product Edited");  };
+   dispatch(addSupplier(supplierDetails));
+    socket.emit("changesMadeToSuppliers", "Supplier Added");
+  };
 
   useEffect(() => {
-    if (isSubmitted && productLoading === false && productError === null) {
+    if (isSubmitted && supplierLoading === false && supplierError === null) {
       setTimeout(() => onClose(), 1200);
       setIsSubmitted(false);
     }
-  }, [isSubmitted, productError, productLoading]);
+  }, [isSubmitted, supplierError, supplierLoading]);
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -95,17 +74,21 @@ export default function EditSuplierModal({ onClose, id }) {
             className="absolute top-5 right-10 text-xl"
           />
         </button>
-        <div className="flex flex-col w-[90%] min-h-[440px] self-center items-center justify-center">
+        <div className="flex flex-col w-[90%] max-h-[450px]  self-center items-center justify-center overflow-scroll scrollbar-hide">
           {screens[currentIndex].component}
-          {currentIndex === 1 && (
-            <button
-              disabled={productLoading}
+          {currentIndex === 1 && !isAccordianOpen &&  (
+            <motion.button
+              initial={{opacity:0.1}}
+              animate={{opacity:1}}
+              exit={{opacity:0.1}}
+              transition={{duration:0.4,type:'tween'}}
+              disabled={supplierLoading}
               onClick={submitHandle}
               type="submit"
               className="w-96  text-white py-4 px-4 rounded-md  dark:hover:bg-d-primary-action-color bg-d-secondary-bg-color"
             >
-              Update Product
-            </button>
+              Save Supplier
+            </motion.button>
           )}
         </div>
         <div className="border min-h-[20px] border-d-secondary-bg-color rounded-b-xl p-4 mt-4 flex justify-center gap-4 items-center ">
